@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Submit a new license request for SSP</h1>
+<form action="{{ url_for('new') }}" method="post" enctype="multipart/form-data">
+  <dl>
+    <label>Product</label>
+    <input type=text name=product value="SSP">
+  </dl>
+  <dl>
+    <label>Product version</label>
+    <input type=text name=version value="5.2.0">
+  </dl>
+  <dl>
+    <label>Request file</label>
+    <input type=file name=license_req>
+  </dl>
+  <button type="submit">Submit</button>
+  <button type="reset">Reset</button>
+</form>
+
+{% endblock %}

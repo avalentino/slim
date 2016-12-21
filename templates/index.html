@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>SSP License Management</h1>
+  <p>Aresys license management application for the SAOCOM SAR Processor (SSP).</p>
+  <ul>
+    <li> {{ count }} license requests uploaded</li>
+    <li> <a href="{{ url_for('uploaded') }}">view</a> uploaded license request list</li>
+    <li> <a href="{{ url_for('new') }}">new</a> license request</li>
+  </ul>
+{% endblock %}

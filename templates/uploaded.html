@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>Uploaded license requests</h1>
+  {% if items %}
+  <ul>
+  {% for url, name in items %}
+    <li><a href="{{ url }}">{{ name }}</a></li>
+  {% endfor %}
+  </ul>
+  {% else %}
+  <p>No license request uploaded.</p>
+  {% endif %}
+{% endblock %}

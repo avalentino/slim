@@ -1,0 +1,41 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}SAOCOM SAR Processor License Management{% endblock %}
+
+{% block body -%}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <a href="{{ url_for('index') }}">Home</a>
+</div>
+{% endblock %}
+
+{% block flash %}
+  <div id="flash">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class=flashes>
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  </div>
+{% endblock flash%}
+
+{% block content -%}
+{%- endblock content %}
+
+{% block scripts %}
+<script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
+<script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+{%- endblock scripts %}
+
+{% block footer %}
+  <div id="footer">
+    Copyright &copy; 2016 by <a href="http://www.aresys.it">Aresys s.r.l</a>
+  </div>
+{% endblock footer %}
+
+{%- endblock body %}
+
