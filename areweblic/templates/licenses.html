@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>Generated licenses</h1>
+  {% if items %}
+  <ul>
+  {% for item in items %}
+    <li><a href="{{ url_for('show_license', req_id=item.id)}}">{{ item.id }}</a>: {{ item.date }}</li>
+  {% endfor %}
+  </ul>
+  {% else %}
+  <p>No license found.</p>
+  {% endif %}
+{% endblock %}

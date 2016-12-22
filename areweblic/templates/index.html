@@ -3,8 +3,8 @@
 {% block content %}
   <h1>Aresys license management system</h1>
   <ul>
-    <li> {{ count }} license requests uploaded</li>
-    <li> <a href="{{ url_for('uploaded') }}">view</a> uploaded license request list</li>
+    <li> {{ count }} licenses found</li>
+    <li> <a href="{{ url_for('licenses') }}">view</a> the list of available licenses</li>
     <li> <a href="{{ url_for('new') }}">new</a> license request</li>
   </ul>
 {% endblock %}

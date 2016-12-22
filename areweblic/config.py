@@ -22,3 +22,6 @@ UPLOADED_REQUESTS_DEST = os.path.join(APPLICATION_DIR, 'uploads')
 UPLOADED_REQUESTS_URL = 'http://localhost:5001/uploads'
 
 REQUEST_EXTENSIONS = ('request',)
+
+LICENSE_GENERATOR_PATH = os.path.join(
+    APPLICATION_DIR, 'bin', 'generate_license.bin')
