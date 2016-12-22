@@ -4,8 +4,8 @@
   <h1>Uploaded license requests</h1>
   {% if items %}
   <ul>
-  {% for url, name in items %}
-    <li><a href="{{ url }}">{{ name }}</a></li>
+  {% for item in items %}
+    <li><a href="{{ url_for('show_request', req_id=item.id)}}">{{ item.id }}</a>: {{ item.date }}</li>
   {% endfor %}
   </ul>
   {% else %}

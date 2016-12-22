@@ -2,28 +2,33 @@
 # -*- coding: utf-8 -*-
 
 import os
-import glob
 import datetime
-import posixpath
 
-from flask import Flask, request, redirect, url_for, flash, render_template
-from flask.ext.bootstrap import Bootstrap
-from flask.ext.uploads import UploadSet, configure_uploads, UploadNotAllowed
+from flask import (
+    Flask, request, redirect, url_for, flash, render_template, make_response)
+from flask_bootstrap import Bootstrap
+from flask_uploads import UploadSet, configure_uploads, UploadNotAllowed
+from flask_sqlalchemy import SQLAlchemy
 #from flask.ext.login import LoginManager, login_required
-#from flask_sqlalchemy import SQLAlchemy
 
 
-UPLOADED_REQUESTS_DEST = os.path.join(
-    os.path.abspath(os.path.dirname(__file__)), 'uploads')
-UPLOADED_REQUESTS_URL = 'http://localhost:5001/uploads'
+# ### config.py ##############################################################
+# DEBUG = True
+
+APPLICATION_DIR = os.path.dirname(os.path.realpath(__file__))
 
 MAX_CONTENT_LENGTH = 4096
+
+UPLOADED_REQUESTS_DEST = os.path.join(APPLICATION_DIR, 'uploads')
+UPLOADED_REQUESTS_URL = 'http://localhost:5001/uploads'
+
 SECRET_KEY = 'something hard to guess'
 
-UPLOADED_REQUEST_PATTERN = os.path.join(UPLOADED_REQUESTS_DEST,
-                                        '*', '*.request')
+SQLALCHEMY_DATABASE_URI = (
+    'sqlite:///' + os.path.join(APPLICATION_DIR, 'ssplic.db'))
 
 
+# ### app.py #################################################################
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -33,50 +38,99 @@ REQUEST_EXTENSIONS = ('request',)
 license_requests = UploadSet('requests', REQUEST_EXTENSIONS)
 configure_uploads(app, license_requests)
 
+db = SQLAlchemy(app)
 
+
+# ### models.py ##############################################################
+class LicenseRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(50), default='user', nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    product = db.Column(db.String(64))
+    description = db.Column(db.String(100))
+    request = db.Column(db.LargeBinary)
+    date = db.Column(db.DateTime)
+
+    def __init__(self, user_id, product, request, description='', date=None):
+        self.user_id = user_id
+        self.product = product
+        self.description = description
+        self.request = request
+
+        if date is None:
+            date = datetime.datetime.now()
+
+        self.date = date
+
+    def __repr__(self):
+        return ('<LicenseRequest: id=%d, user_id=%r, product=%r, '
+                'request_date=%s>' % (self.id, self.user_id, self.product,
+                                      self.date.isoformat()))
+
+
+# ### views.py ###############################################################
 @app.route('/')
 def index():
-    requests = glob.glob(UPLOADED_REQUEST_PATTERN)
-    count = len(requests)
-    return render_template('index.html', count=count)
+    return render_template('index.html', count=LicenseRequest.query.count())
 
 
 @app.route('/uploaded')
 def uploaded():
-    items = []
-    for name in glob.glob(UPLOADED_REQUEST_PATTERN):
-        name = os.path.relpath(name, UPLOADED_REQUESTS_DEST)
-        items.append((posixpath.join(UPLOADED_REQUESTS_URL, name), name))
-    return render_template('uploaded.html', items=items)
+    return render_template('uploaded.html', items=LicenseRequest.query.all())
 
 
 @app.route('/new', methods=['GET', 'POST'])
 def new():
     if request.method == 'POST' and 'license_req' in request.files:
-        folder = datetime.datetime.now().strftime('%Y%m%d-%H-%M-%S.%f')
-
         try:
-            filename = license_requests.save(request.files['license_req'],
-                                             folder=folder)
+            filename = license_requests.save(request.files['license_req'])
         except UploadNotAllowed as ex:
             flash('Upload not allowed: incorrect file type', 'error')
         else:
             flash('Request file saved to %r.' % filename)
+
+            filename = os.path.join(UPLOADED_REQUESTS_DEST, filename)
+            with open(filename, 'rb') as fd:
+                data = fd.read()
+
+            req = LicenseRequest(
+                'user_id',
+                product=request.form['product'],
+                request=data,
+                description=request.form['description'])
+
+            db.session.add(req)
+            db.session.commit()
+
+            os.remove(filename)
+
             return redirect(url_for('uploaded'))
     return render_template('new.html')
 
 
+@app.route('/request/<int:req_id>')
+def show_request(req_id):
+    req = LicenseRequest.query.get(req_id)
+    return render_template('request.html', req=req)
+
+
+@app.route('/download/<int:req_id>')
+def download(req_id):
+    req = LicenseRequest.query.get(req_id)
+    #data = req.license     # XXX
+    data = req.request
+
+    response = make_response(data)
+    response.headers['Content-Type'] = 'application/octet-stream'
+    response.headers['Content-Disposition'] = 'attachment; filename=lic.dat'
+
+    return response
+
 ## http://www.patricksoftwareblog.com/tag/flask-uploads/
-#~ db = SQLAlchemy(app)
-#~ bcrypt = Bcrypt(app)
-#~ mail = Mail(app)
 
 #~ login_manager = LoginManager()
 #~ login_manager.init_app(app)
 #~ login_manager.login_view = "users.login"
-
-#UPLOADS_DEFAULT_DEST = TOP_LEVEL_DIR + '/static/requests/'
-#UPLOADS_DEFAULT_URL = 'http://localhost:5000/static/requests/'
 
 
 
@@ -95,30 +149,6 @@ def new():
         #~ validators=[FileRequired(),
                     #~ FileAllowed(license_requests, 'request file (*.request)')])
 
-############################################################
-
-#~ class Recipe(db.Model):
-
-    #~ __tablename__ = "recipes"
-
-    #~ id = db.Column(db.Integer, primary_key=True)
-    #~ recipe_title = db.Column(db.String, nullable=False)
-    #~ recipe_description = db.Column(db.String, nullable=False)
-    #~ is_public = db.Column(db.Boolean, nullable=False)
-    #~ image_filename = db.Column(db.String, default=None, nullable=True)
-    #~ image_url = db.Column(db.String, default=None, nullable=True)
-    #~ user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-    #~ def __init__(self, title, description, user_id, is_public, image_filename=None, image_url=None):
-        #~ self.recipe_title = title
-        #~ self.recipe_description = description
-        #~ self.is_public = is_public
-        #~ self.image_filename = image_filename
-        #~ self.image_url = image_url
-        #~ self.user_id = user_id
-
-    #~ def __repr__(self):
-        #~ return '<id: {}, title: {}, user_id: {}>'.format(self.id, self.recipe_title, self.user_id)
 
 ############################################################
 
@@ -153,6 +183,15 @@ def new():
             #~ flash('ERROR! Request was not added.', 'error')
 
     #~ return render_template('requestform.html', form=form)
+
+
+def init_db():
+    db.create_all()
+
+    req = LicenseRequest('user_id', 'SSP', '', 'descr')
+
+    db.session.add(req)
+    db.session.commit()
 
 
 if __name__ == "__main__":

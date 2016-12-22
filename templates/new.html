@@ -5,15 +5,20 @@
 <form action="{{ url_for('new') }}" method="post" enctype="multipart/form-data">
   <dl>
     <label>Product</label>
-    <input type=text name=product value="SSP">
-  </dl>
-  <dl>
-    <label>Product version</label>
-    <input type=text name=version value="5.2.0">
+    <select name="product">
+      <option value="ssp">SSP</option>
+      <option value="cspp">CSPP</option>
+      <option value="csip">CSIP</option>
+      <option value="gss">GSS</option>
+    </select>
   </dl>
   <dl>
     <label>Request file</label>
     <input type=file name=license_req>
+  </dl>
+  <dl>
+    <label>Description (optional)</label>
+    <input type=text name=description>
   </dl>
   <button type="submit">Submit</button>
   <button type="reset">Reset</button>
