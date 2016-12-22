@@ -3,7 +3,7 @@
 import os
 
 
-# DEBUG = True
+DEBUG = True
 
 APPLICATION_DIR = os.path.dirname(os.path.realpath(__file__))
 APPLICATION_DIR = os.path.normpath(os.path.join(APPLICATION_DIR, os.pardir))
@@ -12,6 +12,7 @@ APPLICATION_DIR = os.path.normpath(os.path.join(APPLICATION_DIR, os.pardir))
 
 SECRET_KEY = 'something hard to guess'
 
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_DATABASE_URI = (
     'sqlite:///' + os.path.join(APPLICATION_DIR, 'arelic.db'))
 

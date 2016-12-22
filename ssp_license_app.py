@@ -1,18 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import datetime
-
-
-from flask_uploads import UploadSet, configure_uploads, UploadNotAllowed
 
 #from flask.ext.login import LoginManager, login_required
-
-
-
-
-
 
 
 ## http://www.patricksoftwareblog.com/tag/flask-uploads/
@@ -20,7 +10,6 @@ from flask_uploads import UploadSet, configure_uploads, UploadNotAllowed
 #~ login_manager = LoginManager()
 #~ login_manager.init_app(app)
 #~ login_manager.login_view = "users.login"
-
 
 
 ############################################################
@@ -72,15 +61,3 @@ from flask_uploads import UploadSet, configure_uploads, UploadNotAllowed
             #~ flash('ERROR! Request was not added.', 'error')
 
     #~ return render_template('requestform.html', form=form)
-
-
-def init_db():
-    db.create_all()
-
-    req = LicenseRequest('user_id', 'SSP', '', 'descr')
-
-    db.session.add(req)
-    db.session.commit()
-
-
-if __name__ == "__main__":

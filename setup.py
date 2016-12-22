@@ -13,6 +13,7 @@ setup(
         'flask-bootstrap',
         # 'flask-login',
         'flask-migrate',
+        'flask-script',
         'flask-sqlalchemy',
         'flask-uploads',
         # 'flask-user',
