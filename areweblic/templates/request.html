@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>Request n. {{ req.id }}</h1>
+  <ul>
+    <li>user: {{ req.user_id }}</li>
+    <li>product: {{ req.product }}</li>
+    <li>description: {{ req.description }}</li>
+    <li>date: {{ req.date }}</li>
+    <li><a href="{{ url_for('download', req_id=req.id) }}">Download</a></li>
+  </ul>
+{% endblock %}
