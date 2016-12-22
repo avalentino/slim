@@ -4,6 +4,7 @@ from flask import Flask
 from flask_bootstrap import Bootstrap as bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import UploadSet, configure_uploads
+from flask_migrate import Migrate
 
 from . import config
 
@@ -17,6 +18,7 @@ bootstrap(app)
 
 # sqlalchemy
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # flask-uploads
 request_uploader = UploadSet('requests', config.REQUEST_EXTENSIONS)
