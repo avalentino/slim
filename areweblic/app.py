@@ -21,5 +21,5 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # flask-uploads
-request_uploader = UploadSet('requests', config.REQUEST_EXTENSIONS)
+request_uploader = UploadSet('requests', app.config['REQUEST_EXTENSIONS'])
 configure_uploads(app, request_uploader)

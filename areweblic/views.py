@@ -7,7 +7,6 @@ from flask import (
 
 from flask_uploads import UploadNotAllowed
 
-from . import config
 from .app import app, db, request_uploader
 from .models import LicenseRequest
 
@@ -32,7 +31,8 @@ def new():
         else:
             flash('Request file saved to %r.' % filename)
 
-            filename = os.path.join(config.UPLOADED_REQUESTS_DEST, filename)
+            filename = os.path.join(
+                app.config['UPLOADED_REQUESTS_DEST'], filename)
             with open(filename, 'rb') as fd:
                 data = fd.read()
 
