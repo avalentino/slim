@@ -16,7 +16,7 @@
   {% for role in pagination.items %}
     <tr>
       <td>{{ role.id }}</td>
-      <td>{{ role.email }}</td>
+      <td>{{ role.name }}</td>
       <td>{{ role.description }}</td>
       <td>{{ role.users|join(', ', attribute='email') }}</td>
     </tr>

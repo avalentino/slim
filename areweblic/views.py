@@ -117,7 +117,7 @@ def admin_users():
     return render_template('users.html', pagination=User.query.paginate())
 
 
-@app.route('/admn/roles')
+@app.route('/admin/roles')
 @roles_accepted('admin')
 def admin_roles():
     return render_template('roles.html', pagination=Role.query.paginate())
