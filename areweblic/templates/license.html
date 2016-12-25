@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>License n. {{ req.id }}</h1>
+  <h1>License n. {{ lic.id }}</h1>
   <ul>
-    <li>user: {{ req.user_id }}</li>
-    <li>product: {{ req.product }}</li>
-    <li>description: {{ req.description }}</li>
-    <li>date: {{ req.date }}</li>
-    <li><a href="{{ url_for('download', req_id=req.id) }}">Download</a></li>
+    <li>user: {{ user.email|default(lic.user_id) }}</li>
+    <li>product: {{ lic.product }}</li>
+    <li>description: {{ lic.description }}</li>
+    <li>date: {{ lic.request_date }}</li>
+    <li><a href="{{ url_for('download', lic_id=lic.id) }}">Download</a></li>
   </ul>
 {% endblock %}

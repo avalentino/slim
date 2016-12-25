@@ -1,13 +1,34 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>Generated licenses</h1>
-  {% if items %}
-  <ul>
-  {% for item in items %}
-    <li><a href="{{ url_for('show_license', req_id=item.id)}}">{{ item.id }}</a>: {{ item.date }}</li>
-  {% endfor %}
-  </ul>
+  <h1>{{ title|default('Licenses') }}</h1>
+  {% if pagination.items %}
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        {% if  current_user.has_role('admin') %}
+        <th>User</th>
+        {% endif %}
+        <th>Product</th>
+        <th>Request date</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for item in pagination.items %}
+      <tr>
+        <td><a href="{{ url_for('show_license', lic_id=item.id)}}">{{ item.id }}</a></td>
+        {% if  current_user.has_role('admin') %}
+        <td>{{ users.get(item.user_id).email|default(item.user_id) }}</th>
+        {% endif %}
+        <td>{{ item.product }}</td>
+        <td>{{ item.request_date }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% from "bootstrap/pagination.html" import render_pagination %}
+  {{ render_pagination(pagination) }}
   {% else %}
   <p>No license found.</p>
   {% endif %}

@@ -11,11 +11,10 @@ setup(
     install_requires=[
         'flask',
         'flask-bootstrap',
-        # 'flask-login',
         'flask-migrate',
         'flask-script',
+        'flask-security',
         'flask-sqlalchemy',
         'flask-uploads',
-        # 'flask-user',
     ],
 )

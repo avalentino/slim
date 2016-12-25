@@ -6,23 +6,29 @@ import subprocess
 from flask import (
     request, redirect, url_for, flash, render_template, make_response)
 
+from flask_security import login_required, roles_accepted, current_user
 from flask_uploads import UploadNotAllowed
 
 from .app import app, db, request_uploader
-from .models import License
+from .models import License, User, Role
 
 
 @app.route('/')
+@login_required
 def index():
-    return render_template('index.html', count=License.query.count())
+    query = License.query.filter(License.user_id == current_user.id)
+    return render_template('index.html', count=query.count())
 
 
 @app.route('/licenses')
+@login_required
 def licenses():
-    return render_template('licenses.html', items=License.query.all())
+    query = License.query.filter(License.user_id == current_user.id)
+    return render_template('licenses.html', pagination=query.paginate())
 
 
 @app.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     if request.method == 'POST' and 'license_req' in request.files:
         if not request.files['license_req']:
@@ -61,14 +67,14 @@ def new():
                 os.remove(licfile)
 
                 # save the new license
-                req = License(
-                    'user_id',  # XXX
+                license = License(
+                    current_user.id,
                     product=request.form['product'],
                     request=data,
                     license=licdata,
                     description=request.form['description'])
 
-                db.session.add(req)
+                db.session.add(license)
                 db.session.commit()
 
             os.remove(filename)
@@ -77,19 +83,48 @@ def new():
     return render_template('new.html')
 
 
-@app.route('/license/<int:req_id>')
-def show_license(req_id):
-    req = License.query.get(req_id)
-    return render_template('license.html', req=req)
+@app.route('/license/<int:lic_id>')
+@login_required
+def show_license(lic_id):
+    if current_user.has_role('admin'):
+        query = License.query
+    else:
+        query = License.query.filter(License.user_id == current_user.id)
+    lic = query.get(lic_id)
+    user = User.query.filter(User.id == lic.user_id).first()
+    return render_template('license.html', lic=lic, user=user)
 
 
-@app.route('/download/<int:req_id>')
-def download(req_id):
-    req = License.query.get(req_id)
-    data = req.license
+@app.route('/download/<int:lic_id>')
+@login_required
+def download(lic_id):
+    if current_user.has_role('admin'):
+        query = License.query
+    else:
+        query = License.query.filter(License.user_id == current_user.id)
+    data = query.get(lic_id).license
 
     response = make_response(data)
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=lic.dat'
 
     return response
+
+
+@app.route('/admin/users')
+@roles_accepted('admin')
+def admin_users():
+    return render_template('users.html', pagination=User.query.paginate())
+
+
+@app.route('/admn/roles')
+@roles_accepted('admin')
+def admin_roles():
+    return render_template('roles.html', pagination=Role.query.paginate())
+
+
+@app.route('/admin/licenses')
+@roles_accepted('admin')
+def admin_licenses():
+    return render_template(
+        'licenses.html', pagination=License.query.paginate(), users=User.query)

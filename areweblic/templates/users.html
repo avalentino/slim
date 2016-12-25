@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>{{ title|default('Users') }}</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>e-mail</th>
+      <th>Active</th>
+      <th>Roles</th>
+      <th>Login count</th>
+      <th>Current login at</th>
+      <th>Current_login IP</th>
+      <th>Last login at</th>
+      <th>Last_login IP</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in pagination.items %}
+    <tr>
+      <td>{{ user.id }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.active }}</td>
+      <td>{{ user.roles|join(', ', attribute='name') }}</td>
+      <td>{{ user.login_count }}</td>
+      <td>{{ user.current_login_at }}</td>
+      <td>{{ user.current_login_ip }}</td>
+      <td>{{ user.last_login_at }}</td>
+      <td>{{ user.last_login_ip }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% from "bootstrap/pagination.html" import render_pagination %}
+{{ render_pagination(pagination) }}
+
+{% endblock %}

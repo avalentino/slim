@@ -5,7 +5,8 @@
 
 {% block navbar %}
 <div class="navbar navbar-fixed-top">
-  <a href="{{ url_for('index') }}">Home</a>
+  <a href="{{ url_for('index') }}">Home</a> |
+  {{ current_user.email }} <a href="{{ url_for('security.logout') }}">logout</a>
 </div>
 {% endblock %}
 
