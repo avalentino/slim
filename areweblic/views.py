@@ -83,7 +83,7 @@ def new():
     return render_template('new.html')
 
 
-@app.route('/license/<int:lic_id>')
+@app.route('/licenses/<int:lic_id>')
 @login_required
 def show_license(lic_id):
     if current_user.has_role('admin'):
