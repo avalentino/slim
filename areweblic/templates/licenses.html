@@ -7,7 +7,7 @@
     <thead>
       <tr>
         <th>ID</th>
-        {% if  current_user.has_role('admin') %}
+        {% if users %}
         <th>User</th>
         {% endif %}
         <th>Product</th>
@@ -18,7 +18,7 @@
     {% for item in pagination.items %}
       <tr>
         <td><a href="{{ url_for('show_license', lic_id=item.id)}}">{{ item.id }}</a></td>
-        {% if  current_user.has_role('admin') %}
+        {% if users %}
         <td>{{ users.get(item.user_id).email|default(item.user_id) }}</th>
         {% endif %}
         <td>{{ item.product }}</td>
