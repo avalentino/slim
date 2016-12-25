@@ -12,6 +12,7 @@ setup(
         'flask',
         'flask-bootstrap',
         'flask-migrate',
+        'flask-nav',
         'flask-script',
         'flask-security',
         'flask-sqlalchemy',
