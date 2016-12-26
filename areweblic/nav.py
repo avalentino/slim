@@ -40,8 +40,11 @@ def topnavbar():
             View('AreWebLic', 'index'),
             View('Home', 'index'),
             Link('Support', support_link),
-            View('Logout %s' % current_user.email, 'security.logout'),
         ]
+        if current_user.is_authenticated:
+            items.append(
+                View('Logout %s' % current_user.email, 'security.logout')
+            )
 
     return Navbar(*items)
 
