@@ -1,12 +1,22 @@
 {% extends "layout.html" %}
+{% from "bootstrap/utils.html" import form_button, icon %}
 
 {% block content %}
   <h1>License n. {{ lic.id }}</h1>
-  <ul>
-    <li>user: {{ user.email|default(lic.user_id) }}</li>
-    <li>product: {{ lic.product }}</li>
-    <li>description: {{ lic.description }}</li>
-    <li>date: {{ lic.request_date }}</li>
-    <li><a href="{{ url_for('download', lic_id=lic.id) }}">Download</a></li>
-  </ul>
+  <dl class="dl-horizontal">
+    <dt>User</dt>
+    <dd>{{ user.email|default(lic.user_id) }}</dd>
+
+    <dt>Product</dt>
+    <dd>{{ lic.product }}</dd>
+
+    <dt>Description</dt>
+    <dd>{{ lic.description }}</dd>
+
+    <dt>Date</dt>
+    <dd>{{ lic.request_date }}</dd>
+
+    <dt>Download</dt>
+    <dd>{{ form_button(url_for('download', lic_id=lic.id), icon('download-alt'), method='get') }}<dd>
+  </dl>
 {% endblock %}

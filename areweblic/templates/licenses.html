@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "bootstrap/utils.html" import form_button, icon %}
 
 {% block content %}
   <h1>{{ title|default('Licenses') }}</h1>
@@ -20,7 +21,7 @@
     <tbody>
     {% for item in pagination.items %}
       <tr>
-        <td><a href="{{ url_for('show_license', lic_id=item.id) }}">{{ item.id }}</a></td>
+        <td>{{ item.id }} {{ form_button(url_for('show_license', lic_id=item.id), icon('eye-open'), method='get') }}</td>
         {% if users %}
         <td>{{ users.get(item.user_id).email|default(item.user_id) }}</th>
         {% endif %}
@@ -34,5 +35,6 @@
   {{ render_pagination(pagination) }}
   {% else %}
   <p>No license found.</p>
+  <p>{{ form_button(url_for('new'), icon('upload') + ' New license request') }}</p>
   {% endif %}
 {% endblock %}
