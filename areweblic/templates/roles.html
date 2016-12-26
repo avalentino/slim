@@ -1,30 +1,32 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h1>{{ title|default('Roles') }}</h1>
+  <h1>{{ title|default('Roles') }}</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Desctiption</th>
-      <th>Users</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for role in pagination.items %}
-    <tr>
-      <td>{{ role.id }}</td>
-      <td>{{ role.name }}</td>
-      <td>{{ role.description }}</td>
-      <td>{{ role.users|join(', ', attribute='email') }}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+  <p>Total role count: {{ pagination.query.count() }}</p>
 
-{% from "bootstrap/pagination.html" import render_pagination %}
-{{ render_pagination(pagination) }}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Desctiption</th>
+        <th>Users</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for role in pagination.items %}
+      <tr>
+        <td>{{ role.id }}</td>
+        <td>{{ role.name }}</td>
+        <td>{{ role.description }}</td>
+        <td>{{ role.users|join(', ', attribute='email') }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  {% from "bootstrap/pagination.html" import render_pagination %}
+  {{ render_pagination(pagination) }}
 
 {% endblock %}
