@@ -16,8 +16,7 @@ from .models import License, User, Role
 @app.route('/')
 @login_required
 def index():
-    query = License.query.filter(License.user_id == current_user.id)
-    return render_template('index.html', count=query.count())
+    return render_template('index.html')
 
 
 @app.route('/licenses')
@@ -109,6 +108,12 @@ def download(lic_id):
     response.headers['Content-Disposition'] = 'attachment; filename=lic.dat'
 
     return response
+
+
+@app.route('/admin')
+@roles_accepted('admin')
+def admin_index():
+    return redirect(url_for('index'))
 
 
 @app.route('/admin/users')

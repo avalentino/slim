@@ -2,9 +2,28 @@
 
 {% block content %}
   <h1>Aresys license management system</h1>
-  <ul>
-    <li> {{ count }} licenses found</li>
-    <li> <a href="{{ url_for('licenses') }}">view</a> the list of available licenses</li>
-    <li> <a href="{{ url_for('new') }}">new</a> license request</li>
-  </ul>
+  <h2>Functions</h2>
+  <dl class="dl-horizontal">
+    <dt><a href="{{ url_for('licenses') }}">licenses</a></dt>
+    <dd>the list of available licenses</dd>
+
+    <dt><a href="{{ url_for('new') }}">new</a></dt>
+    <dd>submit a new license request</dd>
+  </dl>
+
+  {% if current_user.has_role('admin') %}
+  <h2>Admin functions</h2>
+  <dl class="dl-horizontal">
+
+    <dt><a href="{{ url_for('admin_users') }}">users</a></dt>
+    <dd>list of registered users</dd>
+
+    <dt><a href="{{ url_for('admin_roles') }}">roles</a></dt>
+    <dd>list of roles</dd>
+
+    <dt><a href="{{ url_for('admin_licenses') }}">licenses</a></dt>
+    <dd>list of licenses of all users</dd>
+  </dl>
+  {% endif %}
+
 {% endblock %}
