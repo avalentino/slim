@@ -59,6 +59,7 @@ def init_test_db():
     # users
     admin = user_datastore.find_user(email='admin')
     admin.password = encrypt_password('admin')
+    user_datastore.activate_user(admin)
 
     role = user_datastore.find_role('user')
     for username in ('user1', 'user2'):
