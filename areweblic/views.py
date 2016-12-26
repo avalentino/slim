@@ -4,7 +4,7 @@ import os
 import subprocess
 
 from flask import (
-    request, redirect, url_for, flash, render_template, make_response)
+    request, redirect, url_for, flash, render_template, make_response, abort)
 
 from flask_security import login_required, roles_accepted, current_user
 from flask_uploads import UploadNotAllowed
@@ -85,11 +85,14 @@ def new():
 @app.route('/licenses/<int:lic_id>')
 @login_required
 def show_license(lic_id):
-    if current_user.has_role('admin'):
-        query = License.query
-    else:
-        query = License.query.filter(License.user_id == current_user.id)
-    lic = query.get(lic_id)
+    lic = License.query.get(lic_id)
+    if lic is None:
+        return abort(404)
+    elif not current_user.has_role('admin') and lic.user_id != current_user.id:
+        # return abort(403)
+        flash('You do not have permission to view this resource.', 'error')
+        return redirect(url_for('index'))
+
     user = User.query.filter(User.id == lic.user_id).first()
     return render_template('license.html', lic=lic, user=user)
 
@@ -97,13 +100,15 @@ def show_license(lic_id):
 @app.route('/download/<int:lic_id>')
 @login_required
 def download(lic_id):
-    if current_user.has_role('admin'):
-        query = License.query
-    else:
-        query = License.query.filter(License.user_id == current_user.id)
-    data = query.get(lic_id).license
+    lic = License.query.get(lic_id)
+    if lic is None:
+        return abort(404)
+    elif not current_user.has_role('admin') and lic.user_id != current_user.id:
+        # return abort(403)
+        flash('You do not have permission to view this resource.', 'error')
+        return redirect(url_for('index'))
 
-    response = make_response(data)
+    response = make_response(lic.license)
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=lic.dat'
 
