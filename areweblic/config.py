@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
+import posixpath
+try:
+    from urllib.parse import SplitResult, urlunsplit
+except ImportError:
+    from urlparse import SplitResult, urlunsplit
 
 
 # app
@@ -8,7 +13,7 @@ DEBUG = True
 
 APPLICATION_DIR = os.path.dirname(os.path.realpath(__file__))
 APPLICATION_DIR = os.path.normpath(os.path.join(APPLICATION_DIR, os.pardir))
-
+SYSTEM_CONFIG_FILE = '/etc/areweblic/config.py'
 # SERVER_NAME = ''
 
 SECRET_KEY = 'something hard to guess'
@@ -16,8 +21,12 @@ SECRET_KEY = 'something hard to guess'
 
 # sqlalchemy
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_DATABASE_URI = (
-    'sqlite:///' + os.path.join(APPLICATION_DIR, 'arelic.db'))
+SQLALCHEMY_DATABASE_URI = urlunsplit(SplitResult(
+    scheme='sqlite',
+    netloc='/',
+    path=posixpath.join(APPLICATION_DIR, 'arelic.db'),
+    query='',
+    fragment=''))
 
 
 # security

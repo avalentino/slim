@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 import logging
+try:
+    from urllib.parse import urlsplit
+except ImportError:
+    from urlparse import urlsplit
 
 from flask_script import Manager
 from flask_migrate import MigrateCommand, Migrate
@@ -23,6 +28,11 @@ manager = Manager(app)
 def init_db():
     """Basic initialization of the internal DB"""
 
+    db_path = urlsplit(app.config['SQLALCHEMY_DATABASE_URI']).path
+    db_path = os.path.dirname(db_path)
+    if not os.path.exists(db_path):
+        os.makedirs(db_path)
+
     db.create_all()
 
     # roles
@@ -34,6 +44,27 @@ def init_db():
     user = user_datastore.create_user(email='admin', password='')
     user_datastore.deactivate_user(user)
     user_datastore.add_role_to_user(user, admin_role)
+
+    log.warning('remember to change the password for admin')
+
+    db.session.commit()
+
+
+@manager.command
+def init_test_db():
+    """Basic initialization of the internal DB for testing"""
+
+    init_db()
+
+    # users
+    admin = user_datastore.find_user(email='admin')
+    admin.password = encrypt_password('admin')
+
+    role = user_datastore.find_role('user')
+    for username in ('user1', 'user2'):
+        user = user_datastore.create_user(email=username, password=username)
+        user_datastore.add_role_to_user(user, role)
+        user_datastore.activate_user(user)
 
     db.session.commit()
 
