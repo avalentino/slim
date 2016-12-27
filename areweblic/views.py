@@ -4,13 +4,13 @@ import os
 import subprocess
 
 from flask import (
-    request, redirect, url_for, flash, render_template, make_response, abort)
+    request, redirect, url_for, flash, render_template, make_response)
 
 from flask_security import login_required, roles_accepted, current_user
 from flask_uploads import UploadNotAllowed
 
 from .app import app, request_uploader
-from .models import db, License, User, Role
+from .models import db, License, User, Role, Product
 
 
 @app.route('/')
@@ -23,7 +23,10 @@ def index():
 @login_required
 def licenses():
     query = License.query.filter(License.user_id == current_user.id)
-    return render_template('licenses.html', pagination=query.paginate())
+    return render_template(
+        'licenses.html',
+        pagination=query.paginate(per_page=app.config['ITEMS_PER_PAGE']),
+        products=Product.query)
 
 
 @app.route('/new', methods=['GET', 'POST'])
@@ -79,7 +82,7 @@ def new():
             os.remove(filename)
 
             return redirect(url_for('licenses'))
-    return render_template('new.html', products=app.config['PRODUCTS'])
+    return render_template('new.html', products=Product.query.all())
 
 
 @app.route('/licenses/<int:lic_id>')
@@ -91,11 +94,12 @@ def show_license(lic_id):
         flash('You do not have permission to view this resource.', 'error')
         return redirect(url_for('index'))
 
-    user = User.query.filter(User.id == lic.user_id).first()
-    return render_template('license.html', lic=lic, user=user)
+    user = User.query.get(lic.user_id)
+    product = Product.query.get(lic.product_id)
+    return render_template('license.html', lic=lic, user=user, product=product)
 
 
-@app.route('/download/<int:lic_id>')
+@app.route('/licenses/<int:lic_id>/download')
 @login_required
 def download(lic_id):
     lic = License.query.get_or_404(lic_id)
@@ -120,17 +124,25 @@ def admin_index():
 @app.route('/admin/users')
 @roles_accepted('admin')
 def admin_users():
-    return render_template('users.html', pagination=User.query.paginate())
+    return render_template(
+        'users.html',
+        pagination=User.query.paginate(per_page=app.config['ITEMS_PER_PAGE']))
 
 
 @app.route('/admin/roles')
 @roles_accepted('admin')
 def admin_roles():
-    return render_template('roles.html', pagination=Role.query.paginate())
+    return render_template(
+        'roles.html',
+        pagination=Role.query.paginate(per_page=app.config['ITEMS_PER_PAGE']))
 
 
 @app.route('/admin/licenses')
 @roles_accepted('admin')
 def admin_licenses():
     return render_template(
-        'licenses.html', pagination=License.query.paginate(), users=User.query)
+        'licenses.html',
+        pagination=License.query.paginate(
+            per_page=app.config['ITEMS_PER_PAGE']),
+        users=User.query,
+        products=Product.query)

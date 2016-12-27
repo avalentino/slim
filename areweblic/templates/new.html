@@ -6,8 +6,8 @@
   <div class="form-group">
     <label for="product-filed">Product</label>
     <select class="form-control" name="product" id="product-field" required>
-      {% for key, value in products.items() %}
-      <option value="{{ key }}">{{ value }}</option>
+      {% for product in products %}
+      <option value="{{ product.name }}">{{ product.name }}</option>
       {% endfor %}
     </select>
   </div>

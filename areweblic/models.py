@@ -53,30 +53,42 @@ class User(db.Model, UserMixin):
 
 
 # areweblic
+class Product(db.Model):
+    __tablename__ = 'products'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32))
+    description = db.Column(db.String(255))
+
+    def __repr__(self):
+        return '<Product: id=%d, name=%r' % (self.id, self.name)
+
+
 class License(db.Model):
     __tablename__ = 'licenses'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    product = db.Column(db.String(64))
-    description = db.Column(db.String(100))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    description = db.Column(db.String(255))
     request = db.Column(db.LargeBinary)
     request_date = db.Column(db.DateTime)
     license = db.Column(db.LargeBinary)
 
-    def __init__(self, user_id, product, request, license, description='',
+    def __init__(self, user_id, product_id, request, license, description='',
                  request_date=None):
 
         if request_date is None:
             request_date = datetime.datetime.now()
 
         self.user_id = user_id
-        self.product = product
+        self.product_id = product_id
         self.description = description
         self.request = request
         self.request_date = request_date
         self.license = license
 
     def __repr__(self):
-        return '<License: id=%d, user_id=%r, product=%r, request_date=%s>' % (
-            self.id, self.user_id, self.product, self.date.isoformat())
+        return ('<License: id=%d, user_id=%r, product_id=%r, '
+                'request_date=%s>' % (self.id, self.user_id, self.product_id,
+                                      self.date.isoformat()))

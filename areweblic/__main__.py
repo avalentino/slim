@@ -12,7 +12,8 @@ from flask_script import Manager
 from flask_migrate import MigrateCommand, Migrate
 from flask_security.utils import encrypt_password
 
-from areweblic.app import app, db, user_datastore
+from areweblic.app import app, user_datastore
+from areweblic.models import db, User, License, Product
 
 
 # basic cli initialization
@@ -47,6 +48,11 @@ def init_db():
 
     log.warning('remember to change the password for admin')
 
+    # products
+    for name in ('gss', 'cspp', 'csip', 'ssp'):
+        product = Product(name=name)
+        db.session.add(product)
+
     db.session.commit()
 
 
@@ -66,6 +72,18 @@ def init_test_db():
         user = user_datastore.create_user(email=username, password=username)
         user_datastore.add_role_to_user(user, role)
         user_datastore.activate_user(user)
+
+    # licenses
+    nproducts = Product.query.count()
+    for idx, user in enumerate(User.query.all()):
+        product = Product.query.get(idx % nproducts + 1)
+        license = License(user.id, product.id, b'dummy', b'bummy')
+        db.session.add(license)
+
+    admin = User.query.filter(User.email == 'admin').first()
+    for product in Product.query.all():
+        license = License(admin.id, product.id, b'dummy', b'bummy')
+        db.session.add(license)
 
     db.session.commit()
 

@@ -49,10 +49,4 @@ REQUEST_EXTENSIONS = ('request',)
 LICENSE_GENERATOR_PATH = os.path.join(
     APPLICATION_DIR, 'bin', 'generate_license.bin')
 
-# TODO: get this form the DB
-PRODUCTS = OrderedDict([
-    ('ssp', 'SSP'),
-    ('cspp', 'CSPP'),
-    ('csip', 'CSIP'),
-    ('gss', 'GSS'),
-])
+ITEMS_PER_PAGE = 5

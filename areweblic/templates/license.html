@@ -8,7 +8,7 @@
     <dd>{{ user.email|default(lic.user_id) }}</dd>
 
     <dt>Product</dt>
-    <dd>{{ lic.product }}</dd>
+    <dd>{{ product.name|default(lic.product_id) }}</dd>
 
     <dt>Description</dt>
     <dd>{{ lic.description }}</dd>
