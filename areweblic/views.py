@@ -130,6 +130,19 @@ def download(lic_id):
     return response
 
 
+@app.route('/profile')
+@login_required
+def user_profile():
+    return render_template('user.html', user=current_user)
+
+
+@app.route('/admin/users/<int:user_id>')
+@roles_accepted('admin')
+def show_user(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('user.html', user=user)
+
+
 @app.route('/admin')
 @roles_accepted('admin')
 def admin_index():

@@ -10,7 +10,7 @@ except ImportError:
 
 from flask import request, current_app
 from flask_nav import Nav
-from flask_nav.elements import Navbar, View, Link
+from flask_nav.elements import Navbar, View, Link, Subgroup
 from flask_security import current_user
 
 
@@ -52,7 +52,7 @@ def topnavbar():
             path_views.clear()
             break
         target = rule.endpoint
-        path_views.append(View(label.capitalize(), target))
+        path_views.append(View('> ' + label.capitalize(), target))
 
     # navbar
     if current_user.has_role('admin'):
@@ -61,7 +61,6 @@ def topnavbar():
             View('Home', 'index'),
             #View('Admin', 'admin_index'),
             Link('Support', support_link),
-            View('Logout %s' % current_user.email, 'security.logout'),
         ]
     else:
         items = [
@@ -69,10 +68,11 @@ def topnavbar():
             View('Home', 'index'),
             Link('Support', support_link),
         ]
-        if current_user.is_authenticated:
-            items.append(
-                View('Logout %s' % current_user.email, 'security.logout')
-            )
+    if current_user.is_authenticated:
+        profile_view = View('Profile', 'user_profile')
+        logout_view = View('Logout', 'security.logout')
+        subgroup = Subgroup(current_user.email, profile_view, logout_view)
+        items.append(subgroup)
 
     if path_views:
         items[2:2] = path_views
