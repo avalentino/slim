@@ -35,6 +35,6 @@
   {{ render_pagination(pagination) }}
   {% else %}
   <p>No license found.</p>
-  <p>{{ form_button(url_for('new'), icon('upload') + ' New license request') }}</p>
   {% endif %}
+  <p>{{ form_button(url_for('new'), icon('upload') + ' New license request') }}</p>
 {% endblock %}
