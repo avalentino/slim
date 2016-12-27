@@ -86,7 +86,15 @@ def new():
             os.remove(filename)
 
             return redirect(url_for('licenses'))
-    return render_template('new.html', products=Product.query.all())
+
+    products = Product.query.all()
+
+    if current_user.has_role('admin'):
+        users = User.query.all()
+    else:
+        users = None
+
+    return render_template('new.html', products=products, users=users)
 
 
 @app.route('/licenses/<int:lic_id>')
