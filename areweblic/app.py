@@ -55,5 +55,6 @@ security = Security(app, user_datastore)
 
 
 # flask-uploads
+#patch_request_class(app, app.config['MAX_CONTENT_LENGTH'])
 request_uploader = UploadSet('requests', app.config['REQUEST_EXTENSIONS'])
 configure_uploads(app, request_uploader)

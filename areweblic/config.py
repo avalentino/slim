@@ -37,7 +37,7 @@ SECURITY_LOGIN_USER_TEMPLATE = 'login.html'
 
 
 # upload
-MAX_CONTENT_LENGTH = 4096
+MAX_CONTENT_LENGTH = 4 * 1024
 
 UPLOADED_REQUESTS_DEST = os.path.join(APPLICATION_DIR, 'uploads')
 UPLOADED_REQUESTS_URL = 'http://localhost:5001/uploads'
