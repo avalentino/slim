@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>{{ title|default('Products') }}</h1>
+  <h1>{{ title|default('Purchases') }}</h1>
 
-  <p>Total pproduct count: {{ pagination.query.count() }}</p>
+  <p>Total purchase count: {{ pagination.query.count() }}</p>
 
   <div>
     <p><a href="{{ support_link }}">Send a support request</a>
@@ -14,22 +14,22 @@
     <thead>
       <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Desctiption</th>
-        {% if purchase_map %}
-        <th>Purchased</th>
+        {% if users %}
+        <th>User</th>
         {% endif %}
+        <th>Product</th>
+        <th>Quantity</th>
       </tr>
     </thead>
     <tbody>
-    {% for product in pagination.items %}
+    {% for item in pagination.items %}
       <tr>
-        <td>{{ product.id }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.description }}</td>
-        {% if purchase_map %}
-        <td>{{ 'YES' if purchase_map[product.id] else 'NO' }}</td>
+        <td>{{ item.id }}</td>
+        {% if users %}
+        <td>{{ users.get(item.user_id).email }}</td>
         {% endif %}
+        <td>{{ products.get(item.product_id).name }}</td>
+        <td>{{ item.quantity }}</td>
       </tr>
     {% endfor %}
     </tbody>

@@ -9,8 +9,9 @@ from flask import (
 from flask_security import login_required, roles_accepted, current_user
 from flask_uploads import UploadNotAllowed
 
+from . import utils
 from .app import app, request_uploader
-from .models import db, License, User, Role, Product
+from .models import db, License, User, Role, Product, Purchase
 
 
 @app.route('/')
@@ -30,65 +31,35 @@ def licenses():
         target='show_license')
 
 
-@app.route('/new', methods=['GET', 'POST'])
+@app.route('/products')
 @login_required
-def new():
-    if request.method == 'POST' and 'license_req' in request.files:
-        if not request.files['license_req']:
-            flash('"Request file" fiield not set', 'error')
+def products():
+    purchased = Purchase.product_ids(current_user.id)
+    purchase_map = dict(
+        (prod.id, prod.id in purchased) for prod in Product.query.all())
+    return render_template(
+        'products.html',
+        pagination=Product.query.paginate(
+            per_page=app.config['ITEMS_PER_PAGE']),
+        purchase_map=purchase_map)
 
-        try:
-            filename = request_uploader.save(request.files['license_req'])
-        except UploadNotAllowed as ex:
-            flash('Upload not allowed: incorrect file type', 'error')
-        else:
-            flash('Request file uploaded')
 
-            # load request data
-            filename = os.path.join(
-                app.config['UPLOADED_REQUESTS_DEST'], filename)
-            with open(filename, 'rb') as fd:
-                data = fd.read()
+@app.route('/purchases')
+@login_required
+def purchases():
+    support_link = utils.make_support_link(app.config['SUPPORT_EMAIL'])
+    return render_template(
+        'purchases.html',
+        pagination=Purchase.query.filter_by(user_id=current_user.id).paginate(
+            per_page=app.config['ITEMS_PER_PAGE']),
+        products=Product.query,
+        support_link=support_link)
 
-            # generate the license file
-            bin = app.config['LICENSE_GENERATOR_PATH']
-            licfile = filename + '.lic.dat'
-            args = [bin, 'add', filename, licfile]
-            try:
-                subprocess.check_call(args, shell=False)
-            except subprocess.CalledProcessError as ex:
-                msg = ('Unable to generate license for request %r, please '
-                       'check that the input is correct.' %
-                       os.basename(filename))
-                flash(msg, 'error')
-            else:
-                flash('New license correctly generated')
 
-                # load the license data
-                with open(licfile, 'rb') as fd:
-                    licdata = fd.read()
-                os.remove(licfile)
-
-                # product
-                name = request.form['product']
-                product = Product.query.filter(Product.name == name).first()
-
-                # save the new license
-                license = License(
-                    current_user.id,
-                    product_id=product.id,
-                    request=data,
-                    license=licdata,
-                    description=request.form['description'])
-
-                db.session.add(license)
-                db.session.commit()
-
-            os.remove(filename)
-
-            return redirect(url_for('licenses'))
-
-    products = Product.query.all()
+def _new_get():
+    purchased = Purchase.product_ids(current_user.id)
+    products = [
+        product for product in Product.query.all() if product.id in purchased]
 
     if current_user.has_role('admin'):
         users = User.query.all()
@@ -96,6 +67,84 @@ def new():
         users = None
 
     return render_template('new.html', products=products, users=users)
+
+
+def _new_post():
+    # product
+    name = request.form['product']
+    product = Product.query.filter_by(name=name).first()
+
+    # Total purchase count for the current user
+    tot_purchase_count = Purchase.count(
+        user_id=current_user.id, product_id=product.id)
+
+    # License count
+    license_count = License.query.filter_by(user_id=current_user.id).count()
+
+    if license_count >= tot_purchase_count:
+        flash('No purchased license available for this ptoduct. '
+              'Please contact the product support or purchase new '
+              'licenses.', 'error')
+        return _new_get()
+
+    try:
+        filename = request_uploader.save(request.files['license_req'])
+    except UploadNotAllowed as ex:
+        flash('Upload not allowed: incorrect file type', 'error')
+        return _new_get()
+    else:
+        flash('Request file uploaded')
+
+    try:
+        # load request data
+        filename = os.path.join(
+            app.config['UPLOADED_REQUESTS_DEST'], filename)
+        with open(filename, 'rb') as fd:
+            data = fd.read()
+
+        # generate the license file
+        bin = app.config['LICENSE_GENERATOR_PATH']
+        licfile = filename + '.lic.dat'
+        args = [bin, 'add', filename, licfile]
+        try:
+            subprocess.check_call(args, shell=False)
+        except subprocess.CalledProcessError as ex:
+            msg = ('Unable to generate license for request %r, please '
+                   'check that the input is correct.' %
+                   os.basename(filename))
+            flash(msg, 'error')
+            return _new_get()
+        else:
+            flash('New license correctly generated')
+
+        # load the license data
+        with open(licfile, 'rb') as fd:
+            licdata = fd.read()
+        os.remove(licfile)
+
+        # save the new license
+        license = License(
+            current_user.id,
+            product_id=product.id,
+            request=data,
+            license=licdata,
+            description=request.form['description'])
+
+        db.session.add(license)
+        db.session.commit()
+    finally:
+        os.remove(filename)
+
+    return redirect(url_for('licenses'))
+
+
+@app.route('/new', methods=['GET', 'POST'])
+@login_required
+def new():
+    if request.method == 'POST':
+        return _new_post()
+    else:
+        return _new_get()
 
 
 @app.route('/admin/licenses/<int:lic_id>', endpoint='admin_show_license')
@@ -172,6 +221,17 @@ def admin_products():
         'products.html',
         pagination=Product.query.paginate(
             per_page=app.config['ITEMS_PER_PAGE']))
+
+
+@app.route('/admin/purchases')
+@roles_accepted('admin')
+def admin_purchases():
+    return render_template(
+        'purchases.html',
+        pagination=Purchase.query.paginate(
+            per_page=app.config['ITEMS_PER_PAGE']),
+        users=User.query,
+        products=Product.query)
 
 
 @app.route('/admin/licenses')

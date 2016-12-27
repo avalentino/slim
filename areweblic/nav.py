@@ -2,30 +2,14 @@
 
 import posixpath
 from functools import partial
-try:
-    from urllib.parse import ParseResult, urlunparse, quote
-except ImportError:
-    from urlparse import ParseResult, urlunparse
-    from urllib import quote
 
 from flask import request, current_app
 from flask_nav import Nav
 from flask_nav.elements import Navbar, View, Link, Subgroup
 from flask_security import current_user
 
+from . import utils
 
-def make_support_link(email):
-    support_link_parts = ParseResult(
-        scheme='mailto',
-        netloc='',
-        path=email,
-        params='',
-        query='subject=' + quote('[AreWebLic] Support request'),
-        # query=urlencode({'subject': '[AreWebLic] Support request'},
-        #                 quote_via=quote),
-        fragment='',
-    )
-    return urlunparse(support_link_parts)
 
 nav = Nav()
 
@@ -33,7 +17,7 @@ nav = Nav()
 @nav.navigation('top')
 def topnavbar():
     # support link
-    support_link = make_support_link(current_app.config['SUPPORT_EMAIL'])
+    support_link = utils.make_support_link(current_app.config['SUPPORT_EMAIL'])
 
     # navigation path
     server_name = current_app.config['SERVER_NAME']
@@ -69,9 +53,12 @@ def topnavbar():
             Link('Support', support_link),
         ]
     if current_user.is_authenticated:
-        profile_view = View('Profile', 'user_profile')
-        logout_view = View('Logout', 'security.logout')
-        subgroup = Subgroup(current_user.email, profile_view, logout_view)
+        subgroup = Subgroup(
+            current_user.email,
+            View('Profile', 'user_profile'),
+            View('Logout', 'security.logout'),
+        )
+
         items.append(subgroup)
 
     if path_views:

@@ -13,7 +13,7 @@ from flask_migrate import MigrateCommand, Migrate
 from flask_security.utils import encrypt_password
 
 from areweblic.app import app, user_datastore
-from areweblic.models import db, User, License, Product
+from areweblic.models import db, User, License, Product, Purchase
 
 
 # basic cli initialization
@@ -49,8 +49,14 @@ def init_db():
     log.warning('remember to change the password for admin')
 
     # products
-    for name in ('gss', 'cspp', 'csip', 'ssp'):
-        product = Product(name=name)
+    products = (
+        ('GSS', 'Generic SAR Simulator'),
+        ('CSPP', 'Sentinel-1 C++ SAR Procrssing Processor'),
+        ('CSIP', 'C++ SAR Interferometric Processor'),
+        ('SSP',  'SAOCOM SAR Processor'),
+    )
+    for name, description in products:
+        product = Product(name=name, description=description)
         db.session.add(product)
 
     db.session.commit()
@@ -73,16 +79,27 @@ def init_test_db():
         user_datastore.add_role_to_user(user, role)
         user_datastore.activate_user(user)
 
-    # licenses
-    nproducts = Product.query.count()
-    for idx, user in enumerate(User.query.all()):
-        product = Product.query.get(idx % nproducts + 1)
-        license = License(user.id, product.id, b'dummy', b'bummy')
-        db.session.add(license)
+    # purchases
+    for product in Product.query.all():
+        purchase = Purchase(
+            user_id=admin.id, product_id=product.id, quantity=1024)
+        db.session.add(purchase)
 
-    admin = User.query.filter(User.email == 'admin').first()
+    nusers = User.query.count()
+    for idx, product in enumerate(product.query.all()):
+        user = User.query.get(idx % (nusers - 1) + 2)  # exclude admin
+        purchase = Purchase(user_id=user.id, product_id=product.id)
+        db.session.add(purchase)
+
+    # licenses
     for product in Product.query.all():
         license = License(admin.id, product.id, b'dummy', b'bummy')
+        db.session.add(license)
+
+    nusers = User.query.count()
+    for idx, product in enumerate(product.query.all()):
+        user = User.query.get(idx % (nusers - 1) + 2)  # exclude admin
+        license = License(user.id, product.id, b'dummy', b'bummy')
         db.session.add(license)
 
     db.session.commit()

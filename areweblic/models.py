@@ -64,6 +64,44 @@ class Product(db.Model):
         return '<Product: id=%d, name=%r' % (self.id, self.name)
 
 
+class Purchase(db.Model):
+    __tablename__ = 'purchases'
+
+    id = db.Column(db.Integer, primary_key=True)  # @TODO: check
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+    product_id = db.Column(db.Integer(), db.ForeignKey('products.id'))
+    quantity = db.Column(db.Integer(), default=1)
+    # purchase_date = db.Column(db.DateTime())
+    # expiration_date = db.Column(db.DateTime())
+    # active = db.Column(db.Boolean())
+
+    @classmethod
+    def count(cls, user_id=None, product_id=None):
+        query = cls.query
+        if user_id:
+            query = query.filter_by(user_id=user_id)
+        if product_id:
+            query = query.filter_by(product_id=product_id)
+
+        return sum(item.quantity for item in query.all())
+
+    @classmethod
+    def product_ids(cls, user_id=None):
+        query = cls.query
+        if user_id:
+            query = query.filter_by(user_id=user_id)
+
+        return set(item.product_id for item in query.all())
+
+    @classmethod
+    def user_idss(cls, product_id=None):
+        query = cls.query
+        if product_id:
+            query = query.filter_by(product_id=product_id)
+
+        return set(item.user_id for item in query.all())
+
+
 class License(db.Model):
     __tablename__ = 'licenses'
 
