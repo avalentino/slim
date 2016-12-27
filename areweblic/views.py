@@ -139,6 +139,15 @@ def admin_roles():
         pagination=Role.query.paginate(per_page=app.config['ITEMS_PER_PAGE']))
 
 
+@app.route('/admin/products')
+@roles_accepted('admin')
+def admin_products():
+    return render_template(
+        'products.html',
+        pagination=Product.query.paginate(
+            per_page=app.config['ITEMS_PER_PAGE']))
+
+
 @app.route('/admin/licenses')
 @roles_accepted('admin')
 def admin_licenses():

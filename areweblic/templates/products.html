@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>{{ title|default('Products') }}</h1>
+
+  <p>Total role count: {{ pagination.query.count() }}</p>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Desctiption</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for product in pagination.items %}
+      <tr>
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.description }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  {% from "bootstrap/pagination.html" import render_pagination %}
+  {{ render_pagination(pagination) }}
+
+{% endblock %}
