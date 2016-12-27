@@ -86,6 +86,7 @@ def new():
 
 
 @app.route('/licenses/<int:lic_id>')
+@app.route('/admin/licenses/<int:lic_id>')
 @login_required
 def show_license(lic_id):
     lic = License.query.get_or_404(lic_id)
@@ -100,6 +101,7 @@ def show_license(lic_id):
 
 
 @app.route('/licenses/<int:lic_id>/download')
+@app.route('/admin/licenses/<int:lic_id>/download')
 @login_required
 def download(lic_id):
     lic = License.query.get_or_404(lic_id)

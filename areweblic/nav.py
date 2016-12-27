@@ -59,7 +59,7 @@ def topnavbar():
         items = [
             View('AreWebLic', 'index'),
             View('Home', 'index'),
-            View('Admin', 'admin_index'),
+            #View('Admin', 'admin_index'),
             Link('Support', support_link),
             View('Logout %s' % current_user.email, 'security.logout'),
         ]
