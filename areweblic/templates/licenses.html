@@ -21,7 +21,7 @@
     <tbody>
     {% for item in pagination.items %}
       <tr>
-        <td>{{ item.id }} {{ form_button(url_for('show_license', lic_id=item.id), icon('eye-open'), method='get') }}</td>
+        <td>{{ item.id }} {{ form_button(url_for(target, lic_id=item.id), icon('eye-open'), method='get') }}</td>
         {% if users %}
         <td>{{ users.get(item.user_id).email|default(item.user_id) }}</th>
         {% endif %}

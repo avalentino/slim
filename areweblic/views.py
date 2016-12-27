@@ -26,7 +26,8 @@ def licenses():
     return render_template(
         'licenses.html',
         pagination=query.paginate(per_page=app.config['ITEMS_PER_PAGE']),
-        products=Product.query)
+        products=Product.query,
+        target='show_license')
 
 
 @app.route('/new', methods=['GET', 'POST'])
@@ -97,8 +98,8 @@ def new():
     return render_template('new.html', products=products, users=users)
 
 
+@app.route('/admin/licenses/<int:lic_id>', endpoint='admin_show_license')
 @app.route('/licenses/<int:lic_id>')
-@app.route('/admin/licenses/<int:lic_id>')
 @login_required
 def show_license(lic_id):
     lic = License.query.get_or_404(lic_id)
@@ -112,8 +113,8 @@ def show_license(lic_id):
     return render_template('license.html', lic=lic, user=user, product=product)
 
 
-@app.route('/licenses/<int:lic_id>/download')
 @app.route('/admin/licenses/<int:lic_id>/download')
+@app.route('/licenses/<int:lic_id>/download')
 @login_required
 def download(lic_id):
     lic = License.query.get_or_404(lic_id)
@@ -168,4 +169,5 @@ def admin_licenses():
         pagination=License.query.paginate(
             per_page=app.config['ITEMS_PER_PAGE']),
         users=User.query,
-        products=Product.query)
+        products=Product.query,
+        target='admin_show_license')
