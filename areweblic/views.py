@@ -68,10 +68,14 @@ def new():
                     licdata = fd.read()
                 os.remove(licfile)
 
+                # product
+                name = request.form['product']
+                product = Product.query.filter(Product.name == name).first()
+
                 # save the new license
                 license = License(
                     current_user.id,
-                    product=request.form['product'],
+                    product_id=product.id,
                     request=data,
                     license=licdata,
                     description=request.form['description'])
