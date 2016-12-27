@@ -10,7 +10,7 @@ from flask_security import login_required, roles_accepted, current_user
 from flask_uploads import UploadNotAllowed
 
 from .app import app, request_uploader
-from .models db, import License, User, Role
+from .models import db, License, User, Role
 
 
 @app.route('/')
@@ -79,7 +79,7 @@ def new():
             os.remove(filename)
 
             return redirect(url_for('licenses'))
-    return render_template('new.html')
+    return render_template('new.html', products=app.config['PRODUCTS'])
 
 
 @app.route('/licenses/<int:lic_id>')

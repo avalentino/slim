@@ -2,6 +2,7 @@
 
 import os
 import posixpath
+from collections import OrderedDict
 try:
     from urllib.parse import SplitResult, urlunsplit
 except ImportError:
@@ -47,3 +48,11 @@ REQUEST_EXTENSIONS = ('request',)
 # areweblic
 LICENSE_GENERATOR_PATH = os.path.join(
     APPLICATION_DIR, 'bin', 'generate_license.bin')
+
+# TODO: get this form the DB
+PRODUCTS = OrderedDict([
+    ('ssp', 'SSP'),
+    ('cspp', 'CSPP'),
+    ('csip', 'CSIP'),
+    ('gss', 'GSS'),
+])
