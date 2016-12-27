@@ -50,3 +50,5 @@ LICENSE_GENERATOR_PATH = os.path.join(
     APPLICATION_DIR, 'bin', 'generate_license.bin')
 
 ITEMS_PER_PAGE = 5
+
+SUPPORT_EMAIL = 'info@aresys.it'
