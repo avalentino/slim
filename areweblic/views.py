@@ -85,10 +85,8 @@ def new():
 @app.route('/licenses/<int:lic_id>')
 @login_required
 def show_license(lic_id):
-    lic = License.query.get(lic_id)
-    if lic is None:
-        return abort(404)
-    elif not current_user.has_role('admin') and lic.user_id != current_user.id:
+    lic = License.query.get_or_404(lic_id)
+    if not current_user.has_role('admin') and lic.user_id != current_user.id:
         # return abort(403)
         flash('You do not have permission to view this resource.', 'error')
         return redirect(url_for('index'))
@@ -100,10 +98,8 @@ def show_license(lic_id):
 @app.route('/download/<int:lic_id>')
 @login_required
 def download(lic_id):
-    lic = License.query.get(lic_id)
-    if lic is None:
-        return abort(404)
-    elif not current_user.has_role('admin') and lic.user_id != current_user.id:
+    lic = License.query.get_or_404(lic_id)
+    if not current_user.has_role('admin') and lic.user_id != current_user.id:
         # return abort(403)
         flash('You do not have permission to view this resource.', 'error')
         return redirect(url_for('index'))
