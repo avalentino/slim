@@ -9,8 +9,8 @@ from flask import (
 from flask_security import login_required, roles_accepted, current_user
 from flask_uploads import UploadNotAllowed
 
-from .app import app, db, request_uploader
-from .models import License, User, Role
+from .app import app, request_uploader
+from .models db, import License, User, Role
 
 
 @app.route('/')
