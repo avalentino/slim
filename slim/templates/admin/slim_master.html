@@ -1,5 +1,9 @@
 {% extends 'admin/base.html' %}
 
+{% block brand %}
+<a class="navbar-brand" href="{{ url_for('index') }}">{{ admin_view.admin.name }}</a>
+{% endblock %}
+
 {% block tail %}
 <br>
 <br>
