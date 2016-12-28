@@ -94,7 +94,7 @@ def init_test_db():
 
     # licenses
     for product in Product.query.all():
-        license = License(admin.id, product.id, b'dummy', b'bummy')
+        license = License(admin.id, product.id, b'dummy', b'dummy')
         db.session.add(license)
 
     nusers = User.query.count()
