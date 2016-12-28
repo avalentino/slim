@@ -147,7 +147,6 @@ def new():
         return _new_get()
 
 
-@app.route('/admin/licenses/<int:lic_id>', endpoint='admin_show_license')
 @app.route('/licenses/<int:lic_id>')
 @login_required
 def show_license(lic_id):
@@ -162,7 +161,6 @@ def show_license(lic_id):
     return render_template('license.html', lic=lic, user=user, product=product)
 
 
-@app.route('/admin/licenses/<int:lic_id>/download')
 @app.route('/licenses/<int:lic_id>/download')
 @login_required
 def download(lic_id):
