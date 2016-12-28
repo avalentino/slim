@@ -17,7 +17,8 @@ nav = Nav()
 @nav.navigation('top')
 def topnavbar():
     # support link
-    support_link = utils.make_support_link(current_app.config['SUPPORT_EMAIL'])
+    support_email = current_app.config['SLIM_SUPPORT_EMAIL']
+    support_link = utils.make_support_link(support_email)
 
     # navigation path
     server_name = current_app.config['SERVER_NAME']
@@ -39,7 +40,7 @@ def topnavbar():
         path_views.append(View('> ' + label.capitalize(), target))
 
     # navbar
-    app_name = current_app.config.get('LIC_APP_NAME', '')
+    app_name = current_app.config.get('SLIM_APPNAME', 'SLiM')
     if current_user.has_role('admin'):
         items = [
             View(app_name, 'index'),

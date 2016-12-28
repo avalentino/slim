@@ -21,6 +21,7 @@ from .nav import nav
 
 
 # Flask app
+#app = Flask('slim')
 app = Flask('areweblic')
 app.config.from_object(config)
 app.config.from_object(config)
@@ -28,15 +29,15 @@ app.config.update(
     SQLALCHEMY_DATABASE_URI=urlunsplit(SplitResult(
         scheme='sqlite',
         netloc='/',
-        path=posixpath.join(app.instance_path, 'arelic.db'),
+        path=posixpath.join(app.instance_path, 'slim.db'),
         query='',
         fragment='')),
     UPLOADED_REQUESTS_DEST=os.path.join(app.instance_path, 'uploads'),
 )
 app.config.from_pyfile(
-    app.config['SYSTEM_CONFIG_FILE'],
+    app.config['SLIM_SYSTEM_CONFIG_FILE'],
     silent=True if app.config['DEBUG'] or app.config['TESTING'] else False)
-app.config.from_envvar('AREWEBLIC_SETTINGS_PATH', silent=True)
+app.config.from_envvar('SLIM_SETTINGS_PATH', silent=True)
 
 
 # bootstrap
@@ -59,7 +60,7 @@ security = Security(app, user_datastore)
 
 # admin
 admin = Admin(
-    app, name=app.config.get('LIC_APP_NAME', ''),
+    app, name=app.config.get('SLIM_APPNAME', 'SLiM'),
     base_template='admin/slim_master.html',
     template_mode='bootstrap3')
 admin.add_view(ModelView(models.Role, db.session))
@@ -82,6 +83,6 @@ def security_context_processor():
 
 
 # flask-uploads
-#patch_request_class(app, app.config['MAX_CONTENT_LENGTH'])
-request_uploader = UploadSet('requests', app.config['REQUEST_EXTENSIONS'])
+# patch_request_class(app, app.config['MAX_CONTENT_LENGTH'])
+request_uploader = UploadSet('requests', app.config['SLIM_REQUEST_EXTENSIONS'])
 configure_uploads(app, request_uploader)

@@ -19,7 +19,7 @@ from areweblic.models import db, User, License, Product, Purchase
 # basic cli initialization
 logging.basicConfig(
     format='%(levelname)s: %(message)s', level=logging.INFO, stream=sys.stdout)
-log = logging.getLogger('arelweblic.cli')
+log = logging.getLogger('slim.cli')
 
 manager = Manager(app)
 

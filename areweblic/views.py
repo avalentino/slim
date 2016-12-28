@@ -26,7 +26,7 @@ def licenses():
     query = License.query.filter(License.user_id == current_user.id)
     return render_template(
         'licenses.html',
-        pagination=query.paginate(per_page=app.config['ITEMS_PER_PAGE']),
+        pagination=query.paginate(per_page=app.config['SLIM_ITEMS_PER_PAGE']),
         products=Product.query,
         target='show_license')
 
@@ -40,18 +40,18 @@ def products():
     return render_template(
         'products.html',
         pagination=Product.query.paginate(
-            per_page=app.config['ITEMS_PER_PAGE']),
+            per_page=app.config['SLIM_ITEMS_PER_PAGE']),
         purchase_map=purchase_map)
 
 
 @app.route('/purchases')
 @login_required
 def purchases():
-    support_link = utils.make_support_link(app.config['SUPPORT_EMAIL'])
+    support_link = utils.make_support_link(app.config['SLIM_SUPPORT_EMAIL'])
     return render_template(
         'purchases.html',
         pagination=Purchase.query.filter_by(user_id=current_user.id).paginate(
-            per_page=app.config['ITEMS_PER_PAGE']),
+            per_page=app.config['SLIM_ITEMS_PER_PAGE']),
         products=Product.query,
         support_link=support_link)
 
@@ -103,7 +103,7 @@ def _new_post():
             data = fd.read()
 
         # generate the license file
-        bin = app.config['LICENSE_GENERATOR_PATH']
+        bin = app.config['SLIM_LICENSE_GENERATOR_PATH']
         licfile = filename + '.lic.dat'
         args = [bin, 'add', filename, licfile]
         try:

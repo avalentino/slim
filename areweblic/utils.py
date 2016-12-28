@@ -7,14 +7,14 @@ except ImportError:
     from urllib import quote
 
 
-def make_support_link(email):
+def make_support_link(email, appname='SLiM'):
     support_link_parts = ParseResult(
         scheme='mailto',
         netloc='',
         path=email,
         params='',
-        query='subject=' + quote('[AreWebLic] Support request'),
-        # query=urlencode({'subject': '[AreWebLic] Support request'},
+        query='subject=' + quote('[%s] Support request' % appname),
+        # query=urlencode({'subject': '[%s] Support request' % appname},
         #                 quote_via=quote),
         fragment='',
     )

@@ -52,7 +52,7 @@ class User(db.Model, UserMixin):
             self.id, self.email, roles, self.active)
 
 
-# areweblic
+# SLiM
 class Product(db.Model):
     __tablename__ = 'products'
 

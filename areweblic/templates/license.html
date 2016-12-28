@@ -16,7 +16,9 @@
     <dt>Date</dt>
     <dd>{{ lic.request_date }}</dd>
 
+    <br>
+
     <dt>Download</dt>
-    <dd>{{ form_button(url_for('download', lic_id=lic.id), icon('download-alt'), method='get') }}<dd>
+    <dd>{{ form_button(url_for('download', lic_id=lic.id), icon('download-alt') + ' Download', method='get', class='btn btn-primary') }}<dd>
   </dl>
 {% endblock %}

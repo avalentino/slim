@@ -32,8 +32,10 @@
     <dt>Last login IP</dt>
     <dd>{{ user.last_login_ip }}</dd>
 
-    <dt>Reset password</dt>
-    <dd>{{ form_button(url_for('security.change_password'), icon('cog') + ' Change password', method='get') }}<dd>
+    <br>
+
+    <dt>Pasword</dt>
+    <dd>{{ form_button(url_for('security.change_password'), icon('cog') + ' Change password', method='get', class='btn btn-primary') }}</dd>
   </dl>
 
 {% endblock %}
