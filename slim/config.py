@@ -2,7 +2,6 @@
 
 import os
 import posixpath
-from collections import OrderedDict
 try:
     from urllib.parse import SplitResult, urlunsplit
 except ImportError:
@@ -53,4 +52,4 @@ SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
 
 # upload
 UPLOADED_REQUESTS_DEST = os.path.join(SLIM_APPDIR, 'uploads')
-#UPLOADED_REQUESTS_URL = 'http://localhost:5001/uploads'
+# UPLOADED_REQUESTS_URL = 'http://localhost:5001/uploads'

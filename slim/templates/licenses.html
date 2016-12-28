@@ -2,39 +2,39 @@
 {% from "bootstrap/utils.html" import form_button, icon %}
 
 {% block content %}
-  <h1>{{ title|default('Licenses') }}</h1>
+<h1>{{ title|default('Licenses') }}</h1>
 
-  <p>Total license count: {{ pagination.query.count() }}</p>
+<p>Total license count: {{ pagination.query.count() }}</p>
 
-  {% if pagination.items %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        {% if users %}
-        <th>User</th>
-        {% endif %}
-        <th>Product</th>
-        <th>Request date</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for item in pagination.items %}
-      <tr>
-        <td>{{ item.id }} {{ form_button(url_for(target, lic_id=item.id), icon('eye-open'), method='get') }}</td>
-        {% if users %}
-        <td>{{ users.get(item.user_id).email|default(item.user_id) }}</th>
-        {% endif %}
-        <td>{{ products.get(item.product_id).name }}</td>
-        <td>{{ item.request_date }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-  {% from "bootstrap/pagination.html" import render_pagination %}
-  {{ render_pagination(pagination) }}
-  {% else %}
-  <p>No license found.</p>
-  {% endif %}
-  <p>{{ form_button(url_for('new'), icon('upload') + ' New license request', method='get', class='btn btn-primary') }}</p>
-{% endblock %}
+{% if pagination.items %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      {% if users %}
+      <th>User</th>
+      {% endif %}
+      <th>Product</th>
+      <th>Request date</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in pagination.items %}
+    <tr>
+      <td>{{ item.id }} {{ form_button(url_for(target, lic_id=item.id), icon('eye-open'), method='get') }}</td>
+      {% if users %}
+      <td>{{ users.get(item.user_id).email|default(item.user_id) }}</th>
+      {% endif %}
+      <td>{{ products.get(item.product_id).name }}</td>
+      <td>{{ item.request_date }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% from "bootstrap/pagination.html" import render_pagination %}
+{{ render_pagination(pagination) }}
+{% else %}
+<p>No license found.</p>
+{% endif %}
+<p>{{ form_button(url_for('new'), icon('upload') + ' New license request', method='get', class='btn btn-primary') }}</p>
+{% endblock content %}

@@ -1,24 +1,24 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>{{ config['SLIM_WELCOME_MESSAGE']|default('Simple License Management system (SLiM)') }}</h1>
-  <h2>Functions</h2>
-  <dl class="dl-horizontal">
-    <dt><a href="{{ url_for('licenses') }}">licenses</a></dt>
-    <dd>show the list of available licenses</dd>
+<h1>{{ config['SLIM_WELCOME_MESSAGE']|default('Simple License Management system (SLiM)') }}</h1>
+<h2>Functions</h2>
+<dl class="dl-horizontal">
+  <dt><a href="{{ url_for('licenses') }}">licenses</a></dt>
+  <dd>show the list of available licenses</dd>
 
-    <dt><a href="{{ url_for('products') }}">products</a></dt>
-    <dd>show the list of products</dd>
+  <dt><a href="{{ url_for('products') }}">products</a></dt>
+  <dd>show the list of products</dd>
 
-    <dt><a href="{{ url_for('purchases') }}">purchases</a></dt>
-    <dd>show the list of purchases</dd>
+  <dt><a href="{{ url_for('purchases') }}">purchases</a></dt>
+  <dd>show the list of purchases</dd>
 
-    <dt><a href="{{ url_for('new') }}">new</a></dt>
-    <dd>submit a new license request</dd>
+  <dt><a href="{{ url_for('new') }}">new</a></dt>
+  <dd>submit a new license request</dd>
 
-    {% if current_user.has_role('admin') %}
-    <dt><a href="{{ url_for('admin.index') }}">admin</a></dt>
-    <dd>go to the administration area</dd>
-    {% endif %}
-  </dl>
-{% endblock %}
+  {% if current_user.has_role('admin') %}
+  <dt><a href="{{ url_for('admin.index') }}">admin</a></dt>
+  <dd>go to the administration area</dd>
+  {% endif %}
+</dl>
+{% endblock content %}

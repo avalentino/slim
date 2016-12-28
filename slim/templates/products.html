@@ -1,41 +1,40 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>{{ title|default('Products') }}</h1>
+<h1>{{ title|default('Products') }}</h1>
 
-  <p>Total pproduct count: {{ pagination.query.count() }}</p>
+<p>Total pproduct count: {{ pagination.query.count() }}</p>
 
-  <div>
-    <p><a href="{{ support_link }}">Send a support request</a>
-    to purchase a product.</p>
-  </div>
+<div>
+  <p><a href="{{ support_link }}">Send a support request</a>
+  to purchase a product.</p>
+</div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Desctiption</th>
-        {% if purchase_map %}
-        <th>Purchased</th>
-        {% endif %}
-      </tr>
-    </thead>
-    <tbody>
-    {% for product in pagination.items %}
-      <tr>
-        <td>{{ product.id }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.description }}</td>
-        {% if purchase_map %}
-        <td>{{ 'YES' if purchase_map[product.id] else 'NO' }}</td>
-        {% endif %}
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Desctiption</th>
+      {% if purchase_map %}
+      <th>Purchased</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+  {% for product in pagination.items %}
+    <tr>
+      <td>{{ product.id }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.description }}</td>
+      {% if purchase_map %}
+      <td>{{ 'YES' if purchase_map[product.id] else 'NO' }}</td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
 
-  {% from "bootstrap/pagination.html" import render_pagination %}
-  {{ render_pagination(pagination) }}
-
-{% endblock %}
+{% from "bootstrap/pagination.html" import render_pagination %}
+{{ render_pagination(pagination) }}
+{% endblock content %}

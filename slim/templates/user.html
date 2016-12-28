@@ -2,40 +2,39 @@
 {% from "bootstrap/utils.html" import form_button, icon %}
 
 {% block content %}
-  <h1>User "{{ user.email }}"</h1>
+<h1>User "{{ user.email }}"</h1>
 
-  <dl class="dl-horizontal">
-    <dt>ID</dt>
-    <dd>{{ user.id }}</dd>
+<dl class="dl-horizontal">
+  <dt>ID</dt>
+  <dd>{{ user.id }}</dd>
 
-    <dt>Email</dt>
-    <dd>{{ user.email }}</dd>
+  <dt>Email</dt>
+  <dd>{{ user.email }}</dd>
 
-    <dt>Active</dt>
-    <dd>{{ user.active }}</dd>
+  <dt>Active</dt>
+  <dd>{{ user.active }}</dd>
 
-    <dt>Roles</dt>
-    <dd><td>{{ user.roles|join(', ', attribute='name') }}</td></dd>
+  <dt>Roles</dt>
+  <dd><td>{{ user.roles|join(', ', attribute='name') }}</td></dd>
 
-    <dt>Login count</dt>
-    <dd>{{ user.login_count }}</dd>
+  <dt>Login count</dt>
+  <dd>{{ user.login_count }}</dd>
 
-    <dt>Curren login at</dt>
-    <dd>{{ user.current_login_at }}</dd>
+  <dt>Curren login at</dt>
+  <dd>{{ user.current_login_at }}</dd>
 
-    <dt>Curren login IP</dt>
-    <dd>{{ user.current_login_ip }}</dd>
+  <dt>Curren login IP</dt>
+  <dd>{{ user.current_login_ip }}</dd>
 
-    <dt>Last login at</dt>
-    <dd>{{ user.last_login_at }}</dd>
+  <dt>Last login at</dt>
+  <dd>{{ user.last_login_at }}</dd>
 
-    <dt>Last login IP</dt>
-    <dd>{{ user.last_login_ip }}</dd>
+  <dt>Last login IP</dt>
+  <dd>{{ user.last_login_ip }}</dd>
 
-    <br>
+  <br>
 
-    <dt>Pasword</dt>
-    <dd>{{ form_button(url_for('security.change_password'), icon('cog') + ' Change password', method='get', class='btn btn-primary') }}</dd>
-  </dl>
-
-{% endblock %}
+  <dt>Pasword</dt>
+  <dd>{{ form_button(url_for('security.change_password'), icon('cog') + ' Change password', method='get', class='btn btn-primary') }}</dd>
+</dl>
+{% endblock content %}

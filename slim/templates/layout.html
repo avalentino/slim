@@ -5,12 +5,12 @@
 
 {% block navbar %}
 {{ nav.top.render() }}
-{% endblock %}
+{% endblock navbar %}
 
 {% block flash %}
 {% from "bootstrap/utils.html" import flashed_messages %}
 {{ flashed_messages(dismissible=True) }}
-{% endblock flash%}
+{% endblock flash %}
 
 <div class="container">
 {% block content -%}

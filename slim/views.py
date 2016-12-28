@@ -6,12 +6,12 @@ import subprocess
 from flask import (
     request, redirect, url_for, flash, render_template, make_response)
 
-from flask_security import login_required, roles_accepted, current_user
+from flask_security import login_required, current_user
 from flask_uploads import UploadNotAllowed
 
 from . import utils
 from .app import app, request_uploader
-from .models import db, License, User, Role, Product, Purchase
+from .models import db, License, User, Product, Purchase
 
 
 @app.route('/')

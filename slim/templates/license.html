@@ -2,23 +2,23 @@
 {% from "bootstrap/utils.html" import form_button, icon %}
 
 {% block content %}
-  <h1>License n. {{ lic.id }}</h1>
-  <dl class="dl-horizontal">
-    <dt>User</dt>
-    <dd>{{ user.email|default(lic.user_id) }}</dd>
+<h1>License n. {{ lic.id }}</h1>
+<dl class="dl-horizontal">
+  <dt>User</dt>
+  <dd>{{ user.email|default(lic.user_id) }}</dd>
 
-    <dt>Product</dt>
-    <dd>{{ product.name|default(lic.product_id) }}</dd>
+  <dt>Product</dt>
+  <dd>{{ product.name|default(lic.product_id) }}</dd>
 
-    <dt>Description</dt>
-    <dd>{{ lic.description }}</dd>
+  <dt>Description</dt>
+  <dd>{{ lic.description }}</dd>
 
-    <dt>Date</dt>
-    <dd>{{ lic.request_date }}</dd>
+  <dt>Date</dt>
+  <dd>{{ lic.request_date }}</dd>
 
-    <br>
+  <br>
 
-    <dt>Download</dt>
-    <dd>{{ form_button(url_for('download', lic_id=lic.id), icon('download-alt') + ' Download', method='get', class='btn btn-primary') }}<dd>
-  </dl>
-{% endblock %}
+  <dt>Download</dt>
+  <dd>{{ form_button(url_for('download', lic_id=lic.id), icon('download-alt') + ' Download', method='get', class='btn btn-primary') }}<dd>
+</dl>
+{% endblock content %}
