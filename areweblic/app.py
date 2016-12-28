@@ -7,11 +7,12 @@ try:
 except ImportError:
     from urlparse import SplitResult, urlunsplit
 
-from flask import Flask
+from flask import Flask, url_for
 from flask_admin import Admin
+from flask_admin import helpers as admin_helpers
 from flask_admin.contrib.sqla import ModelView
 from flask_bootstrap import Bootstrap as bootstrap
-from flask_security import Security, SQLAlchemyUserDatastore, current_user
+from flask_security import Security, SQLAlchemyUserDatastore
 from flask_uploads import UploadSet, configure_uploads
 
 from . import config
@@ -58,7 +59,9 @@ security = Security(app, user_datastore)
 
 # admin
 admin = Admin(
-    app, name=app.config.get('LIC_APP_NAME', ''), template_mode='bootstrap3')
+    app, name=app.config.get('LIC_APP_NAME', ''),
+    base_template='admin/slim_master.html',
+    template_mode='bootstrap3')
 admin.add_view(ModelView(models.Role, db.session))
 admin.add_view(ModelView(models.User, db.session))
 admin.add_view(ModelView(models.Product, db.session))

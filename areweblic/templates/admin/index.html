@@ -1,9 +1,12 @@
 {% extends 'admin/slim_master.html' %}
+{% from "bootstrap/utils.html" import form_button, icon %}
 
 {% block body %}
-  <h1>Admin page</h1>
+  <h1>SLiM administration page</h1>
+  <br>
+  <p>{{ form_button(url_for('index'), icon('home') + ' Home', method='get', class='btn btn-primary') }}</p>
 
-  <p>Database tables:</p>
+  <h2>Database tables</h2>
 
   <dl class="dl-horizontal">
     <dt><a href="{{ url_for('role.index_view') }}">Roles</a></dt>
@@ -22,5 +25,4 @@
     <dd>the table of licenses</dd>
   </dl>
 
-  <p><a href="{{ url_for('index')}}">Back</a> to the main page</p>
 {% endblock %}
