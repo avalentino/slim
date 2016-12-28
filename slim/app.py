@@ -8,15 +8,14 @@ except ImportError:
     from urlparse import SplitResult, urlunsplit
 
 from flask import Flask, url_for
-from flask_admin import Admin
 from flask_admin import helpers as admin_helpers
-from flask_admin.contrib.sqla import ModelView
 from flask_bootstrap import Bootstrap as bootstrap
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_uploads import UploadSet, configure_uploads
 
 from . import config
 from . import models
+from .admin import admin, ModelView
 from .nav import nav
 
 
@@ -43,10 +42,6 @@ app.config.from_envvar('SLIM_SETTINGS_PATH', silent=True)
 bootstrap(app)
 
 
-# nav
-nav.init_app(app)
-
-
 # sqlalchemy
 db = models.db
 db.init_app(app)
@@ -58,15 +53,10 @@ security = Security(app, user_datastore)
 
 
 # admin
-admin = Admin(
-    app, name=app.config.get('SLIM_APPNAME', 'SLiM'),
-    base_template='admin/slim_master.html',
-    template_mode='bootstrap3')
-admin.add_view(ModelView(models.Role, db.session))
-admin.add_view(ModelView(models.User, db.session))
-admin.add_view(ModelView(models.Product, db.session))
-admin.add_view(ModelView(models.Purchase, db.session))
-admin.add_view(ModelView(models.License, db.session))
+ModelView.page_size = app.config.get('SLIM_ITEMS_PER_PAGE', 5)
+admin.name = app.config.get('SLIM_APPNAME', 'SLiM')
+#admin.url = '/'  # url_for('index')
+admin.init_app(app)
 
 
 # define a context processor for merging flask-admin's template context
@@ -79,6 +69,10 @@ def security_context_processor():
         h=admin_helpers,
         get_url=url_for
     )
+
+
+# nav
+nav.init_app(app)
 
 
 # flask-uploads
