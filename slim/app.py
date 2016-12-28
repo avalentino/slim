@@ -21,8 +21,7 @@ from .nav import nav
 
 
 # Flask app
-#app = Flask('slim')
-app = Flask('areweblic')
+app = Flask('slim')
 app.config.from_object(config)
 app.config.from_object(config)
 app.config.update(

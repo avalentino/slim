@@ -12,8 +12,8 @@ from flask_script import Manager
 from flask_migrate import MigrateCommand, Migrate
 from flask_security.utils import encrypt_password
 
-from areweblic.app import app, user_datastore
-from areweblic.models import db, User, License, Product, Purchase
+from slim.app import app, user_datastore
+from slim.models import db, User, License, Product, Purchase
 
 
 # basic cli initialization
