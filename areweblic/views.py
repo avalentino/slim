@@ -192,10 +192,10 @@ def show_user(user_id):
     return render_template('user.html', user=user)
 
 
-@app.route('/admin')
-@roles_accepted('admin')
-def admin_index():
-    return redirect(url_for('index'))
+#~ @app.route('/admin')
+#~ @roles_accepted('admin')
+#~ def admin_index():
+    #~ return redirect(url_for('index'))
 
 
 @app.route('/admin/users')

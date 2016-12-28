@@ -47,9 +47,16 @@ REQUEST_EXTENSIONS = ('request',)
 
 
 # areweblic
+LIC_APP_NAME = 'AreWebLic'
 LICENSE_GENERATOR_PATH = os.path.join(
     APPLICATION_DIR, 'bin', 'generate_license.bin')
 
 ITEMS_PER_PAGE = 5
 
 SUPPORT_EMAIL = 'info@aresys.it'
+
+
+# slim
+SLIM_COPYRIGHT_YEAR = 2016
+SLIM_COPYRIGHT_URL = 'http://aresys.it'
+SLIM_COPYRIGHT_OWNER = 'Aresys s.r.l.'

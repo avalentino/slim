@@ -8,6 +8,8 @@ except ImportError:
     from urlparse import SplitResult, urlunsplit
 
 from flask import Flask
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from flask_bootstrap import Bootstrap as bootstrap
 from flask_security import Security, SQLAlchemyUserDatastore, current_user
 from flask_uploads import UploadSet, configure_uploads
@@ -52,6 +54,28 @@ db.init_app(app)
 # security
 user_datastore = SQLAlchemyUserDatastore(db, models.User, models.Role)
 security = Security(app, user_datastore)
+
+
+# admin
+admin = Admin(
+    app, name=app.config.get('LIC_APP_NAME', ''), template_mode='bootstrap3')
+admin.add_view(ModelView(models.Role, db.session))
+admin.add_view(ModelView(models.User, db.session))
+admin.add_view(ModelView(models.Product, db.session))
+admin.add_view(ModelView(models.Purchase, db.session))
+admin.add_view(ModelView(models.License, db.session))
+
+
+# define a context processor for merging flask-admin's template context
+# into the flask-security views.
+@security.context_processor
+def security_context_processor():
+    return dict(
+        admin_base_template=admin.base_template,
+        admin_view=admin.index_view,
+        h=admin_helpers,
+        get_url=url_for
+    )
 
 
 # flask-uploads

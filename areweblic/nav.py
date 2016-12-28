@@ -39,16 +39,17 @@ def topnavbar():
         path_views.append(View('> ' + label.capitalize(), target))
 
     # navbar
+    app_name = current_app.config.get('LIC_APP_NAME', '')
     if current_user.has_role('admin'):
         items = [
-            View('AreWebLic', 'index'),
+            View(app_name, 'index'),
             View('Home', 'index'),
-            #View('Admin', 'admin_index'),
+            View('Admin', 'admin.index'),
             Link('Support', support_link),
         ]
     else:
         items = [
-            View('AreWebLic', 'index'),
+            View(app_name, 'index'),
             View('Home', 'index'),
             Link('Support', support_link),
         ]

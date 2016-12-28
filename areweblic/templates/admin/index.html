@@ -1,0 +1,26 @@
+{% extends 'admin/slim_master.html' %}
+
+{% block body %}
+  <h1>Admin page</h1>
+
+  <p>Database tables:</p>
+
+  <dl class="dl-horizontal">
+    <dt><a href="{{ url_for('role.index_view') }}">Roles</a></dt>
+    <dd>the table of user roles</dd>
+
+    <dt><a href="{{ url_for('user.index_view') }}">Users</a></dt>
+    <dd>the table storing user data</dd>
+
+    <dt><a href="{{ url_for('product.index_view') }}">Products</a></dt>
+    <dd>the table of the products</dd>
+
+    <dt><a href="{{ url_for('purchase.index_view') }}">Purchases</a></dt>
+    <dd>the table for purchasing nformation</dd>
+
+    <dt><a href="{{ url_for('license.index_view') }}">Licenses</a></dt>
+    <dd>the table of licenses</dd>
+  </dl>
+
+  <p><a href="{{ url_for('index')}}">Back</a> to the main page</p>
+{% endblock %}

@@ -15,27 +15,11 @@
 
     <dt><a href="{{ url_for('new') }}">new</a></dt>
     <dd>submit a new license request</dd>
+
+    {% if current_user.has_role('admin') %}
+    <dt><a href="{{ url_for('admin.index') }}">admin</a></dt>
+    <dd>go to the administration area</dd>
+    {% endif %}
   </dl>
-
-  {% if current_user.has_role('admin') %}
-  <h2>Admin functions</h2>
-  <dl class="dl-horizontal">
-
-    <dt><a href="{{ url_for('admin_users') }}">users</a></dt>
-    <dd>show the list of registered users</dd>
-
-    <dt><a href="{{ url_for('admin_roles') }}">roles</a></dt>
-    <dd>show the list of roles</dd>
-
-    <dt><a href="{{ url_for('admin_products') }}">products</a></dt>
-    <dd>show the list of products</dd>
-
-    <dt><a href="{{ url_for('admin_purchases') }}">purchases</a></dt>
-    <dd>show the list of purchases</dd>
-
-    <dt><a href="{{ url_for('admin_licenses') }}">all licenses</a></dt>
-    <dd>show the list of licenses of all users</dd>
-  </dl>
-  {% endif %}
 
 {% endblock %}

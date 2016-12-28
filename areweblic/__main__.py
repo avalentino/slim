@@ -75,7 +75,8 @@ def init_test_db():
 
     role = user_datastore.find_role('user')
     for username in ('user1', 'user2'):
-        user = user_datastore.create_user(email=username, password=username)
+        user = user_datastore.create_user(email=username,
+                                          password=encrypt_password(username))
         user_datastore.add_role_to_user(user, role)
         user_datastore.activate_user(user)
 
