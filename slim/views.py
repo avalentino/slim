@@ -23,7 +23,7 @@ def index():
 @app.route('/licenses')
 @login_required
 def licenses():
-    query = License.query.filter(License.user_id == current_user.id)
+    query = License.query.filter_by(user_id=current_user.id)
     return render_template(
         'licenses.html',
         pagination=query.paginate(per_page=app.config['SLIM_ITEMS_PER_PAGE']),

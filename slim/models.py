@@ -23,6 +23,9 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
+    def __str__(self):
+        return self.name
+
     def __repr__(self):
         return '<Role(id=%d, name=%r, description=%r)>' % (
             self.id, self.name, self.description)
@@ -47,6 +50,9 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
 
+    def __str__(self):
+        return self.email
+
     def __repr__(self):
         roles = ', '.join([role.name for role in self.roles])
         return '<User(id=%d, email=%r, roles=%r, active=%s)>' % (
@@ -58,8 +64,11 @@ class Product(db.Model):
     __tablename__ = 'products'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(32))
+    name = db.Column(db.String(80))
     description = db.Column(db.String(255))
+
+    def __str__(self):
+        return self.name
 
     def __repr__(self):
         return '<Product: id=%d, name=%r' % (self.id, self.name)
@@ -95,7 +104,7 @@ class Purchase(db.Model):
         return set(item.product_id for item in query.all())
 
     @classmethod
-    def user_idss(cls, product_id=None):
+    def user_ids(cls, product_id=None):
         query = cls.query
         if product_id:
             query = query.filter_by(product_id=product_id)
