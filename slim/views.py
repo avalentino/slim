@@ -41,7 +41,8 @@ def products():
         'products.html',
         pagination=Product.query.paginate(
             per_page=app.config['SLIM_ITEMS_PER_PAGE']),
-        purchase_map=purchase_map)
+        purchase_map=purchase_map,
+        support_link=utils.make_support_link(app.config['SLIM_SUPPORT_EMAIL']))
 
 
 @app.route('/purchases')
