@@ -25,7 +25,6 @@ SLIM_LICENSE_GENERATOR_CMD = [
     sys.executable,
     '-u',
     os.path.join(SLIM_APPDIR, 'bin', 'dummy-generate-license.py'),
-    'add',
     '%(INPUT_REQUEST_FILE)s',
     '%(OUTPUT_LICENSE_FILE)s',
 ]
@@ -33,7 +32,7 @@ SLIM_LICENSE_GENERATOR_CMD = [
 
 # flask
 # DEBUG = True
-SECRET_KEY = 'something hard to guess'      # @TODO: change this
+SECRET_KEY = 'something hard to guess'      # XXX: change this
 # SERVER_NAME = 'slim.local'
 MAX_CONTENT_LENGTH = 4 * 1024
 
@@ -50,7 +49,7 @@ SQLALCHEMY_DATABASE_URI = urlunsplit(SplitResult(
 
 # security
 SECURITY_PASSWORD_HASH = 'sha512_crypt'
-SECURITY_PASSWORD_SALT = 'slimsalt'         # @TODO: change this
+SECURITY_PASSWORD_SALT = 'slimsalt'         # XXX: change this
 SECURITY_CONFIRMABLE = False
 SECURITY_TRACKABLE = True
 SECURITY_CHANGEABLE = True

@@ -118,9 +118,10 @@ def _new_post():
         try:
             subprocess.check_call(licgencmd, shell=False)
         except subprocess.CalledProcessError as ex:
+            flash(str(ex), 'error')
             msg = ('Unable to generate license for request %r, please '
                    'check that the input is correct.' %
-                   os.basename(filename))
+                   os.path.basename(filename))
             flash(msg, 'error')
             return _new_get()
         else:
