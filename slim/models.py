@@ -66,6 +66,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     description = db.Column(db.String(255))
+    url = db.Column(db.String(255))
 
     def __str__(self):
         return self.name
@@ -84,6 +85,10 @@ class Purchase(db.Model):
     # purchase_date = db.Column(db.DateTime())
     # expiration_date = db.Column(db.DateTime())
     # active = db.Column(db.Boolean())
+
+    def __repr__(self):
+        return '<Purchase(%d, user_id=%r, product_id=%r, quantiry=%d)>' % (
+            self.id, self.user_id, self.product_id, self.quantity)
 
     @classmethod
     def count(cls, user_id=None, product_id=None):
@@ -123,18 +128,9 @@ class License(db.Model):
     request_date = db.Column(db.DateTime)
     license = db.Column(db.LargeBinary)
 
-    def __init__(self, user_id, product_id, request, license, description='',
-                 request_date=None):
-
-        if request_date is None:
-            request_date = datetime.datetime.now()
-
-        self.user_id = user_id
-        self.product_id = product_id
-        self.description = description
-        self.request = request
-        self.request_date = request_date
-        self.license = license
+    def __init__(self, **kwargs):
+        kwargs.setdefault('request_date', datetime.datetime.now())
+        super(License, self).__init__(**kwargs)
 
     def __repr__(self):
         return ('<License: id=%d, user_id=%r, product_id=%r, '

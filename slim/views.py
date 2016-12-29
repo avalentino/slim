@@ -125,11 +125,12 @@ def _new_post():
 
         # save the new license
         license = License(
-            current_user.id,
+            user_id=current_user.id,
             product_id=product.id,
             request=data,
             license=licdata,
-            description=request.form['description'])
+            description=request.form['description'],
+        )
 
         db.session.add(license)
         db.session.commit()

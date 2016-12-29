@@ -51,9 +51,9 @@ def init_db():
     # products
     products = (
         ('GSS', 'Generic SAR Simulator'),
-        ('CSPP', 'Sentinel-1 C++ SAR Procrssing Processor'),
+        ('CSPP', 'C++ SAR Prototype Processor for Sentinel-1'),
         ('CSIP', 'C++ SAR Interferometric Processor'),
-        ('SSP',  'SAOCOM SAR Processor'),
+        ('SSP', 'SAOCOM SAR Processor'),
     )
     for name, description in products:
         product = Product(name=name, description=description)
@@ -94,13 +94,23 @@ def init_test_db():
 
     # licenses
     for product in Product.query.all():
-        license = License(admin.id, product.id, b'dummy', b'dummy')
+        license = License(
+            user_id=admin.id,
+            product_id=product.id,
+            request=b'dummy',
+            license=b'dummy',
+        )
         db.session.add(license)
 
     nusers = User.query.count()
     for idx, product in enumerate(product.query.all()):
         user = User.query.get(idx % (nusers - 1) + 2)  # exclude admin
-        license = License(user.id, product.id, b'dummy', b'bummy')
+        license = License(
+            user_id=admin.id,
+            product_id=product.id,
+            request=b'dummy',
+            license=b'dummy',
+        )
         db.session.add(license)
 
     db.session.commit()
