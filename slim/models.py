@@ -145,4 +145,4 @@ class License(db.Model):
     def __repr__(self):
         return ('<License: id=%d, user_id=%r, product_id=%r, '
                 'request_date=%s>' % (self.id, self.user_id, self.product_id,
-                                      self.date.isoformat()))
+                                      self.request_date.isoformat()))
