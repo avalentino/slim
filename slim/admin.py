@@ -16,9 +16,27 @@ class AdminIndexView(_AdminIndexView):
         return self.render(self._template)
 
 
+def _format_large_binary_data(data, size=10):
+    s = data[:size].decode('utf-8', 'replace')
+    if len(data) > size:
+        s += ' ...'
+    return s
+
+
+def _format_password(data, size=6, placemark='*'):
+    return placemark * size
+
+
+def large_binary_data_formatter(view, value):
+    return _format_large_binary_data(value)
+
+
 class ModelView(sqla.ModelView):
+    column_type_formatters = {
+        bytes: large_binary_data_formatter,
+    }
     column_display_pk = True
-    #column_display_all_relations = True
+    # column_display_all_relations = True
 
     def is_accessible(self):
         if current_user.has_role('admin'):
@@ -36,7 +54,9 @@ class ModelView(sqla.ModelView):
 
 
 class UserModelView(ModelView):
-    column_formatters = dict(password=lambda v, c, m, p: '*' * 6)
+    column_formatters = dict(
+        password=lambda v, c, m, p: _format_password(m.password),
+    )
     column_display_all_relations = True
     column_list = (
         'id',
@@ -69,10 +89,6 @@ class LicenseModelView(ModelView):
         'request',
         'request_date',
         'license',
-    )
-    column_formatters = dict(
-        request=lambda v, c, m, p: m.request[:10] + '...',
-        licnse=lambda v, c, m, p: m.license[:10] + '...',
     )
 
 
