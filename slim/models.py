@@ -27,7 +27,7 @@ class Role(db.Model, RoleMixin):
         return self.name
 
     def __repr__(self):
-        return '<Role(id=%d, name=%r, description=%r)>' % (
+        return '<Role: id=%d, name=%r, description=%r>' % (
             self.id, self.name, self.description)
 
 
@@ -37,7 +37,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     # first_name = db.Column(db.String(255))
     # last_name = db.Column(db.String(255))
-    email = db.Column(db.String(255), unique=True)
+    email = db.Column(db.String(64), unique=True)
     password = db.Column(db.String(255))
     # password = db.Column(db.PasswordType(255))
     active = db.Column(db.Boolean())
@@ -55,7 +55,7 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         roles = ', '.join([role.name for role in self.roles])
-        return '<User(id=%d, email=%r, roles=%r, active=%s)>' % (
+        return '<User: id=%d, email=%r, roles=%r, active=%s>' % (
             self.id, self.email, roles, self.active)
 
 
@@ -64,7 +64,7 @@ class Product(db.Model):
     __tablename__ = 'products'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
+    name = db.Column(db.String(64), unique=True)
     description = db.Column(db.String(255))
     url = db.Column(db.String(255))
 
@@ -91,8 +91,12 @@ class Purchase(db.Model):
     product = db.relationship(
         'Product', backref=db.backref('purchases', lazy='dynamic'))
 
+    def __str__(self):
+        return 'Purchase(id=%d, user=%r, product=%r, quantiry=%d)' % (
+            self.id, self.user.email, self.product.name, self.quantity)
+
     def __repr__(self):
-        return '<Purchase(%d, user_id=%r, product_id=%r, quantiry=%d)>' % (
+        return '<Purchase: id=%d, user_id=%r, product_id=%r, quantiry=%d>' % (
             self.id, self.user_id, self.product_id, self.quantity)
 
     @classmethod
@@ -141,6 +145,11 @@ class License(db.Model):
     def __init__(self, **kwargs):
         kwargs.setdefault('request_date', datetime.datetime.now())
         super(License, self).__init__(**kwargs)
+
+    def __str__(self):
+        return ('License(id=%d, user=%r, product=%r, request_date=%s)' % (
+                self.id, self.user.email, self.product.name,
+                self.request_date.isoformat()))
 
     def __repr__(self):
         return ('<License: id=%d, user_id=%r, product_id=%r, '
