@@ -52,8 +52,6 @@ def init_db():
 
 
 def _init_test_db(products=None):
-    """Basic initialization of the internal DB for testing"""
-
     init_db()
 
     # products
@@ -117,11 +115,13 @@ def _init_test_db(products=None):
 
 @manager.command
 def init_test_db():
+    """Basic initialization of the internal DB for testing"""
+
     return _init_test_db()
 
 
 # === User management ========================================================
-UserManager = Manager(usage='Perform user mamagement')
+UserManager = Manager(usage='Perform user management')
 
 
 @UserManager.command
@@ -228,5 +228,9 @@ manager.add_command('db', MigrateCommand)
 manager.add_command('user', UserManager)
 
 
-if __name__ == '__main__':
+def main():
     manager.run()
+
+
+if __name__ == '__main__':
+    main()
