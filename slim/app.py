@@ -55,7 +55,6 @@ security = Security(app, user_datastore)
 # admin
 ModelView.page_size = app.config.get('SLIM_ITEMS_PER_PAGE', 5)
 admin.name = app.config.get('SLIM_APPNAME', 'SLiM')
-#admin.url = '/'  # url_for('index')
 admin.init_app(app)
 
 

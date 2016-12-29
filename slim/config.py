@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import posixpath
 try:
     from urllib.parse import SplitResult, urlunsplit
@@ -20,12 +21,18 @@ SLIM_SUPPORT_EMAIL = 'support@slimapp.org'
 SLIM_SYSTEM_CONFIG_FILE = '/etc/slim/config.py'
 SLIM_ITEMS_PER_PAGE = 5
 SLIM_REQUEST_EXTENSIONS = ('request',)
-SLIM_LICENSE_GENERATOR_PATH = os.path.join(
-    SLIM_APPDIR, 'bin', 'generate_license.bin')
+SLIM_LICENSE_GENERATOR_CMD = [
+    sys.executable,
+    '-u',
+    os.path.join(SLIM_APPDIR, 'bin', 'dummy-generate-license.py'),
+    'add',
+    '%(INPUT_REQUEST_FILE)s',
+    '%(OUTPUT_LICENSE_FILE)s',
+]
 
 
-# app
-DEBUG = True
+# flask
+# DEBUG = True
 SECRET_KEY = 'something hard to guess'      # @TODO: change this
 # SERVER_NAME = 'slim.local'
 MAX_CONTENT_LENGTH = 4 * 1024

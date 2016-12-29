@@ -48,25 +48,24 @@ def init_db():
 
     log.warning('remember to change the password for admin')
 
-    # products
-    products = (
-        ('GSS', 'Generic SAR Simulator'),
-        ('CSPP', 'C++ SAR Prototype Processor for Sentinel-1'),
-        ('CSIP', 'C++ SAR Interferometric Processor'),
-        ('SSP', 'SAOCOM SAR Processor'),
-    )
-    for name, description in products:
-        product = Product(name=name, description=description)
-        db.session.add(product)
-
     db.session.commit()
 
 
-@manager.command
-def init_test_db():
+def _init_test_db(products=None):
     """Basic initialization of the internal DB for testing"""
 
     init_db()
+
+    # products
+    if products is None:
+        products = (
+            ('product1', 'Product n. 1 description'),
+            ('product2', 'Product n. 1 description'),
+            ('product3', 'Product n. 1 description'),
+        )
+    for name, description in products:
+        product = Product(name=name, description=description)
+        db.session.add(product)
 
     # users
     admin = user_datastore.find_user(email='admin')
@@ -114,6 +113,11 @@ def init_test_db():
         db.session.add(license)
 
     db.session.commit()
+
+
+@manager.command
+def init_test_db():
+    return _init_test_db()
 
 
 # === User management ========================================================
@@ -223,4 +227,6 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 manager.add_command('user', UserManager)
 
-manager.run()
+
+if __name__ == '__main__':
+    manager.run()
