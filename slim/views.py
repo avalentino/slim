@@ -71,16 +71,20 @@ def _new_get():
 
 
 def _new_post():
-    # product
-    name = request.form['product']
-    product = Product.query.filter_by(name=name).first()
+    # check
+    product = request.form['product']
+    product = Product.query.filter_by(name=product).first()
+    if 'user' in request.form:
+        user = request.form['user']
+        user = User.query.filter_by(email=user).first()
+    else:
+        user = current_user
 
     # Total purchase count for the current user
-    tot_purchase_count = Purchase.count(
-        user_id=current_user.id, product_id=product.id)
+    tot_purchase_count = Purchase.count(user_id=user.id, product_id=product.id)
 
     # License count
-    license_count = License.query.filter_by(user_id=current_user.id).count()
+    license_count = License.query.filter_by(user_id=user.id).count()
 
     if license_count >= tot_purchase_count:
         flash('No purchased license available for this ptoduct. '
@@ -88,6 +92,7 @@ def _new_post():
               'licenses.', 'error')
         return _new_get()
 
+    # upload license request
     try:
         filename = request_uploader.save(request.files['license_req'])
     except UploadNotAllowed as ex:
@@ -104,11 +109,14 @@ def _new_post():
             data = fd.read()
 
         # generate the license file
-        bin = app.config['SLIM_LICENSE_GENERATOR_PATH']
         licfile = filename + '.lic.dat'
-        args = [bin, 'add', filename, licfile]
+        licgencmd = app.config['SLIM_LICENSE_GENERATOR_CMD']
+        licgencmd = utils.expand_cmd_vars(licgencmd,
+                                          INPUT_REQUEST_FILE=filename,
+                                          OUTPUT_LICENSE_FILE=licfile)
+
         try:
-            subprocess.check_call(args, shell=False)
+            subprocess.check_call(licgencmd, shell=False)
         except subprocess.CalledProcessError as ex:
             msg = ('Unable to generate license for request %r, please '
                    'check that the input is correct.' %
@@ -125,7 +133,7 @@ def _new_post():
 
         # save the new license
         license = License(
-            user_id=current_user.id,
+            user_id=user.id,
             product_id=product.id,
             request=data,
             license=licdata,
