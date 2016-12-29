@@ -48,7 +48,7 @@ class User(db.Model, UserMixin):
     current_login_ip = db.Column(db.String(45))
     login_count = db.Column(db.Integer)
     roles = db.relationship('Role', secondary=roles_users,
-                            backref=db.backref('users', lazy='dynamic'))
+                            backref=db.backref('users'))  # , lazy='dynamic'))
 
     def __str__(self):
         return self.email
@@ -85,6 +85,11 @@ class Purchase(db.Model):
     # purchase_date = db.Column(db.DateTime())
     # expiration_date = db.Column(db.DateTime())
     # active = db.Column(db.Boolean())
+
+    user = db.relationship(
+        'User', backref=db.backref('purchases', lazy='dynamic'))
+    product = db.relationship(
+        'Product', backref=db.backref('purchases', lazy='dynamic'))
 
     def __repr__(self):
         return '<Purchase(%d, user_id=%r, product_id=%r, quantiry=%d)>' % (
@@ -127,6 +132,11 @@ class License(db.Model):
     request = db.Column(db.LargeBinary)
     request_date = db.Column(db.DateTime)
     license = db.Column(db.LargeBinary)
+
+    user = db.relationship(
+        'User', backref=db.backref('licenses', lazy='dynamic'))
+    product = db.relationship(
+        'Product', backref=db.backref('licenses', lazy='dynamic'))
 
     def __init__(self, **kwargs):
         kwargs.setdefault('request_date', datetime.datetime.now())
