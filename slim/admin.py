@@ -95,6 +95,20 @@ class UserModelView(ModelView):
         'purchases',
         'licenses',
     )
+    column_editable_list = (
+        # 'email',
+        # 'password',
+        # 'roles',
+        'active',
+    )
+    form_excluded_columns = (
+        # 'password',
+        'last_login_at',
+        'current_login_at',
+        'last_login_ip',
+        'current_login_ip',
+        'login_count',
+    )
 
 
 class ProductModelView(ModelView):
