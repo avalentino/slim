@@ -90,23 +90,23 @@ def _init_test_db(products=None):
         db.session.add(purchase)
 
     # licenses
-    for product in Product.query.all():
+    for idx, product in enumerate(Product.query.all(), start=1):
         license = License(
             user_id=admin.id,
             product_id=product.id,
-            request=b'dummy',
-            license=b'dummy',
+            request=b'dummy-request-%03d' % idx,
+            license=b'dummy-license-%03d' % idx,
         )
         db.session.add(license)
 
     nusers = User.query.count()
-    for idx, product in enumerate(product.query.all()):
+    for idx, product in enumerate(product.query.all(), start=idx + 1):
         user = User.query.get(idx % (nusers - 1) + 2)  # exclude admin
         license = License(
             user_id=user.id,
             product_id=product.id,
-            request=b'dummy',
-            license=b'dummy',
+            request=b'dummy-request-%03d' % idx,
+            license=b'dummy-license-%03d' % idx,
         )
         db.session.add(license)
 
