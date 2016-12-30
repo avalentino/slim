@@ -15,8 +15,8 @@ from .app import app, request_uploader
 from .models import db, License, User, Product, Purchase
 
 
-_PurchaseMapItem = namedtuple('PurchaseMapItem',
-                             ('purchased', 'purchase_count', 'license_count'))
+_PurchaseMapItem = namedtuple(
+    'PurchaseMapItem', ('purchased', 'purchase_count', 'license_count'))
 
 
 @app.route('/')
@@ -44,8 +44,8 @@ def products():
     purchase_map = {}
     for product in Product.query.all():
         purcased = product in purchased_products
-        purchase_count = sum\
-            (p.quantity for p in product.purchases.filter_by(user=user))
+        purchase_count = sum(
+            p.quantity for p in product.purchases.filter_by(user=user))
         license_count = product.licenses.filter_by(user=current_user).count()
         purchase_map[product.id] = _PurchaseMapItem(purcased,
                                                     purchase_count,
@@ -72,6 +72,9 @@ def purchases():
 
 
 def _new_get():
+    selected_user_id = utils.to_int(request.args.get('user_id'))
+    selected_product_id = utils.to_int(request.args.get('product_id'))
+
     if current_user.has_role('admin'):
         users = User.query.all()
         products = Product.query.all()
@@ -81,7 +84,13 @@ def _new_get():
         products = [
             product for product in Product.query.all() if product in purchased]
 
-    return render_template('new.html', products=products, users=users)
+    return render_template(
+        'new.html',
+        products=products,
+        selected_product_id=selected_product_id,
+        users=users,
+        selected_user_id=selected_user_id,
+    )
 
 
 def _new_post():
@@ -98,7 +107,8 @@ def _new_post():
     tot_purchase_count = Purchase.count(user_id=user.id, product_id=product.id)
 
     # License count
-    license_count = License.query.filter_by(user_id=user.id, product_id=product.id).count()
+    license_count = License.query.filter_by(
+        user_id=user.id, product_id=product.id).count()
 
     if license_count >= tot_purchase_count:
         flash('No purchased license available for this product. '

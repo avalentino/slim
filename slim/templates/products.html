@@ -21,6 +21,7 @@
       {% if purchase_map is defined %}
       <th>Purchased</th>
       <th>Used</th>
+      <th></th>
       {% endif %}
     </tr>
   </thead>
@@ -35,6 +36,7 @@
       <td>{{ icon('ok', extra_classes=['text-success']) if purchase_map[product.id].purchased else icon('remove', extra_classes=['text-danger']) }}</td>
         {% if purchase_map[product.id].purchased %}
         <td>{{ purchase_map[product.id].license_count }} of {{ purchase_map[product.id].purchase_count }}</td>
+        <td>{{ form_button(url_for('new', product_id=product.id), icon('upload') + ' New license request', method='get') }}<td>
         {% else %}
         <td>N/A</td>
         {% endif %}

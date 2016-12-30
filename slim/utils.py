@@ -23,3 +23,10 @@ def make_support_link(email, appname='SLiM'):
 
 def expand_cmd_vars(cmdargs, **kwargs):
     return [item % kwargs for item in cmdargs]
+
+
+def to_int(s, default=None):
+    try:
+        return int(s)
+    except (ValueError, TypeError):
+        return default
