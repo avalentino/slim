@@ -28,6 +28,12 @@ Features:
   - simple purchasing management
   - configurable license generator program
 
+
+.. important::
+
+    SLiM is mainly a toy project and it **shall not be used in production**
+
+
 .. _Flask: http://flask.pocoo.org
 
 
