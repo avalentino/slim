@@ -58,8 +58,8 @@ def _init_test_db(products=None):
     if products is None:
         products = (
             ('product1', 'Product n. 1 description'),
-            ('product2', 'Product n. 1 description'),
-            ('product3', 'Product n. 1 description'),
+            ('product2', 'Product n. 2 description'),
+            ('product3', 'Product n. 3 description'),
         )
     for name, description in products:
         product = Product(name=name, description=description)
