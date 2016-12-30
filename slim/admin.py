@@ -9,6 +9,7 @@ from flask_admin.contrib import sqla
 from flask_security import current_user, roles_accepted
 from flask_security.utils import encrypt_password
 import wtforms
+from jinja2 import Markup
 
 from . import models
 
@@ -20,7 +21,7 @@ class AdminIndexView(_AdminIndexView):
         return self.render(self._template)
 
 
-def _format_large_binary_data(data, size=10):
+def _format_large_binary_data(data, size=32):
     s = data[:size].decode('utf-8', 'replace')
     if len(data) > size:
         s += ' ...'
@@ -33,6 +34,42 @@ def _format_password(data, size=6, placemark='*'):
 
 def large_binary_data_formatter(view, value):
     return _format_large_binary_data(value)
+
+
+_DOWNLOAD_BUTTON_TEMPLATE = '''\
+<form style="display: inline;" action='%s' method='get'>
+  <button class="btn btn-primary">
+    <span class="glyphicon glyphicon-download-alt"></span>
+  </button>
+</form>'''
+
+
+def request_data_formatter(view, context, model, name):
+    # `view` is current administrative view
+    # `context` is instance of jinja2.runtime.Context
+    # `model` is model instance
+    # `name` is property name
+
+    target = url_for('admin_download_request_file', lic_id=model.id)
+
+    return Markup(' '.join([
+        _format_large_binary_data(model.request),
+        _DOWNLOAD_BUTTON_TEMPLATE % target
+    ]))
+
+
+def license_data_formatter(view, context, model, name):
+    # `view` is current administrative view
+    # `context` is instance of jinja2.runtime.Context
+    # `model` is model instance
+    # `name` is property name
+
+    target = url_for('download', lic_id=model.id)
+
+    return Markup(' '.join([
+        _format_large_binary_data(model.request),
+        _DOWNLOAD_BUTTON_TEMPLATE % target
+    ]))
 
 
 class PasswordInputWidget(wtforms.widgets.PasswordInput):
@@ -173,6 +210,10 @@ class PurchaseModelView(ModelView):
 
 class LicenseModelView(ModelView):
     can_create = False
+    column_formatters = dict(
+        request=request_data_formatter,
+        license=license_data_formatter,
+    )
     column_list = (
         'id',
         'user',

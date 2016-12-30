@@ -7,3 +7,4 @@ Flask-Script
 Flask-Security
 Flask-SQLAlchemy
 Flask-Uploads
+Jinja2

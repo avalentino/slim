@@ -54,5 +54,6 @@ setup(
         'flask-security',
         'flask-sqlalchemy',
         'flask-uploads',
+        'Jinja2',
     ],
 )
