@@ -7,6 +7,8 @@ from flask_admin import Admin, expose, AdminIndexView as _AdminIndexView
 from flask_admin.base import MenuLink
 from flask_admin.contrib import sqla
 from flask_security import current_user, roles_accepted
+from flask_security.utils import encrypt_password
+import wtforms
 
 from . import models
 
@@ -31,6 +33,18 @@ def _format_password(data, size=6, placemark='*'):
 
 def large_binary_data_formatter(view, value):
     return _format_large_binary_data(value)
+
+
+class PasswordInputWidget(wtforms.widgets.PasswordInput):
+    def _value(self):
+        value = super(PasswordInputWidget, self)._value()
+        if value:
+            value = encrypt_password(value)
+        return value
+
+
+class PasswordInputField(wtforms.PasswordField):
+    widget = PasswordInputWidget()
 
 
 class ModelView(sqla.ModelView):
@@ -102,13 +116,15 @@ class UserModelView(ModelView):
         'active',
     )
     form_excluded_columns = (
-        'password',     # XXX
         'last_login_at',
         'current_login_at',
         'last_login_ip',
         'current_login_ip',
         'login_count',
     )
+    form_overrides = {
+        'password': PasswordInputField,
+    }
 
 
 class ProductModelView(ModelView):
