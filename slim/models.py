@@ -9,7 +9,7 @@ from flask_security import UserMixin, RoleMixin
 db = SQLAlchemy()
 
 
-# Secutiry
+# Security
 roles_users = db.Table(
     'roles_users',
     db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
@@ -92,11 +92,11 @@ class Purchase(db.Model):
         'Product', backref=db.backref('purchases', lazy='dynamic'))
 
     def __str__(self):
-        return 'Purchase(id=%d, user=%r, product=%r, quantiry=%d)' % (
+        return 'Purchase(id=%d, user=%r, product=%r, quantity=%d)' % (
             self.id, self.user.email, self.product.name, self.quantity)
 
     def __repr__(self):
-        return '<Purchase: id=%d, user_id=%r, product_id=%r, quantiry=%d>' % (
+        return '<Purchase: id=%d, user_id=%r, product_id=%r, quantity=%d>' % (
             self.id, self.user_id, self.product_id, self.quantity)
 
     @classmethod

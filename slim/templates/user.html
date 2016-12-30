@@ -15,15 +15,15 @@
   <dd>{{ user.active }}</dd>
 
   <dt>Roles</dt>
-  <dd><td>{{ user.roles|join(', ', attribute='name') }}</td></dd>
+  <dd>{{ user.roles|join(', ', attribute='name') }}</dd>
 
   <dt>Login count</dt>
   <dd>{{ user.login_count }}</dd>
 
-  <dt>Curren login at</dt>
+  <dt>Current login at</dt>
   <dd>{{ user.current_login_at }}</dd>
 
-  <dt>Curren login IP</dt>
+  <dt>Current login IP</dt>
   <dd>{{ user.current_login_ip }}</dd>
 
   <dt>Last login at</dt>
@@ -31,10 +31,7 @@
 
   <dt>Last login IP</dt>
   <dd>{{ user.last_login_ip }}</dd>
-
-  <br>
-
-  <dt>Pasword</dt>
+  <dt><br/>Password</dt>
   <dd>{{ form_button(url_for('security.change_password'), icon('cog') + ' Change password', method='get', class='btn btn-primary') }}</dd>
 </dl>
 {% endblock content %}

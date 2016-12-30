@@ -84,7 +84,7 @@ def _init_test_db(products=None):
         db.session.add(purchase)
 
     nusers = User.query.count()
-    for idx, product in enumerate(product.query.all()):
+    for idx, product in enumerate(Product.query.all()):
         user = User.query.get(idx % (nusers - 1) + 2)  # exclude admin
         purchase = Purchase(user_id=user.id, product_id=product.id)
         db.session.add(purchase)
@@ -103,7 +103,7 @@ def _init_test_db(products=None):
     for idx, product in enumerate(product.query.all()):
         user = User.query.get(idx % (nusers - 1) + 2)  # exclude admin
         license = License(
-            user_id=admin.id,
+            user_id=user.id,
             product_id=product.id,
             request=b'dummy',
             license=b'dummy',
@@ -179,7 +179,7 @@ def remove(email):
 
 
 @UserManager.option('email', help="new user's email")
-def enable(email, enable=True):
+def enable(email, enabled=True):
     """Enable an existing user"""
 
     db.create_all()
@@ -188,13 +188,13 @@ def enable(email, enable=True):
     if not user:
         log.error('user %r does not exist', email)
     else:
-        if enable:
+        if enabled:
             user_datastore.activate_user(user)
         else:
             user_datastore.deactivate_user(user)
 
         db.session.commit()
-        log.info('user %r %s', email, 'enabled' if enable else 'disabled')
+        log.info('user %r %s', email, 'enabled' if enabled else 'disabled')
 
 
 @UserManager.option('email', help="new user's email")

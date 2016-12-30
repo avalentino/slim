@@ -4,7 +4,7 @@
 {% block content %}
 <h1>{{ title|default('Products') }}</h1>
 
-<p>Total pproduct count: {{ pagination.query.count() }}</p>
+<p>Total product count: {{ pagination.query.count() }}</p>
 
 <div>
   <p><a href="{{ support_link }}"><button class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Send</button></a>
@@ -16,7 +16,7 @@
     <tr>
       <th>ID</th>
       <th>Name</th>
-      <th>Desctiption</th>
+      <th>Description</th>
       {% if purchase_map %}
       <th>Purchased</th>
       {% endif %}

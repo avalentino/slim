@@ -87,7 +87,7 @@ def _new_post():
     license_count = License.query.filter_by(user_id=user.id).count()
 
     if license_count >= tot_purchase_count:
-        flash('No purchased license available for this ptoduct. '
+        flash('No purchased license available for this product. '
               'Please contact the product support or purchase new '
               'licenses.', 'error')
         return _new_get()
@@ -95,7 +95,7 @@ def _new_post():
     # upload license request
     try:
         filename = request_uploader.save(request.files['license_req'])
-    except UploadNotAllowed as ex:
+    except UploadNotAllowed:
         flash('Upload not allowed: incorrect file type', 'error')
         return _new_get()
     else:

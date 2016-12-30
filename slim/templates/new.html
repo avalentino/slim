@@ -4,7 +4,7 @@
 <h1>Submit a new license request</h1>
 <form class="form" action="{{ url_for('new') }}" method="post" enctype="multipart/form-data">
   <div class="form-group">
-    <label for="product-filed">Product</label>
+    <label>Product</label>
     <select class="form-control" name="product" id="product-field" required>
       {% for product in products %}
       <option value="{{ product.name }}">{{ product.name }}</option>
@@ -13,7 +13,7 @@
   </div>
   {% if current_user.has_role('admin') %}
   <div class="form-group">
-    <label for="user-filed">User</label>
+    <label>User</label>
     <select class="form-control" name="user" id="user-field" required>
       {% for user in users %}
       <option value="{{ user.email }}">{{ user.email }}</option>

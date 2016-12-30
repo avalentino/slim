@@ -33,7 +33,7 @@ def topnavbar():
         path = posixpath.join('/', *path_parts[:idx])
         try:
             rule, _ = match(path)
-        except Exception:  # RequestRedirect, NotFound
+        except Exception:
             path_views.clear()
             break
         target = rule.endpoint
