@@ -117,6 +117,10 @@ class UserModelView(ModelView):
         # 'roles',
         'active',
     )
+    column_filters = (
+        'roles',
+        'active',
+    )
     form_excluded_columns = (
         'last_login_at',
         'current_login_at',
