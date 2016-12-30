@@ -2,37 +2,52 @@
 {% from "bootstrap/utils.html" import form_button, icon %}
 
 {% block body %}
-  <h1>SLiM administration page</h1>
+<h1>SLiM administration page</h1>
 
-  <h2>Admin views</h2>
+<h2>Admin tasks</h2>
 
-  <dl class="dl-horizontal">
-    <dt><a href="{{ url_for('index') }}">Profiles</a></dt>
-    <dd>view user profiles and allow <b>password change</b> -- <b>TODO</b></dd>
+<dl class="dl-horizontal">
+  <dt><a href="{{ url_for('user.create_view') }}">new user</a></dt>
+  <dd>create a new user</dd>
 
-    <dt><a href="{{ url_for('index') }}">Request download</a></dt>
-    <dd>allows to download license request files uploaded by users -- <b>TODO</b></dd>
+  <dt><a href="{{ url_for('user.index_view') }}">profiles</a></dt>
+  <dd>manage user profiles and <b>password change</b></dd>
 
-    <dt><a href="{{ url_for('index') }}">Manual license upload</a></dt>
-    <dd>allows to manually upload a license file -- <b>TODO</b></dd>
-  </dl>
+  <dt><a href="{{ url_for('product.index_view') }}">products</a></dt>
+  <dd>manage products</dd>
 
-  <h2>Database tables</h2>
+  <dt><a href="{{ url_for('purchase.create_view') }}">new purchase</a></dt>
+  <dd>create a purchase record</dd>
 
-  <dl class="dl-horizontal">
-    <dt><a href="{{ url_for('role.index_view') }}">Roles</a></dt>
-    <dd>the table of user roles</dd>
+  <dt><a href="{{ url_for('purchase.index_view') }}">purchases</a></dt>
+  <dd>manage purchases</dd>
 
-    <dt><a href="{{ url_for('user.index_view') }}">Users</a></dt>
-    <dd>the table storing user data</dd>
+  <dt><a href="{{ url_for('license.index_view') }}">licenses</a></dt>
+  <dd>manage licenses</dd>
 
-    <dt><a href="{{ url_for('product.index_view') }}">Products</a></dt>
-    <dd>the table of the products</dd>
+  <dt><a href="{{ url_for('index') }}">request download</a></dt>
+  <dd>allows to download license request files uploaded by users -- <b>TODO</b></dd>
 
-    <dt><a href="{{ url_for('purchase.index_view') }}">Purchases</a></dt>
-    <dd>the table for purchasing information</dd>
+  <dt><a href="{{ url_for('index') }}">manual license upload</a></dt>
+  <dd>allows to manually upload a license file -- <b>TODO</b></dd>
+</dl>
 
-    <dt><a href="{{ url_for('license.index_view') }}">Licenses</a></dt>
-    <dd>the table of licenses</dd>
-  </dl>
+<h2>Database tables</h2>
+
+<dl class="dl-horizontal">
+  <dt><a href="{{ url_for('role.index_view') }}">Roles</a></dt>
+  <dd>the table of user roles</dd>
+
+  <dt><a href="{{ url_for('user.index_view') }}">Users</a></dt>
+  <dd>the table storing user data</dd>
+
+  <dt><a href="{{ url_for('product.index_view') }}">Products</a></dt>
+  <dd>the table of the products</dd>
+
+  <dt><a href="{{ url_for('purchase.index_view') }}">Purchases</a></dt>
+  <dd>the table for purchasing information</dd>
+
+  <dt><a href="{{ url_for('license.index_view') }}">Licenses</a></dt>
+  <dd>the table of licenses</dd>
+</dl>
 {% endblock body %}
