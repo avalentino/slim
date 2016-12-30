@@ -81,6 +81,9 @@ class RoleModelView(ModelView):
     #     'description',
     #     'users',
     # )
+    form_args = dict(
+        name=dict(validators=[wtforms.validators.DataRequired()]),
+    )
 
 
 class UserModelView(ModelView):
@@ -94,7 +97,6 @@ class UserModelView(ModelView):
             '%s (%d)' % (p, n)
             for p, n in Counter(l.product.name for l in m.licenses).items()),
     )
-
     column_list = (
         'id',
         'email',
@@ -122,9 +124,13 @@ class UserModelView(ModelView):
         'current_login_ip',
         'login_count',
     )
-    form_overrides = {
-        'password': PasswordInputField,
-    }
+    form_overrides = dict(
+        password=PasswordInputField,
+    )
+    form_args = dict(
+        email=dict(validators=[wtforms.validators.DataRequired()]),
+        roles=dict(validators=[wtforms.validators.DataRequired()]),
+    )
 
 
 class ProductModelView(ModelView):
@@ -133,6 +139,9 @@ class ProductModelView(ModelView):
         licenses=lambda v, c, m, p: m.licenses.count(),
         purchases=lambda v, c, m, p: sum(
             item.quantity for item in m.purchases),
+    )
+    form_args = dict(
+        name=dict(validators=[wtforms.validators.DataRequired()]),
     )
 
 
@@ -150,6 +159,11 @@ class PurchaseModelView(ModelView):
     column_filters = (
         'user',
         'product',
+    )
+    form_args = dict(
+        user=dict(validators=[wtforms.validators.DataRequired()]),
+        product=dict(validators=[wtforms.validators.DataRequired()]),
+        quantity=dict(validators=[wtforms.validators.DataRequired()]),
     )
 
 
@@ -177,13 +191,20 @@ class LicenseModelView(ModelView):
     #     'request': form.FileUploadField,
     #     'license': form.FileUploadField,
     # }
-    # form_args = {
-    #     'path': {
-    #         'label': 'File',
-    #         'base_path': file_path,
+    form_args = dict(
+        user=dict(validators=[wtforms.validators.DataRequired()]),
+        product=dict(validators=[wtforms.validators.DataRequired()]),
+    #     request=dict(
+    #         'label': 'Request file',
+    #         'base_path': current_app.config['UPLOADED_REQUESTS_DEST'],
     #         'allow_overwrite': False
-    #     }
-    # }
+    #     )
+    #     license=dict(
+    #         'label': 'License file',
+    #         'base_path': current_app.config['UPLOADED_REQUESTS_DEST'],
+    #         'allow_overwrite': False
+    #     )
+    )
 
 
 admin = Admin(
