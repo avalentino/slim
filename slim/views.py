@@ -7,7 +7,7 @@ from collections import namedtuple
 from flask import (
     request, redirect, url_for, flash, render_template, make_response)
 
-from flask_security import login_required, current_user
+from flask_security import login_required, current_user, roles_accepted
 from flask_uploads import UploadNotAllowed
 
 from . import utils
@@ -216,3 +216,16 @@ def download(lic_id):
 @login_required
 def user_profile():
     return render_template('user.html', user=current_user)
+
+
+@app.route('/admin/licenses/<int:lic_id>/download/request')
+@roles_accepted('admin')
+def admin_download_request_file(lic_id):
+    lic = License.query.get_or_404(lic_id)
+
+    response = make_response(lic.request)
+    response.headers['Content-Type'] = 'application/octet-stream'
+    response.headers['Content-Disposition'] = (
+        'attachment; filename=license_%d.request' % lic.id)
+
+    return response
