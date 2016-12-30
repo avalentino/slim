@@ -102,7 +102,7 @@ class UserModelView(ModelView):
         'active',
     )
     form_excluded_columns = (
-        # 'password',
+        'password',     # XXX
         'last_login_at',
         'current_login_at',
         'last_login_ip',
@@ -128,9 +128,17 @@ class PurchaseModelView(ModelView):
         'product',
         'quantity',
     )
+    column_editable_list = (
+        'quantity',
+    )
+    column_filters = (
+        'user',
+        'product',
+    )
 
 
 class LicenseModelView(ModelView):
+    can_create = False
     column_list = (
         'id',
         'user',
@@ -140,6 +148,26 @@ class LicenseModelView(ModelView):
         'request_date',
         'license',
     )
+    column_filters = (
+        'user',
+        'product',
+    )
+    form_excluded_columns = (
+        'request',
+        'request_date',
+        'license',
+    )
+    # form_overrides = {
+    #     'request': form.FileUploadField,
+    #     'license': form.FileUploadField,
+    # }
+    # form_args = {
+    #     'path': {
+    #         'label': 'File',
+    #         'base_path': file_path,
+    #         'allow_overwrite': False
+    #     }
+    # }
 
 
 admin = Admin(
