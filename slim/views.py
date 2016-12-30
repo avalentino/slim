@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+from collections import namedtuple
 
 from flask import (
     request, redirect, url_for, flash, render_template, make_response)
@@ -14,6 +15,10 @@ from .app import app, request_uploader
 from .models import db, License, User, Product, Purchase
 
 
+_PurchaseMapItem = namedtuple('PurchaseMapItem',
+                             ('purchased', 'purchase_count', 'license_count'))
+
+
 @app.route('/')
 @login_required
 def index():
@@ -23,49 +28,58 @@ def index():
 @app.route('/licenses')
 @login_required
 def licenses():
-    query = License.query.filter_by(user_id=current_user.id)
+    query = current_user.licenses
     return render_template(
         'licenses.html',
         pagination=query.paginate(per_page=app.config['SLIM_ITEMS_PER_PAGE']),
-        products=Product.query,
-        target='show_license')
+    )
 
 
 @app.route('/products')
 @login_required
 def products():
-    purchased = Purchase.product_ids(current_user.id)
-    purchase_map = dict(
-        (prod.id, prod.id in purchased) for prod in Product.query.all())
+    user = current_user
+    purchased_products = set(item.product for item in user.purchases)
+
+    purchase_map = {}
+    for product in Product.query.all():
+        purcased = product in purchased_products
+        purchase_count = sum\
+            (p.quantity for p in product.purchases.filter_by(user=user))
+        license_count = product.licenses.filter_by(user=current_user).count()
+        purchase_map[product.id] = _PurchaseMapItem(purcased,
+                                                    purchase_count,
+                                                    license_count)
+
     return render_template(
         'products.html',
         pagination=Product.query.paginate(
             per_page=app.config['SLIM_ITEMS_PER_PAGE']),
         purchase_map=purchase_map,
-        support_link=utils.make_support_link(app.config['SLIM_SUPPORT_EMAIL']))
+        support_link=utils.make_support_link(app.config['SLIM_SUPPORT_EMAIL']),
+    )
 
 
 @app.route('/purchases')
 @login_required
 def purchases():
-    support_link = utils.make_support_link(app.config['SLIM_SUPPORT_EMAIL'])
     return render_template(
         'purchases.html',
-        pagination=Purchase.query.filter_by(user_id=current_user.id).paginate(
+        pagination=current_user.purchases.paginate(
             per_page=app.config['SLIM_ITEMS_PER_PAGE']),
-        products=Product.query,
-        support_link=support_link)
+        support_link=utils.make_support_link(app.config['SLIM_SUPPORT_EMAIL']),
+    )
 
 
 def _new_get():
-    purchased = Purchase.product_ids(current_user.id)
-    products = [
-        product for product in Product.query.all() if product.id in purchased]
-
     if current_user.has_role('admin'):
         users = User.query.all()
+        products = Product.query.all()
     else:
         users = None
+        purchased = [item.product for item in current_user.purchases]
+        products = [
+            product for product in Product.query.all() if product in purchased]
 
     return render_template('new.html', products=products, users=users)
 
@@ -84,7 +98,7 @@ def _new_post():
     tot_purchase_count = Purchase.count(user_id=user.id, product_id=product.id)
 
     # License count
-    license_count = License.query.filter_by(user_id=user.id).count()
+    license_count = License.query.filter_by(user_id=user.id, product_id=product.id).count()
 
     if license_count >= tot_purchase_count:
         flash('No purchased license available for this product. '

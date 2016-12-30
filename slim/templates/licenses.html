@@ -6,6 +6,8 @@
 
 <p>Total license count: {{ pagination.query.count() }}</p>
 
+<p>{{ form_button(url_for('new'), icon('upload') + ' New license request', method='get', class='btn btn-primary') }}</p>
+
 {% if pagination.items %}
 <table class="table">
   <thead>
@@ -21,11 +23,11 @@
   <tbody>
   {% for item in pagination.items %}
     <tr>
-      <td>{{ item.id }} {{ form_button(url_for(target, lic_id=item.id), icon('eye-open'), method='get') }}</td>
+      <td>{{ item.id }} {{ form_button(url_for('show_license', lic_id=item.id), icon('eye-open'), method='get') }}</td>
       {% if users %}
       <td>{{ users.get(item.user_id).email|default(item.user_id) }}</td>
       {% endif %}
-      <td>{{ products.get(item.product_id).name }}</td>
+      <td>{{ item.product.name }}</td>
       <td>{{ item.request_date }}</td>
     </tr>
   {% endfor %}
@@ -36,5 +38,4 @@
 {% else %}
 <p>No license found.</p>
 {% endif %}
-<p>{{ form_button(url_for('new'), icon('upload') + ' New license request', method='get', class='btn btn-primary') }}</p>
 {% endblock content %}

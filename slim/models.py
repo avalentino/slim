@@ -65,8 +65,8 @@ class Product(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
-    description = db.Column(db.String(255))
-    url = db.Column(db.String(255))
+    description = db.Column(db.String(255), default='')
+    url = db.Column(db.String(255), default='')
 
     def __str__(self):
         return self.name
@@ -108,22 +108,6 @@ class Purchase(db.Model):
             query = query.filter_by(product_id=product_id)
 
         return sum(item.quantity for item in query.all())
-
-    @classmethod
-    def product_ids(cls, user_id=None):
-        query = cls.query
-        if user_id:
-            query = query.filter_by(user_id=user_id)
-
-        return set(item.product_id for item in query.all())
-
-    @classmethod
-    def user_ids(cls, product_id=None):
-        query = cls.query
-        if product_id:
-            query = query.filter_by(product_id=product_id)
-
-        return set(item.user_id for item in query.all())
 
 
 class License(db.Model):

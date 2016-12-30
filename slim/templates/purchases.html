@@ -28,7 +28,7 @@
       {% if users %}
       <td>{{ users.get(item.user_id).email }}</td>
       {% endif %}
-      <td>{{ products.get(item.product_id).name }}</td>
+      <td>{{ item.product.name }}</td>
       <td>{{ item.quantity }}</td>
     </tr>
   {% endfor %}
