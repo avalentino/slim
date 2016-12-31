@@ -28,11 +28,14 @@ app.config.update(
         path=os.path.join(app.instance_path, 'slim.db'),
         query='',
         fragment='')),
+    SLIM_LOGGING_FILENAME=os.path.join(app.instance_path, 'slim.log'),
     UPLOADED_REQUESTS_DEST=os.path.join(app.instance_path, 'uploads'),
 )
 app.config.from_pyfile(app.config['SLIM_INSTANCE_CONFIG_FILE'], silent=True)
 app.config.from_pyfile(app.config['SLIM_SYSTEM_CONFIG_FILE'], silent=True)
 app.config.from_envvar('SLIM_SETTINGS_PATH', silent=True)
+
+config.logging_config(app)
 
 
 # bootstrap

@@ -27,6 +27,12 @@ SLIM_LICENSE_GENERATOR_CMD = [
     '%(INPUT_REQUEST_FILE)s',
     '%(OUTPUT_LICENSE_FILE)s',
 ]
+SLIM_FILE_LOGGING_LEVEL = None   # no logging on file
+SLIM_FILE_LOGGING_FORMAT = (
+    '%(asctime)s - %(name)s - %(levelname)s: %(message)s')
+SLIM_FILE_LOGGING_MAXBYTES = 10 * 1024**2     # 10 MB
+SLIM_FILE_LOGGING_BACKUPCOUNT = 5
+
 
 
 # flask
@@ -61,3 +67,35 @@ SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
 # upload
 UPLOADED_REQUESTS_DEST = os.path.join('instance', 'uploads')
 # UPLOADED_REQUESTS_URL = 'http://localhost:5001/uploads'
+
+
+def logging_config(app):
+    import logging
+    import logging.handlers
+
+    level = app.config['SLIM_FILE_LOGGING_LEVEL']
+    if level is None:
+        return
+
+    werkzeug_logger = logging.getLogger('werkzeug')
+    level = logging.getLevelName(level)
+
+    if not os.path.isdir(app.instance_path):
+        os.makedirs(app.instance_path)
+
+    formatter = logging.Formatter(app.config['SLIM_FILE_LOGGING_FORMAT'])
+
+    handler = logging.handlers.RotatingFileHandler(
+        os.path.join(app.instance_path, 'slim.log'),
+        maxBytes=app.config['SLIM_FILE_LOGGING_MAXBYTES'],
+        backupCount=app.config['SLIM_FILE_LOGGING_BACKUPCOUNT'])
+    handler.setFormatter(formatter)
+    handler.setLevel(logging.DEBUG)
+
+    app.logger.addHandler(handler)
+    logging.getLogger('werkzeug').addHandler(handler)
+
+    # set log level
+    app.logger.setLevel(level)
+    werkzeug_logger.setLevel(level)
+    app.logger.info('log level set to %r', app.config['SLIM_FILE_LOGGING_LEVEL'])

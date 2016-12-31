@@ -145,7 +145,8 @@ def init_test_env():
         else:
             log.info('local instance detected: set debug mode')
             with open(instance_config, 'w') as fd:
-                fd.write('FLASK_DEBUG = True')
+                fd.write('FLASK_DEBUG = True\n')
+                fd.write("SLIM_FILE_LOGGING_LEVEL = 'DEBUG'\n")
                 fd.write('\n')
 
     return _init_test_db()
