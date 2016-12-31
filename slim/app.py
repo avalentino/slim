@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import posixpath
 try:
     from urllib.parse import SplitResult, urlunsplit
 except ImportError:
@@ -20,21 +19,19 @@ from .nav import nav
 
 
 # Flask app
-app = Flask('slim')
-app.config.from_object(config)
+app = Flask('slim', instance_relative_config=True)
 app.config.from_object(config)
 app.config.update(
     SQLALCHEMY_DATABASE_URI=urlunsplit(SplitResult(
         scheme='sqlite',
         netloc='/',
-        path=posixpath.join(app.instance_path, 'slim.db'),
+        path=os.path.join(app.instance_path, 'slim.db'),
         query='',
         fragment='')),
     UPLOADED_REQUESTS_DEST=os.path.join(app.instance_path, 'uploads'),
 )
-app.config.from_pyfile(
-    app.config['SLIM_SYSTEM_CONFIG_FILE'],
-    silent=True if app.config['DEBUG'] or app.config['TESTING'] else False)
+app.config.from_pyfile(app.config['SLIM_INSTANCE_CONFIG_FILE'], silent=True)
+app.config.from_pyfile(app.config['SLIM_SYSTEM_CONFIG_FILE'], silent=True)
 app.config.from_envvar('SLIM_SETTINGS_PATH', silent=True)
 
 

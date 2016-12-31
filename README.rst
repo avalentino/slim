@@ -60,24 +60,22 @@ https://github.com/avalentino/slim.
 To run the development server use the following command for the project
 root directory::
 
-  $ env PYTHONPATH=. FLASK_DEBUG=TRUE python -m slim runserver
+  $ env PYTHONPATH=. python -m slim runserver
 
 The package also provides a basic set tools for developer life easier::
 
-  $ env PYTHONPATH=. FLASK_DEBUG=TRUE python -m slim --help
+  $ env PYTHONPATH=. python -m slim --help
 
-  usage: __main__.py [-?] {shell,db,init_test_db,runserver,user,init_db} ...
+  usage: __main__.py [-?] {runserver,init_test_env,shell,db,user,init_db} ...
 
   positional arguments:
-    {shell,db,init_test_db,runserver,user,init_db}
+    {runserver,init_test_env,shell,db,user,init_db}
+      runserver           Runs the Flask development server i.e. app.run()
+      init_test_env       Basic initialization of the testing environment
       shell               Runs a Python shell inside Flask application context.
       db                  Perform database migrations
-      init_test_db        Basic initialization of the internal DB for testing
-      runserver           Runs the Flask development server i.e. app.run()
       user                Perform user management
       init_db             Basic initialization of the internal DB
 
-
   optional arguments:
     -?, --help            show this help message and exit
-

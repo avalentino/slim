@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 import os
 import sys
+import shutil
 import logging
 try:
     from urllib.parse import urlsplit
@@ -12,6 +15,7 @@ from flask_script import Manager
 from flask_migrate import MigrateCommand, Migrate
 from flask_security.utils import encrypt_password
 
+from slim import utils
 from slim.app import app, user_datastore
 from slim.models import db, User, License, Product, Purchase
 
@@ -29,10 +33,17 @@ manager = Manager(app)
 def init_db():
     """Basic initialization of the internal DB"""
 
-    db_path = urlsplit(app.config['SQLALCHEMY_DATABASE_URI']).path
-    db_path = os.path.dirname(db_path)
-    if not os.path.exists(db_path):
-        os.makedirs(db_path)
+    db_path_parts = urlsplit(app.config['SQLALCHEMY_DATABASE_URI'])
+
+    if db_path_parts.scheme == 'sqlite':
+        db_path = db_path_parts.path
+        if os.path.exists(db_path):
+            raise RuntimeError(
+                'the database already exista at %r. Please remove it and try '
+                'again' % app.config['SQLALCHEMY_DATABASE_URI'])
+        db_dir = os.path.dirname(db_path)
+        if db_dir and not os.path.exists(db_dir):
+            os.makedirs(db_dir)
 
     db.create_all()
 
@@ -114,8 +125,28 @@ def _init_test_db(products=None):
 
 
 @manager.command
-def init_test_db():
-    """Basic initialization of the internal DB for testing"""
+def init_test_env():
+    """Basic initialization of the testing environment"""
+
+    if not utils.is_installed(app.instance_path):
+        # unistalled mode
+
+        if not os.path.exists(app.instance_path):
+            os.makedirs(app.instance_path)
+
+        custom_config = os.path.join(
+            app.instance_path, os.pardir, 'custom_config.py')
+        instance_config = os.path.join(app.instance_path,
+                                       app.config['SLIM_INSTANCE_CONFIG_FILE'])
+
+        if os.path.exists(custom_config):
+            log.info('copy custom config: %r', custom_config)
+            shutil.copy(custom_config, instance_config)
+        else:
+            log.info('local instance detected: set debug mode')
+            with open(instance_config, 'w') as fd:
+                fd.write('FLASK_DEBUG = True')
+                fd.write('\n')
 
     return _init_test_db()
 

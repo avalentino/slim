@@ -2,29 +2,28 @@
 
 import os
 import sys
-import posixpath
 try:
     from urllib.parse import SplitResult, urlunsplit
 except ImportError:
     from urlparse import SplitResult, urlunsplit
 
+from . import utils
 
 # slim
-SLIM_APPDIR = os.path.dirname(os.path.realpath(__file__))
-SLIM_APPDIR = os.path.normpath(os.path.join(SLIM_APPDIR, os.pardir))
 SLIM_APPNAME = 'SLiM'
 SLIM_WELCOME_MESSAGE = 'Simple License Management system (SLiM)'
 SLIM_COPYRIGHT_YEAR = 2016
 SLIM_COPYRIGHT_URL = 'http://slimapp.org'
 SLIM_COPYRIGHT_OWNER = 'Antonio Valentino'
 SLIM_SUPPORT_EMAIL = 'support@slimapp.org'
+SLIM_INSTANCE_CONFIG_FILE = 'config.py'
 SLIM_SYSTEM_CONFIG_FILE = '/etc/slim/config.py'
 SLIM_ITEMS_PER_PAGE = 5
 SLIM_REQUEST_EXTENSIONS = ('request',)
 SLIM_LICENSE_GENERATOR_CMD = [
     sys.executable,
     '-u',
-    os.path.join(SLIM_APPDIR, 'bin', 'dummy-generate-license.py'),
+    os.path.join(utils.package_prefix(), 'bin', 'dummy-generate-license.py'),
     '%(INPUT_REQUEST_FILE)s',
     '%(OUTPUT_LICENSE_FILE)s',
 ]
@@ -42,7 +41,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_DATABASE_URI = urlunsplit(SplitResult(
     scheme='sqlite',
     netloc='/',
-    path=posixpath.join(SLIM_APPDIR, 'slim.db'),
+    path=os.path.join(utils.package_prefix(), 'instance', 'slim.db'),
     query='',
     fragment=''))
 
@@ -60,5 +59,5 @@ SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
 
 
 # upload
-UPLOADED_REQUESTS_DEST = os.path.join(SLIM_APPDIR, 'uploads')
+UPLOADED_REQUESTS_DEST = os.path.join('instance', 'uploads')
 # UPLOADED_REQUESTS_URL = 'http://localhost:5001/uploads'

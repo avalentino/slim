@@ -1,10 +1,23 @@
 # -*- coding: utf-8 -*-
 
+import os
 try:
     from urllib.parse import ParseResult, urlunparse, quote
 except ImportError:
     from urlparse import ParseResult, urlunparse
     from urllib import quote
+
+
+def package_dir():
+    return os.path.dirname(os.path.realpath(__file__))
+
+
+def package_prefix():
+    return os.path.normpath(os.path.join(package_dir(), os.pardir))
+
+
+def is_installed(instance_path):
+    return not instance_path.startswith(package_prefix())
 
 
 def make_support_link(email, appname='SLiM'):
