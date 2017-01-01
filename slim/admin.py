@@ -32,7 +32,7 @@ def _format_password(data, size=6, placemark='*'):
     return placemark * size
 
 
-def large_binary_data_formatter(view, value):
+def large_binary_data_type_formatter(view, value):
     return _format_large_binary_data(value)
 
 
@@ -72,6 +72,15 @@ def license_data_formatter(view, context, model, name):
     ]))
 
 
+def url_formatter(view, context, model, name):
+    # `view` is current administrative view
+    # `context` is instance of jinja2.runtime.Context
+    # `model` is model instance
+    # `name` is property name
+
+    return Markup('<a href="%(url)s">%(url)s</s>' % dict(url=model.url))
+
+
 class PasswordInputWidget(wtforms.widgets.PasswordInput):
     def _value(self):
         value = super(PasswordInputWidget, self)._value()
@@ -89,7 +98,7 @@ class ModelView(sqla.ModelView):
     # column_display_all_relations = True
 
     column_type_formatters = {
-        bytes: large_binary_data_formatter,
+        bytes: large_binary_data_type_formatter,
     }
 
     def is_accessible(self):
@@ -177,6 +186,7 @@ class UserModelView(ModelView):
 class ProductModelView(ModelView):
     column_display_all_relations = True
     column_formatters = dict(
+        url=url_formatter,
         licenses=lambda v, c, m, p: m.licenses.count(),
         purchases=lambda v, c, m, p: sum(
             item.quantity for item in m.purchases),
