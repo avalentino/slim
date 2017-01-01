@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+
 from collections import Counter
 
 from flask import abort, redirect, request, url_for

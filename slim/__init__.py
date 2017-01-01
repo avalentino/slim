@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from .app import app, components
+from __future__ import absolute_import
+
 from . import views
 
 
