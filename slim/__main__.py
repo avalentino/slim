@@ -16,8 +16,11 @@ from flask_migrate import MigrateCommand, Migrate
 from flask_security.utils import encrypt_password
 
 from slim import utils
-from slim.app import app, user_datastore
+from slim.app import app, components
 from slim.models import db, User, License, Product, Purchase
+
+
+user_datastore = components['user_datastore']
 
 
 # basic cli initialization
@@ -94,32 +97,32 @@ def _init_test_db(products=None):
             user_id=admin.id, product_id=product.id, quantity=1024)
         db.session.add(purchase)
 
-    nusers = User.query.count()
+    n_users = User.query.count()
     for idx, product in enumerate(Product.query.all()):
-        user = User.query.get(idx % (nusers - 1) + 2)  # exclude admin
+        user = User.query.get(idx % (n_users - 1) + 2)  # exclude admin
         purchase = Purchase(user_id=user.id, product_id=product.id)
         db.session.add(purchase)
 
     # licenses
     for idx, product in enumerate(Product.query.all(), start=1):
-        license = License(
+        license_ = License(
             user_id=admin.id,
             product_id=product.id,
             request=b'dummy-request-%03d' % idx,
             license=b'dummy-license-%03d' % idx,
         )
-        db.session.add(license)
+        db.session.add(license_)
 
-    nusers = User.query.count()
-    for idx, product in enumerate(product.query.all(), start=idx + 1):
-        user = User.query.get(idx % (nusers - 1) + 2)  # exclude admin
-        license = License(
+    n_users = User.query.count()
+    for idx, product in enumerate(Product.query.all(), start=idx + 1):
+        user = User.query.get(idx % (n_users - 1) + 2)  # exclude admin
+        license_ = License(
             user_id=user.id,
             product_id=product.id,
             request=b'dummy-request-%03d' % idx,
             license=b'dummy-license-%03d' % idx,
         )
-        db.session.add(license)
+        db.session.add(license_)
 
     db.session.commit()
 
@@ -129,7 +132,7 @@ def init_test_env():
     """Basic initialization of the testing environment"""
 
     if not utils.is_installed(app.instance_path):
-        # unistalled mode
+        # uninstalled mode
 
         if not os.path.exists(app.instance_path):
             os.makedirs(app.instance_path)

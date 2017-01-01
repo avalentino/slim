@@ -34,6 +34,18 @@ def make_support_link(email, appname='SLiM'):
     return urlunparse(support_link_parts)
 
 
+def sqlite_uri_for(path):
+    uri_parts = ParseResult(
+        scheme='sqlite',
+        netloc='/',
+        path=path,
+        params='',
+        query='',
+        fragment='')
+
+    return urlunparse(uri_parts)
+
+
 def expand_cmd_vars(cmdargs, **kwargs):
     return [item % kwargs for item in cmdargs]
 

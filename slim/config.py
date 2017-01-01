@@ -2,10 +2,6 @@
 
 import os
 import sys
-try:
-    from urllib.parse import SplitResult, urlunsplit
-except ImportError:
-    from urlparse import SplitResult, urlunsplit
 
 from . import utils
 
@@ -34,7 +30,6 @@ SLIM_FILE_LOGGING_MAXBYTES = 10 * 1024**2     # 10 MB
 SLIM_FILE_LOGGING_BACKUPCOUNT = 5
 
 
-
 # flask
 # DEBUG = True
 SECRET_KEY = 'something hard to guess'      # XXX: change this
@@ -44,12 +39,7 @@ MAX_CONTENT_LENGTH = 4 * 1024
 
 # sqlalchemy
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_DATABASE_URI = urlunsplit(SplitResult(
-    scheme='sqlite',
-    netloc='/',
-    path=os.path.join(utils.package_prefix(), 'instance', 'slim.db'),
-    query='',
-    fragment=''))
+SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 
 # security
@@ -67,35 +57,3 @@ SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
 # upload
 UPLOADED_REQUESTS_DEST = os.path.join('instance', 'uploads')
 # UPLOADED_REQUESTS_URL = 'http://localhost:5001/uploads'
-
-
-def logging_config(app):
-    import logging
-    import logging.handlers
-
-    level = app.config['SLIM_FILE_LOGGING_LEVEL']
-    if level is None:
-        return
-
-    werkzeug_logger = logging.getLogger('werkzeug')
-    level = logging.getLevelName(level)
-
-    if not os.path.isdir(app.instance_path):
-        os.makedirs(app.instance_path)
-
-    formatter = logging.Formatter(app.config['SLIM_FILE_LOGGING_FORMAT'])
-
-    handler = logging.handlers.RotatingFileHandler(
-        os.path.join(app.instance_path, 'slim.log'),
-        maxBytes=app.config['SLIM_FILE_LOGGING_MAXBYTES'],
-        backupCount=app.config['SLIM_FILE_LOGGING_BACKUPCOUNT'])
-    handler.setFormatter(formatter)
-    handler.setLevel(logging.DEBUG)
-
-    app.logger.addHandler(handler)
-    logging.getLogger('werkzeug').addHandler(handler)
-
-    # set log level
-    app.logger.setLevel(level)
-    werkzeug_logger.setLevel(level)
-    app.logger.info('log level set to %r', app.config['SLIM_FILE_LOGGING_LEVEL'])

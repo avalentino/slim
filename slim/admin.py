@@ -239,16 +239,16 @@ class LicenseModelView(ModelView):
     form_args = dict(
         user=dict(validators=[wtforms.validators.DataRequired()]),
         product=dict(validators=[wtforms.validators.DataRequired()]),
-    #     request=dict(
-    #         'label': 'Request file',
-    #         'base_path': current_app.config['UPLOADED_REQUESTS_DEST'],
-    #         'allow_overwrite': False
-    #     )
-    #     license=dict(
-    #         'label': 'License file',
-    #         'base_path': current_app.config['UPLOADED_REQUESTS_DEST'],
-    #         'allow_overwrite': False
-    #     )
+        # request=dict(
+        #     'label': 'Request file',
+        #     'base_path': current_app.config['UPLOADED_REQUESTS_DEST'],
+        #     'allow_overwrite': False
+        # )
+        # license=dict(
+        #     'label': 'License file',
+        #     'base_path': current_app.config['UPLOADED_REQUESTS_DEST'],
+        #     'allow_overwrite': False
+        # )
     )
 
 

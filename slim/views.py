@@ -11,9 +11,11 @@ from flask_security import login_required, current_user, roles_accepted
 from flask_uploads import UploadNotAllowed
 
 from . import utils
-from .app import app, request_uploader
+from .app import app, components
 from .models import db, License, User, Product, Purchase
 
+
+request_uploader = components['request_uploader']
 
 _PurchaseMapItem = namedtuple(
     'PurchaseMapItem', ('purchased', 'purchase_count', 'license_count'))
@@ -157,7 +159,7 @@ def _new_post():
         os.remove(licfile)
 
         # save the new license
-        license = License(
+        license_ = License(
             user_id=user.id,
             product_id=product.id,
             request=data,
@@ -165,7 +167,7 @@ def _new_post():
             description=request.form['description'],
         )
 
-        db.session.add(license)
+        db.session.add(license_)
         db.session.commit()
     finally:
         os.remove(filename)
