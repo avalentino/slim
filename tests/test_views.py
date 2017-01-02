@@ -26,9 +26,10 @@ class TestCase(flask_testing.TestCase):
     def create_app(self):
         app = slim.app.app
         # app.config.from_mapping(
-        #     TESTING=self.TESTING,
+        #     TESTING=True,
         #     SECURITY_PASSWORD_HASH='plaintext',
-        #     SQLALCHEMY_DATABASE_URI=self.SQLALCHEMY_DATABASE_URI,
+        #     SQLALCHEMY_DATABASE_URI='sqlite://',
+        #     PRESERVE_CONTEXT_ON_EXCEPTION=False,
         # )
 
         return app
@@ -205,7 +206,7 @@ class TestUserViews01(TestCase):
 
     def test_license_01(self):
         with self.login(self.user):
-            response = self.client.get('/license/400')
+            response = self.client.get('/licenses/400')
             self.assert_404(response)
 
 
@@ -264,10 +265,9 @@ class TestUserViews02(TestUserViews01):
             license = self.user.licenses.first()
             product = license.product
 
-            response = self.client.get('/license/%d' % license.id)
+            response = self.client.open('/licenses/%d' % license.id)
             self.assert_200(response)
             self.assert_template_used('license.html')
-
 
             data = response.get_data(as_text=True).lower()
             self.assertTrue(('License n. %d' % license.id).lower() in data)
@@ -284,7 +284,7 @@ class TestUserViews02(TestUserViews01):
 
     def test_license_03(self):
         with self.login(self.user):
-            response = self.client.get('/license/1', follow_redirects=True)
+            response = self.client.get('/licenses/1', follow_redirects=True)
             self.assert_200(response)
             self.assert_message_flashed(
                 'You do not have permission to view this resource.', 'error')

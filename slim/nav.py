@@ -36,7 +36,9 @@ def topnavbar():
         try:
             rule, _ = match(path)
         except Exception:
-            path_views.clear()
+            # compatibility with Python < 3.5
+            del path_views[:]
+            # path_views.clear()
             break
         target = rule.endpoint
         path_views.append(View('> ' + label.capitalize(), target))
