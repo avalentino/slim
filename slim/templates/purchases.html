@@ -10,6 +10,7 @@
   a support request to purchase a product.</p>
 </div>
 
+{% if pagination.items %}
 <table class="table">
   <thead>
     <tr>
@@ -34,7 +35,9 @@
   {% endfor %}
   </tbody>
 </table>
-
 {% from "bootstrap/pagination.html" import render_pagination %}
 {{ render_pagination(pagination) }}
+{% else %}
+<p>No purchase found.</p>
+{% endif %}
 {% endblock content %}
