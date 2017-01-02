@@ -7,21 +7,18 @@ import os
 import sys
 import shutil
 import logging
-try:
-    from urllib.parse import urlsplit
-except ImportError:
-    from urlparse import urlsplit
 
 from flask_script import Manager
 from flask_migrate import MigrateCommand, Migrate
 from flask_security.utils import encrypt_password
 
+import slim.app
 from slim import utils
-from slim.app import app, components
 from slim.models import db, User, License, Product, Purchase
 
 
-user_datastore = components['user_datastore']
+app = slim.app.app
+user_datastore = slim.app.components['user_datastore']
 
 
 # basic cli initialization
@@ -37,38 +34,11 @@ manager = Manager(app)
 def init_db():
     """Basic initialization of the internal DB"""
 
-    db_path_parts = urlsplit(app.config['SQLALCHEMY_DATABASE_URI'])
-
-    if db_path_parts.scheme == 'sqlite':
-        db_path = db_path_parts.path
-        if os.path.exists(db_path):
-            raise RuntimeError(
-                'the database already exista at %r. Please remove it and try '
-                'again' % app.config['SQLALCHEMY_DATABASE_URI'])
-        db_dir = os.path.dirname(db_path)
-        if db_dir and not os.path.exists(db_dir):
-            os.makedirs(db_dir)
-
-    db.create_all()
-
-    # roles
-    admin_role = user_datastore.create_role(name='admin',
-                                            description='Administrator')
-    user_datastore.create_role(name='user', description='Standard user')
-
-    # users
-    user = user_datastore.create_user(email='admin', password='')
-    user_datastore.deactivate_user(user)
-    user_datastore.add_role_to_user(user, admin_role)
-
+    slim.app.init_db('')
     log.warning('remember to change the password for admin')
-
-    db.session.commit()
 
 
 def _init_test_db(products=None):
-    init_db()
-
     # products
     if products is None:
         products = (
@@ -82,7 +52,6 @@ def _init_test_db(products=None):
 
     # users
     admin = user_datastore.find_user(email='admin')
-    admin.password = encrypt_password('admin')
     user_datastore.activate_user(admin)
 
     role = user_datastore.find_role('user')
@@ -152,6 +121,8 @@ def init_test_env():
                 fd.write('DEBUG = True\n')
                 fd.write("SLIM_FILE_LOGGING_LEVEL = 'DEBUG'\n")
                 fd.write('\n')
+
+    slim.app.init_db(app, user_datastore, 'admin')
 
     return _init_test_db()
 
