@@ -7,6 +7,10 @@ SLiM - A Simple License Management system
 :homepage:  https://github.com/avalentino/slim
 
 
+.. image:: https://travis-ci.org/avalentino/slim.svg?branch=master
+    :target: https://travis-ci.org/avalentino/slim
+
+
 Introduction
 ------------
 
