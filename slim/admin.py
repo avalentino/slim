@@ -2,6 +2,13 @@
 
 from __future__ import absolute_import
 
+try:
+    from future import standard_library
+except ImportError:
+    pass
+else:
+    standard_library.install_aliases()
+
 from collections import Counter
 
 from flask import abort, redirect, request, url_for

@@ -8,7 +8,11 @@ python:
   - "nightly" # currently points to 3.7-dev
   - "pypy"
   # - "pypy3"
+
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install:
+  -"pip install -r requirements.txt"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install future; fi"
+
 # command to run tests
 script: "python setup.py test"
