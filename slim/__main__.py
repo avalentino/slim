@@ -78,8 +78,8 @@ def _init_test_db(products=None):
         license_ = License(
             user_id=admin.id,
             product_id=product.id,
-            request=b'dummy-request-%03d' % idx,
-            license=b'dummy-license-%03d' % idx,
+            request=('dummy-request-%03d' % idx).encode('utf-8'),
+            license=('dummy-license-%03d' % idx).encode('utf-8'),
         )
         db.session.add(license_)
 
@@ -89,8 +89,8 @@ def _init_test_db(products=None):
         license_ = License(
             user_id=user.id,
             product_id=product.id,
-            request=b'dummy-request-%03d' % idx,
-            license=b'dummy-license-%03d' % idx,
+            request=('dummy-request-%03d' % idx).encode('utf-8'),
+            license=('dummy-license-%03d' % idx).encode('utf-8'),
         )
         db.session.add(license_)
 
