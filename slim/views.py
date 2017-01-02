@@ -186,7 +186,7 @@ def new():
         return _new_get()
 
 
-@app.route('/licenses/<int:lic_id>')
+@app.route('/license/<int:lic_id>')
 @login_required
 def show_license(lic_id):
     lic = License.query.get_or_404(lic_id)
@@ -200,7 +200,7 @@ def show_license(lic_id):
     return render_template('license.html', lic=lic, user=user, product=product)
 
 
-@app.route('/licenses/<int:lic_id>/download')
+@app.route('/license/<int:lic_id>/download')
 @login_required
 def download(lic_id):
     lic = License.query.get_or_404(lic_id)
@@ -222,7 +222,7 @@ def user_profile():
     return render_template('user.html', user=current_user)
 
 
-@app.route('/admin/licenses/<int:lic_id>/download/request')
+@app.route('/admin/license/<int:lic_id>/download/request')
 @roles_accepted('admin')
 def admin_download_request_file(lic_id):
     lic = License.query.get_or_404(lic_id)
