@@ -7,7 +7,7 @@ python:
   - "3.6"
   - "nightly" # currently points to 3.7-dev
   - "pypy"
-  - "pypy3"
+  # - "pypy3"
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # command to run tests
