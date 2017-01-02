@@ -53,6 +53,7 @@ setup(
         'flask-script',
         'flask-security',
         'flask-sqlalchemy',
+        'flask-testing',
         'flask-uploads',
         'Jinja2',
         'mock',
