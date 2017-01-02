@@ -8,7 +8,6 @@ import unittest
 import contextlib
 
 import flask_testing
-from flask_security import current_user, login_user
 
 os.environ['SLIM_SETTINGS_PATH'] = os.path.join(
     os.path.dirname(__file__), 'slim_testing_config.py')
@@ -43,7 +42,7 @@ class TestCase(flask_testing.TestCase):
         user_datastore.activate_user(self.admin)
 
         role = user_datastore.find_role('user')
-        self.user = user_datastore.create_user(email='user', password='user')
+        self.user = user_datastore.create_user(email='user0', password='user0')
         user_datastore.add_role_to_user(self.user, role)
         user_datastore.activate_user(self.user)
 
@@ -66,9 +65,9 @@ class TestCase(flask_testing.TestCase):
 
 class TestUserViews01(TestCase):
     send_button_text = (
-        b'<span class="glyphicon glyphicon-envelope"></span> Send')
+        '<span class="glyphicon glyphicon-envelope"></span> Send')
     new_license_button_text = (
-        b'<span class="glyphicon glyphicon-upload"></span> New license request')
+        '<span class="glyphicon glyphicon-upload"></span> New license request')
 
     def test_index(self):
         with self.login(self.user):
@@ -76,12 +75,12 @@ class TestUserViews01(TestCase):
             self.assert_200(response)
             self.assert_template_used('index.html')
 
-            data = response.data.lower()
-            self.assertTrue(b'products' in data)
-            self.assertTrue(b'licenses' in data)
-            self.assertTrue(b'purchases' in data)
-            self.assertTrue(b'new' in data)
-            self.assertFalse(b'admin' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('products' in data)
+            self.assertTrue('licenses' in data)
+            self.assertTrue('purchases' in data)
+            self.assertTrue('new' in data)
+            self.assertFalse('admin' in data)
 
     def test_products(self):
         with self.login(self.user):
@@ -89,11 +88,10 @@ class TestUserViews01(TestCase):
             self.assert_200(response)
             self.assert_template_used('products.html')
 
-            data = response.data.lower()
-            self.assertTrue(b'products' in data)
-            self.assertTrue(b'count' in data)
-            # self.assertTrue(b'description' in data)
-            self.assertTrue(b'no product found.' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('products' in data)
+            self.assertTrue('count' in data)
+            self.assertTrue('no product found.' in data)
             self.assertTrue(self.send_button_text.lower() in data)
 
     def test_licenses(self):
@@ -102,11 +100,10 @@ class TestUserViews01(TestCase):
             self.assert_200(response)
             self.assert_template_used('licenses.html')
 
-            data = response.data.lower()
-            self.assertTrue(b'licenses' in data)
-            self.assertTrue(b'count' in data)
-            # self.assertTrue(b'request date' in data)
-            self.assertTrue(b'no license found.' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('licenses' in data)
+            self.assertTrue('count' in data)
+            self.assertTrue('no license found.' in data)
             self.assertTrue(self.new_license_button_text.lower() in data)
 
     def test_purchases(self):
@@ -115,11 +112,10 @@ class TestUserViews01(TestCase):
             self.assert_200(response)
             self.assert_template_used('purchases.html')
 
-            data = response.data.lower()
-            self.assertTrue(b'purchases' in data)
-            self.assertTrue(b'count' in data)
-            # self.assertTrue(b'quantity' in data)
-            self.assertTrue(b'no purchase found.' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('purchases' in data)
+            self.assertTrue('count' in data)
+            self.assertTrue('no purchase found.' in data)
             self.assertTrue(self.send_button_text.lower() in data)
 
     def test_new(self):
@@ -128,17 +124,17 @@ class TestUserViews01(TestCase):
             self.assert_200(response)
             self.assert_template_used('new.html')
 
-            data = response.data.lower()
-            self.assertTrue(b'submit a new license request' in data)
-            self.assertTrue(b'product' in data)
-            self.assertTrue(b'request file' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('submit a new license request' in data)
+            self.assertTrue('product' in data)
+            self.assertTrue('request file' in data)
             self.assertTrue(
-                b'<form class="form" action="/new" method="post"' in data)
-            self.assertTrue(b'<input type=file' in data)
+                '<form class="form" action="/new" method="post"' in data)
+            self.assertTrue('<input type=file' in data)
             self.assertTrue(
-                b'<button type="reset">Reset</button>'.lower() in data)
+                '<button type="reset">Reset</button>'.lower() in data)
             self.assertTrue(
-                b'<button type="submit">Submit</button>'.lower() in data)
+                '<button type="submit">Submit</button>'.lower() in data)
 
     def test_profile(self):
         with self.login(self.user):
@@ -146,18 +142,18 @@ class TestUserViews01(TestCase):
             self.assert_200(response)
             self.assert_template_used('user.html')
 
-            data = response.data.lower()
-            self.assertTrue(b'User "user'.lower() in data)
-            self.assertTrue(b'id' in data)
-            self.assertTrue(b'email' in data)
-            self.assertTrue(b'active' in data)
-            self.assertTrue(b'roles' in data)
-            self.assertTrue(b'login count' in data)
-            self.assertTrue(b'current login at' in data)
-            self.assertTrue(b'current login ip' in data)
-            self.assertTrue(b'last login at' in data)
-            self.assertTrue(b'last login ip' in data)
-            self.assertTrue(b'password' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('User "user'.lower() in data)
+            self.assertTrue('id' in data)
+            self.assertTrue('email' in data)
+            self.assertTrue('active' in data)
+            self.assertTrue('roles' in data)
+            self.assertTrue('login count' in data)
+            self.assertTrue('current login at' in data)
+            self.assertTrue('current login ip' in data)
+            self.assertTrue('last login at' in data)
+            self.assertTrue('last login ip' in data)
+            self.assertTrue('password' in data)
 
     def test_invalid(self):
         with self.login(self.user):
@@ -215,9 +211,9 @@ class TestUserViews01(TestCase):
 
 class TestUserViews02(TestUserViews01):
     license_download_button = (
-        b'<button class="btn btn-primary">'
-        b'<span class="glyphicon glyphicon-download-alt"></span>'
-        b' Download</button>')
+        '<button class="btn btn-primary">'
+        '<span class="glyphicon glyphicon-download-alt"></span>'
+        ' Download</button>')
 
     def setUp(self):
         super(TestUserViews02, self).setUp()
@@ -233,10 +229,10 @@ class TestUserViews02(TestUserViews01):
             self.assert_200(response)
             self.assert_template_used('products.html')
 
-            data = response.data.lower()
-            self.assertTrue(b'products' in data)
-            self.assertTrue(b'count' in data)
-            self.assertTrue(b'description' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('products' in data)
+            self.assertTrue('count' in data)
+            self.assertTrue('description' in data)
             self.assertTrue(self.send_button_text.lower() in data)
 
     def test_licenses(self):
@@ -245,10 +241,10 @@ class TestUserViews02(TestUserViews01):
             self.assert_200(response)
             self.assert_template_used('licenses.html')
 
-            data = response.data.lower()
-            self.assertTrue(b'licenses' in data)
-            self.assertTrue(b'count' in data)
-            self.assertTrue(b'request date' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('licenses' in data)
+            self.assertTrue('count' in data)
+            self.assertTrue('request date' in data)
             self.assertTrue(self.new_license_button_text.lower() in data)
 
     def test_purchases(self):
@@ -257,10 +253,10 @@ class TestUserViews02(TestUserViews01):
             self.assert_200(response)
             self.assert_template_used('purchases.html')
 
-            data = response.data.lower()
-            self.assertTrue(b'purchases' in data)
-            self.assertTrue(b'count' in data)
-            self.assertTrue(b'quantity' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('purchases' in data)
+            self.assertTrue('count' in data)
+            self.assertTrue('quantity' in data)
             self.assertTrue(self.send_button_text.lower() in data)
 
     def test_license_02(self):
@@ -273,18 +269,17 @@ class TestUserViews02(TestUserViews01):
             self.assert_template_used('license.html')
 
 
-            data = response.data.lower()
-            self.assertTrue((b'License n. %d' % license.id).lower() in data)
-            self.assertTrue(b'user' in data)
-            self.assertTrue(self.user.email.encode('utf-8') in data)
-            self.assertTrue(b'product' in data)
-            self.assertTrue(product.name.lower().encode('utf-8') in data)
-            self.assertTrue(b'description' in data)
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue(('License n. %d' % license.id).lower() in data)
+            self.assertTrue('user' in data)
+            self.assertTrue(self.user.email in data)
+            self.assertTrue('product' in data)
+            self.assertTrue(product.name.lower() in data)
+            self.assertTrue('description' in data)
             if license.description is not None:
-                self.assertTrue(
-                    license.description.lower().encode('utf-8') in data)
-            self.assertTrue(b'request date' in data)
-            self.assertTrue(b'download' in data)
+                self.assertTrue(license.description.lower() in data)
+            self.assertTrue('request date' in data)
+            self.assertTrue('download' in data)
             self.assertTrue(self.license_download_button.lower() in data)
 
     def test_license_03(self):

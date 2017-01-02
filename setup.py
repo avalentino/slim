@@ -55,5 +55,7 @@ setup(
         'flask-sqlalchemy',
         'flask-uploads',
         'Jinja2',
+        'mock',
     ],
+    test_suite='tests',
 )
