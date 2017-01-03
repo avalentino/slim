@@ -1,0 +1,42 @@
+#######################################################################
+# This file shall be installed into:
+#   /var/apache2/site-available/slim.conf
+#
+# Please rememmber to run the following command to enable the site:
+#
+#   $ sudo a2enmod ssl   # recommended
+#   $ sudo a2ensite slim
+#
+#######################################################################
+
+Listen 8910
+
+<VirtualHost *:8910>
+    ServerName www.slim.org
+    ServerAlias slim.org
+    ServerAdmin webmaster@slim.org
+
+    <IfModule mod_ssl.c>
+        SSLEngine on
+        SSLCertificateFile	/etc/ssl/certs/ssl-cert-snakeoil.pem
+        SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+    </IfModule>
+
+    WSGIDaemonProcess slim user=www-data group=www-data threads=5
+    WSGIScriptAlias / /var/www/slim.org/slim.wsgi
+
+    # WSGIRestrictStdout Off
+    # WSGIScriptReloading On
+
+    <Directory /var/www/slim.org>
+        <IfModule mod_ssl.c>
+           SSLRequireSSL on
+        </IfModule>
+
+       WSGIProcessGroup slim
+       WSGIApplicationGroup %{GLOBAL}
+       Order deny,allow
+       Allow from all
+    </Directory>
+</VirtualHost>
+

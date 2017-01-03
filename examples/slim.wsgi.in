@@ -1,0 +1,31 @@
+# -*- coding: utf-8 -*-
+
+#######################################################################
+#
+# This file shall be installed into the application directory (ROOT),
+# that in this example is '/var/www/slim.org', as 'slim.wsgi'.
+#
+# Please ensure to to set the ownership of the file properly:
+#
+#   $ sudo chown -R www-data:www-data /var/www/slim.org
+#
+#######################################################################
+
+
+import os
+import sys
+
+ROOT = '/var/www/slim.org'
+VENV = True
+
+if VENV:
+    activate_this = os.path.join(ROOT, 'bin', 'activate_this.py')
+    with open(activate_this) as fd:
+        exec(fd.read(), dict(__file__=activate_this))
+else:
+    sys.path.insert(0, ROOT)
+
+sys.stdout = sys.stderr
+
+from slim.app import app as application
+

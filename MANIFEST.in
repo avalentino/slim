@@ -2,3 +2,5 @@ recursive-include slim/templates *.html
 
 include LICENSE requirements.txt
 include bin/dummy-generate-license.py
+recursive-include examples *.in
+
