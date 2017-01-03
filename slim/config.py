@@ -10,7 +10,7 @@ from . import utils
 # slim
 SLIM_APPNAME = 'SLiM'
 SLIM_WELCOME_MESSAGE = 'Simple License Management system (SLiM)'
-SLIM_COPYRIGHT_YEAR = 2016
+SLIM_COPYRIGHT_YEAR = 2017
 SLIM_COPYRIGHT_URL = 'http://slimapp.org'
 SLIM_COPYRIGHT_OWNER = 'Antonio Valentino'
 SLIM_SUPPORT_EMAIL = 'support@slimapp.org'
