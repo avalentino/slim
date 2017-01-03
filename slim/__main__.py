@@ -34,7 +34,7 @@ manager = Manager(app)
 def init_db():
     """Basic initialization of the internal DB"""
 
-    slim.app.init_db('')
+    slim.app.init_db(app, user_datastore, '')
     log.warning('remember to change the password for admin')
 
 
