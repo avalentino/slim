@@ -46,6 +46,10 @@ TESTING = False
 # MAX_CONTENT_LENGTH = 4 * 1024
 
 
+# --- bootstrap --------------------------------------------------------------
+# BOOTSTRAP_SERVE_LOCAL = False
+
+
 # --- sqlalchemy -------------------------------------------------------------
 # SQLALCHEMY_TRACK_MODIFICATIONS = False
 # SQLALCHEMY_DATABASE_URI = 'sqlite://'

@@ -18,7 +18,7 @@ Listen 8910
 
     <IfModule mod_ssl.c>
         SSLEngine on
-        SSLCertificateFile	/etc/ssl/certs/ssl-cert-snakeoil.pem
+        SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
         SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
     </IfModule>
 
