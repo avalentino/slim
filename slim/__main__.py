@@ -21,11 +21,19 @@ app = slim.app.app
 user_datastore = slim.app.components['user_datastore']
 
 
-# basic cli initialization
-logging.basicConfig(
-    format='%(levelname)s: %(message)s', level=logging.INFO, stream=sys.stdout)
-log = logging.getLogger('slim.cli')
+def get_logger(level=logging.INFO):
+    logger = logging.getLogger('slim.cli')
+    handler = logging.StreamHandler(stream=sys.stdout)
+    handler.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
+    logger.addHandler(handler)
+    logger.setLevel(level)
+    logger.propagate = False
 
+    return logger
+
+
+# basic cli initialization
+log = get_logger()
 manager = Manager(app)
 
 
