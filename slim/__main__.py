@@ -55,7 +55,8 @@ def _init_test_db(products=None):
             ('product3', 'Product n. 3 description'),
         )
     for name, description in products:
-        product = Product(name=name, description=description)
+        product = Product(name=name, description=description,
+                          url='http://%s.example.com' % name)
         db.session.add(product)
 
     # users

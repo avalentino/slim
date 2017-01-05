@@ -32,7 +32,7 @@
       <td>{{ product.id }}</td>
       <td>{{ product.name }}</td>
       <td>{{ product.description|default('') }}</td>
-      <td>{{ product.url|default('') }}</td>
+      <td><a href="{{ product.url|default('') }}">{{ product.url|default('') }}</a></td>
       {% if purchase_map is defined %}
       <td>{{ icon('ok', extra_classes=['text-success']) if purchase_map[product.id].purchased else icon('remove', extra_classes=['text-danger']) }}</td>
         {% if purchase_map[product.id].purchased %}
