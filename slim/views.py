@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 
 import os
+import sys
 import subprocess
 from collections import namedtuple
 
@@ -98,7 +99,70 @@ def _new_get():
     )
 
 
-def _new_post():
+def _request_matches_product(product, request):
+    plugin = app.config.get('SLIM_PLUGIN')
+    if plugin is None:
+        return None
+
+    # load plugin
+    plugin_name, plugin_ext = os.path.splitext(plugin)
+    plugin_path, plugin_basename = os.path.split(plugin_name)
+    if plugin_basename not in sys.modules:
+        # load plugin
+        if app.instance_path not in sys.path:
+            sys.path.insert(0, app.instance_path)
+
+        if plugin_ext.lower() == '.zip':
+            path = plugin
+        elif plugin_ext.lower() in ('.py', '.pyc', '.pyo', '.pyd', '.so'):
+            if plugin_path:
+                path = plugin_path
+            else:
+                path = None
+        else:
+            app.logger.warning('invaid plugin: %r' % plugin)
+            app.logger.warning('remove SLIM_PLUGIN form config')
+            del app.config['SLIM_PLUGIN']
+            path = None
+
+        if path:
+            if not os.path.isabs(path):
+                path = os.path.normcase(os.path.join(app.instance_path, path))
+            if path not in sys.path:
+                sys.path.insert(0, path)
+
+        try:
+            module = __import__(plugin_basename)
+        except ImportError:
+            app.logger.warning('unable to import plugin: %r' % plugin)
+            app.logger.warning('remove SLIM_PLUGIN form config')
+            del app.config['SLIM_PLUGIN']
+            module = None
+            app.logger.debug('plugin: %r', plugin)
+            app.logger.debug('plugin_path: %r', plugin_path)
+            app.logger.debug('plugin_name: %r', plugin_name)
+            app.logger.debug('plugin_ext: %r', plugin_ext)
+            app.logger.debug('sys.path: %r', sys.path)
+        else:
+            app.logger.info('plugin %r corectly loaded', plugin)
+    else:
+        module = sys.modules[plugin_basename]
+
+    if not hasattr(module, 'request_matches_product'):
+        return None
+    else:
+        try:
+            return module.request_matches_product(product, request)
+        except Exception:
+            msg = ('Unable to check that the license request matches the '
+                   'selected product. Please check your license request and '
+                   're-try')
+            app.logger.exception(msg)
+            flash(msg, 'error')
+            return False
+
+
+def _new_post_raw():
     # check
     product = request.form['product']
     product = Product.query.filter_by(name=product).first()
@@ -135,7 +199,13 @@ def _new_post():
         filename = os.path.join(
             app.config['UPLOADED_REQUESTS_DEST'], filename)
         with open(filename, 'rb') as fd:
-            data = fd.read()
+            reqdata = fd.read()
+
+        # check that uploaded request corresponds to the specified product
+        if  _request_matches_product(product.name, reqdata) is False:
+            flash('The uploaded request file does not correspond to the '
+                  'specified product: %r' % product.name, 'error')
+            return _new_get()
 
         # generate the license file
         licfile = filename + '.lic.dat'
@@ -165,7 +235,7 @@ def _new_post():
         license_ = License(
             user_id=user.id,
             product_id=product.id,
-            request=data,
+            request=reqdata,
             license=licdata,
             description=request.form['description'],
         )
@@ -176,6 +246,10 @@ def _new_post():
         os.remove(filename)
 
     return redirect(url_for('show_license', lic_id=license_.id))
+
+
+_new_post = _new_post_raw
+# _new_post = _new_post_wtforms
 
 
 @app.route('/new', methods=['GET', 'POST'])

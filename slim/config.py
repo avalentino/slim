@@ -7,6 +7,7 @@ import sys
 
 from . import utils
 
+
 # --- slim -------------------------------------------------------------------
 SLIM_APPNAME = 'SLiM'
 SLIM_WELCOME_MESSAGE = 'Simple License Management system (SLiM)'
@@ -25,6 +26,7 @@ SLIM_LICENSE_GENERATOR_CMD = [
     '%(INPUT_REQUEST_FILE)s',
     '%(OUTPUT_LICENSE_FILE)s',
 ]
+# SLIM_PLUGIN = None
 SLIM_FILE_LOGGING_LEVEL = None   # no logging on file
 SLIM_FILE_LOGGING_FORMAT = (
     '%(asctime)s - %(name)s - %(levelname)s: %(message)s')
