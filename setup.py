@@ -3,7 +3,7 @@
 
 import os
 import re
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 PROJECT = 'slim'
@@ -31,7 +31,7 @@ setup(
     author='Antonio Valentino',
     author_email='antonio.valentino@tiscali.it',
     license='MIT',
-    packages=find_packages(),
+    packages=['slim'],
     include_package_data=True,
     package_data={
         'slim': [
