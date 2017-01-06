@@ -174,7 +174,7 @@ def _new_post():
     finally:
         os.remove(filename)
 
-    return redirect(url_for('show_license', lic_id=license.id))
+    return redirect(url_for('show_license', lic_id=license_.id))
 
 
 @app.route('/new', methods=['GET', 'POST'])
