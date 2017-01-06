@@ -8,7 +8,7 @@
     <label>User</label>
     <select class="form-control" name="user" id="user-field" required>
       {% for user in users %}
-      <option value="{{ user.email }}" {{ 'selected' if selected_user_id|default(current_user.id) == user else ''}}>{{ user.email }}</option>
+      <option value="{{ user.email }}" {{ 'selected' if selected_user_id|default(current_user.id) == user.id else ''}}>{{ user.email }}</option>
       {% endfor %}
     </select>
   </div>

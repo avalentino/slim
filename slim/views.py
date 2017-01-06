@@ -76,7 +76,8 @@ def purchases():
 
 
 def _new_get():
-    selected_user_id = utils.to_int(request.args.get('user_id'))
+    selected_user_id = utils.to_int(
+        request.args.get('user_id', current_user.id))
     selected_product_id = utils.to_int(request.args.get('product_id'))
 
     if current_user.has_role('admin'):
