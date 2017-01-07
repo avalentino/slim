@@ -154,7 +154,7 @@ class TestUserViews01(TestCase):
             self.assert_template_used('user.html')
 
             data = response.get_data(as_text=True).lower()
-            self.assertTrue('User "user'.lower() in data)
+            self.assertTrue(('User "%s"' % self.user.email).lower() in data)
             self.assertTrue('id' in data)
             self.assertTrue('email' in data)
             self.assertTrue('active' in data)
@@ -223,8 +223,8 @@ class TestUserViews01(TestCase):
 class TestUserViews02(TestUserViews01):
     license_download_button = (
         '<button class="btn btn-primary">'
-        '<span class="glyphicon glyphicon-download-alt"></span>'
-        ' Download</button>')
+        '<span class="glyphicon glyphicon-download-alt"></span> '
+        'Download</button>')
 
     def setUp(self):
         super(TestUserViews02, self).setUp()
@@ -298,6 +298,80 @@ class TestUserViews02(TestUserViews01):
             self.assert_200(response)
             self.assert_message_flashed(
                 'You do not have permission to view this resource.', 'error')
+
+
+class AdminTestMixin:
+    def test_index(self):
+        with self.login(self.user):
+            response = self.client.get('/')
+            self.assert_200(response)
+            self.assert_template_used('index.html')
+
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('products' in data)
+            self.assertTrue('licenses' in data)
+            self.assertTrue('purchases' in data)
+            self.assertTrue('new' in data)
+            self.assertTrue('admin' in data)
+
+    def test_admin_01(self):
+        with self.login(self.user):
+            response = self.client.get('/admin', follow_redirects=True)
+            self.assert_200(response)
+
+    def test_admin_02(self):
+        with self.login(self.user):
+            response = self.client.get('/admin', follow_redirects=True)
+            self.assert_200(response)
+            self.assert_message_flashed(
+                'You do not have permission to view this resource.', 'error')
+
+    def test_admin_roles(self):
+        with self.login(self.user):
+            response = self.client.get('/admin/role', follow_redirects=True)
+            self.assert_200(response)
+            data = response.get_data(as_text=True)
+            self.assertTrue('<title>Role - SLiM</title>')
+
+    def test_admin_users(self):
+        with self.login(self.user):
+            response = self.client.get('/admin/user', follow_redirects=True)
+            self.assert_200(response)
+            data = response.get_data(as_text=True)
+            self.assertTrue('<title>User - SLiM</title>')
+
+    def test_admin_products(self):
+        with self.login(self.user):
+            response = self.client.get('/admin/product', follow_redirects=True)
+            self.assert_200(response)
+            data = response.get_data(as_text=True)
+            self.assertTrue('<title>Product - SLiM</title>')
+
+    def test_admin_purchases(self):
+        with self.login(self.user):
+            response = self.client.get('/admin/purchase', follow_redirects=True)
+            self.assert_200(response)
+            data = response.get_data(as_text=True)
+            self.assertTrue('<title>Purchase - SLiM</title>')
+
+    def test_admin_licenses(self):
+        with self.login(self.user):
+            response = self.client.get('/admin/license', follow_redirects=True)
+            self.assert_200(response)
+            data = response.get_data(as_text=True)
+            self.assertTrue('<title>License - SLiM</title>')
+
+
+class TestAdminViews01(AdminTestMixin, TestUserViews01):
+    def setUp(self):
+        super(TestAdminViews01, self).setUp()
+        self.user = self.admin
+
+
+class TestAdminViews02(AdminTestMixin, TestUserViews02):
+    def setUp(self):
+        super(TestAdminViews02, self).setUp()
+        self.user = self.admin
 
 
 if __name__ == '__main__':
