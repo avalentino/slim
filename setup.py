@@ -57,6 +57,7 @@ setup(
         'flask-uploads',
         'Jinja2',
         'mock',
+        'setuptools'
     ],
     test_suite='tests',
 )

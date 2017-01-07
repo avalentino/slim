@@ -119,7 +119,7 @@ class TestUserViews01(TestCase):
             self.assertTrue('no purchase found.' in data)
             self.assertTrue(self.send_button_text.lower() in data)
 
-    def test_new(self):
+    def test_new_get(self):
         with self.login(self.user):
             response = self.client.get('/new')
             self.assert_200(response)
@@ -136,6 +136,16 @@ class TestUserViews01(TestCase):
                 '<button type="reset">Reset</button>'.lower() in data)
             self.assertTrue(
                 '<button type="submit">Submit</button>'.lower() in data)
+
+    def test_about(self):
+        with self.login(self.user):
+            response = self.client.get('/about')
+            self.assert_200(response)
+            self.assert_template_used('about.html')
+
+            data = response.get_data(as_text=True).lower()
+            self.assertTrue('about' in data)
+            self.assertTrue('slim' in data)
 
     def test_profile(self):
         with self.login(self.user):

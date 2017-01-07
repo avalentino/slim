@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>About SLiM</h1>
+
+<h2>(S)imple (Li)cense (M)anagement system</h2>
+
+<dl class="dl-horizontal">
+  <dt>Application</dt>
+  <dd>SLiM</dd>
+
+  <dt>Version</dt>
+  <dd>{{ version }}</dd>
+
+  <dt>Home Page</dt>
+  <dd><a href="https://github.com/avalentino/slim">https://github.com/avalentino/slim</a></dd>
+
+  <dt>Author</a></dt>
+  <dd><a href="mailto:antonio.valentino@tiscali.it">Antonio Velentino</a></dd>
+
+  <dt>Copyright</a></dt>
+  <dd>2017 Antonio Velentino</dd>
+</dl>
+
+
+<h2>Components</h2>
+
+{% for name, info in components.items() %}
+<dl class="dl-horizontal">
+  <dt>Name</dt>
+  <dd>{{ info.name }}</dd>
+  <dt>Version</dt>
+  <dd>v. {{ info.version }}</dd>
+  <dt>url</dt>
+  <dd><a href="{{ info.url }}">{{ info.url|default('') }}</a></dd>
+</dl>
+{% endfor %}
+{% endblock content %}

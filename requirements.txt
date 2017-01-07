@@ -10,4 +10,5 @@ Flask-Testing
 Flask-Uploads
 Jinja2
 mock
+setuptools
 # future # python < 2.7

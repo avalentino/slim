@@ -297,6 +297,15 @@ def user_profile():
     return render_template('user.html', user=current_user)
 
 
+@app.route('/about')
+@login_required
+def about():
+    import slim
+    info = utils.component_version_info()
+    return render_template(
+        'about.html', varsion=slim.__version__, components=info)
+
+
 @app.route('/admin/licenses/<int:lic_id>/download/request')
 @roles_accepted('admin')
 def admin_download_request_file(lic_id):

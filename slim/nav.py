@@ -45,19 +45,19 @@ def topnavbar():
 
     # navbar
     app_name = current_app.config.get('SLIM_APPNAME', 'SLiM')
+    items = [
+        View(app_name, 'index'),
+        View('Home', 'index'),
+    ]
     if current_user.has_role('admin'):
-        items = [
-            View(app_name, 'index'),
-            View('Home', 'index'),
-            View('Admin', 'admin.index'),
-            Link('Support', support_link),
-        ]
-    else:
-        items = [
-            View(app_name, 'index'),
-            View('Home', 'index'),
-            Link('Support', support_link),
-        ]
+         items.extend([
+             View('Admin', 'admin.index'),
+         ])
+    items.extend([
+        Link('Support', support_link),
+        View('About', 'about'),
+    ])
+
     if current_user.is_authenticated:
         subgroup = Subgroup(
             current_user.email,
