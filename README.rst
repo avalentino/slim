@@ -2,7 +2,7 @@ SLiM - A Simple License Management system
 =========================================
 
 :author:    Antonio Valentino <antonio dot valentino at tiscali dot it>
-:copyright: 2016, Antonio Valentino
+:copyright: 2016-2017, Antonio Valentino
 :license:   MIT
 :homepage:  https://github.com/avalentino/slim
 
