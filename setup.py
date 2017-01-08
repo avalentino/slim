@@ -55,7 +55,8 @@ setup(
         'flask-sqlalchemy',
         'flask-testing',
         'flask-uploads',
-        'Jinja2',
+        'flask-wtf<=0.13.1',
+        'jinja2<=2.8.2',
         'mock',
         'setuptools'
     ],
