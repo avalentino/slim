@@ -76,7 +76,7 @@ def license_data_formatter(view, context, model, name):
     target = url_for('download', lic_id=model.id)
 
     return Markup(' '.join([
-        _format_large_binary_data(model.request),
+        _format_large_binary_data(model.license),
         _DOWNLOAD_BUTTON_TEMPLATE % target
     ]))
 
