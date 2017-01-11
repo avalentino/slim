@@ -303,7 +303,7 @@ def about():
     import slim
     info = utils.component_version_info()
     return render_template(
-        'about.html', varsion=slim.__version__, components=info)
+        'about.html', version=slim.__version__, components=info)
 
 
 @app.route('/admin/licenses/<int:lic_id>/download/request')
