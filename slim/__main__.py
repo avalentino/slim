@@ -10,7 +10,11 @@ import logging
 
 from flask_script import Manager
 from flask_migrate import MigrateCommand, Migrate
-from flask_security.utils import encrypt_password
+try:
+    from flask_security.utils import hash_password
+except ImportError:
+    # @COMPATIBILITY: Flask-Security < 2.0.2
+    from flask_security.utils import encrypt_password as hash_password
 
 import slim.app
 from slim import utils
@@ -66,7 +70,7 @@ def _init_test_db(products=None):
     role = user_datastore.find_role('user')
     for username in ('user1', 'user2'):
         user = user_datastore.create_user(email=username,
-                                          password=encrypt_password(username))
+                                          password=hash_password(username))
         user_datastore.add_role_to_user(user, role)
         user_datastore.activate_user(user)
 
@@ -231,7 +235,7 @@ def change_password(email, newpwd):
     if not user:
         log.error('user %r does not exist', email)
     else:
-        user.password = encrypt_password(newpwd)
+        user.password = hash_password(newpwd)
 
         db.session.commit()
         log.info('user %r password changed', email)
