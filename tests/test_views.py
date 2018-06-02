@@ -61,12 +61,20 @@ class TestCase(flask_testing.TestCase):
 
     @contextlib.contextmanager
     def login(self, user):
-        mock_get_user = mock.patch('flask_login._get_user',
-                                   mock.Mock(return_value=user))
+        import flask_login
+
         self.app.login_manager._login_disabled = True
-        mock_get_user.start()
-        yield
-        mock_get_user.stop()
+
+        if hasattr(flask_login, '_get_user'):
+            mock_get_user = mock.patch('flask_login._get_user',
+                                       mock.Mock(return_value=user))
+        else:
+            mock_get_user = mock.patch('flask_login.utils._get_user',
+                                       mock.Mock(return_value=user))
+
+        with mock_get_user:
+            yield
+
         self.app.login_manager._login_disabled = False
 
 
