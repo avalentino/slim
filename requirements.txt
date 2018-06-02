@@ -8,8 +8,8 @@ Flask-Security
 Flask-SQLAlchemy
 Flask-Testing
 Flask-Uploads
-Flask-WTF<=0.13.1
-Jinja2<=2.8.2
-mock
+Flask-WTF
+Jinja2
+# future    # Python < 2.7
+# mock      # Python < 3.3
 setuptools
-# future # python < 2.7
