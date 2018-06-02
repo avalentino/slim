@@ -3,9 +3,14 @@
 from __future__ import absolute_import
 
 import os
-import mock
 import unittest
 import contextlib
+
+try:
+    from unittest import mock
+except ImportError:
+    # @COMPATIBILITY: Python < 3.3
+    import mock
 
 import flask_testing
 
