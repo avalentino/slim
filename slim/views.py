@@ -202,7 +202,7 @@ def _new_post_raw():
             reqdata = fd.read()
 
         # check that uploaded request corresponds to the specified product
-        if  _request_matches_product(product.name, reqdata) is False:
+        if _request_matches_product(product.name, reqdata) is False:
             flash('The uploaded request file does not correspond to the '
                   'specified product: %r' % product.name, 'error')
             return _new_get()

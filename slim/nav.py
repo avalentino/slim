@@ -36,7 +36,7 @@ def topnavbar():
         try:
             rule, _ = match(path)
         except Exception:
-            # compatibility with Python < 3.5
+            # @COMPATIBILITY: Python < 3.5
             del path_views[:]
             # path_views.clear()
             break
@@ -50,8 +50,8 @@ def topnavbar():
         View('Home', 'index'),
     ]
     if current_user.has_role('admin'):
-         items.extend([
-             View('Admin', 'admin.index'),
+        items.extend([
+            View('Admin', 'admin.index'),
          ])
     items.extend([
         Link('Support', support_link),

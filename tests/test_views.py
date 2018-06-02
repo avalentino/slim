@@ -27,9 +27,10 @@ class TestCase(flask_testing.TestCase):
         app = slim.app.app
         # app.config.from_mapping(
         #     TESTING=True,
+        #     # LOGIN_DISABLED=True,
         #     SECURITY_PASSWORD_HASH='plaintext',
         #     SQLALCHEMY_DATABASE_URI='sqlite://',
-        #     PRESERVE_CONTEXT_ON_EXCEPTION=False,
+        #     # PRESERVE_CONTEXT_ON_EXCEPTION=False,
         # )
 
         return app
