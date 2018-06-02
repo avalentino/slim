@@ -50,7 +50,7 @@ def file_logging_setup(app):
     handler.setLevel(level)
 
     app.logger.addHandler(handler)
-    logging.getLogger('werkzeug').addHandler(handler)
+    werkzeug_logger.addHandler(handler)
 
     # set log level
     # app.logger.setLevel(level)
