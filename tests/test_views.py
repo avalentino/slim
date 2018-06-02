@@ -193,12 +193,12 @@ class TestUserViews01(TestCase):
 
     def test_admin_01(self):
         with self.login(self.user):
-            response = self.client.get('/admin')
+            response = self.client.get('/admin/')
             self.assertTrue(response.status_code in (301, 302))
 
     def test_admin_02(self):
         with self.login(self.user):
-            response = self.client.get('/admin', follow_redirects=True)
+            response = self.client.get('/admin/', follow_redirects=True)
             self.assert_200(response)
             self.assert_message_flashed(
                 'You do not have permission to view this resource.', 'error')
@@ -330,15 +330,14 @@ class AdminTestMixin:
 
     def test_admin_01(self):
         with self.login(self.user):
-            response = self.client.get('/admin', follow_redirects=True)
+            response = self.client.get('/admin/')
             self.assert_200(response)
 
     def test_admin_02(self):
         with self.login(self.user):
-            response = self.client.get('/admin', follow_redirects=True)
+            response = self.client.get('/admin/')
             self.assert_200(response)
-            self.assert_message_flashed(
-                'You do not have permission to view this resource.', 'error')
+            self.assertFalse(self.flashed_messages)
 
     def test_admin_roles(self):
         with self.login(self.user):
@@ -386,6 +385,11 @@ class TestAdminViews02(AdminTestMixin, TestUserViews02):
     def setUp(self):
         super(TestAdminViews02, self).setUp()
         self.user = self.admin
+
+    def test_license_03(self):
+       with self.login(self.user):
+           response = self.client.get('/licenses/1')
+           self.assert_200(response)
 
 
 if __name__ == '__main__':
