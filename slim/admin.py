@@ -126,6 +126,8 @@ class ModelView(sqla.ModelView):
     }
 
     def is_accessible(self):
+        """Return true if the model is accessible by the current user."""
+
         if current_user.has_role('admin'):
             return True
 
