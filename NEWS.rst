@@ -1,8 +1,8 @@
 SLiM Changelog
 ==============
 
-SLiM v0.9.4 (in development)
-----------------------------
+SLiM v0.9.4 (03/06/2018)
+------------------------
 
 * Improved compatibility with new versions of
   `Flask-Security <https://github.com/mattupstate/flask-security>`_ and
