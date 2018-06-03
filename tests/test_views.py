@@ -344,35 +344,35 @@ class AdminTestMixin:
             response = self.client.get('/admin/role', follow_redirects=True)
             self.assert_200(response)
             data = response.get_data(as_text=True)
-            self.assertTrue('<title>Role - SLiM</title>')
+            self.assertTrue('<title>Role - SLiM</title>' in data)
 
     def test_admin_users(self):
         with self.login(self.user):
             response = self.client.get('/admin/user', follow_redirects=True)
             self.assert_200(response)
             data = response.get_data(as_text=True)
-            self.assertTrue('<title>User - SLiM</title>')
+            self.assertTrue('<title>User - SLiM</title>' in data)
 
     def test_admin_products(self):
         with self.login(self.user):
             response = self.client.get('/admin/product', follow_redirects=True)
             self.assert_200(response)
             data = response.get_data(as_text=True)
-            self.assertTrue('<title>Product - SLiM</title>')
+            self.assertTrue('<title>Product - SLiM</title>' in data)
 
     def test_admin_purchases(self):
         with self.login(self.user):
             response = self.client.get('/admin/purchase', follow_redirects=True)
             self.assert_200(response)
             data = response.get_data(as_text=True)
-            self.assertTrue('<title>Purchase - SLiM</title>')
+            self.assertTrue('<title>Purchase - SLiM</title>' in data)
 
     def test_admin_licenses(self):
         with self.login(self.user):
             response = self.client.get('/admin/license', follow_redirects=True)
             self.assert_200(response)
             data = response.get_data(as_text=True)
-            self.assertTrue('<title>License - SLiM</title>')
+            self.assertTrue('<title>License - SLiM</title>' in data)
 
 
 class TestAdminViews01(AdminTestMixin, TestUserViews01):
