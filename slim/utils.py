@@ -6,13 +6,10 @@ from __future__ import absolute_import
 
 import os
 import sys
-try:
-    from urllib.parse import ParseResult, urlunparse, quote
-except ImportError:
-    from urlparse import ParseResult, urlunparse
-    from urllib import quote
 
 import pkg_resources
+
+from ._compat import ParseResult, urlunparse, quote
 
 
 __all__ = ['component_version_info']

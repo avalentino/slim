@@ -7,10 +7,6 @@ from __future__ import absolute_import
 import os
 import logging
 import logging.handlers
-try:
-    from urllib.parse import urlsplit
-except ImportError:
-    from urlparse import urlsplit
 
 from flask import Flask, url_for
 from flask_admin import helpers as admin_helpers
@@ -23,7 +19,7 @@ from . import models
 from . import utils
 from .admin import admin, ModelView
 from .nav import nav
-from ._compat import hash_password
+from ._compat import hash_password, urlsplit
 
 
 # Flask app setup
