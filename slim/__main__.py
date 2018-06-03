@@ -10,15 +10,11 @@ import logging
 
 from flask_script import Manager
 from flask_migrate import MigrateCommand, Migrate
-try:
-    from flask_security.utils import hash_password
-except ImportError:
-    # @COMPATIBILITY: Flask-Security < 2.0.2
-    from flask_security.utils import encrypt_password as hash_password
 
 import slim.app
 from slim import utils
 from slim.models import db, User, License, Product, Purchase
+from slim._compat import hash_password
 
 
 app = slim.app.app

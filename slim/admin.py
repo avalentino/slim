@@ -16,16 +16,12 @@ from flask_admin import Admin, expose, AdminIndexView as _AdminIndexView
 from flask_admin.base import MenuLink
 from flask_admin.contrib import sqla
 from flask_security import current_user, roles_accepted
-try:
-    from flask_security.utils import hash_password
-except ImportError:
-    # @COMPATIBILITY: Flask-Security < 2.0.2
-    from flask_security.utils import encrypt_password as hash_password
 
 import wtforms
 from jinja2 import Markup
 
 from . import models
+from ._compat import hash_password
 
 
 class AdminIndexView(_AdminIndexView):

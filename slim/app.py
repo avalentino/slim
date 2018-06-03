@@ -15,17 +15,13 @@ from flask_admin import helpers as admin_helpers
 from flask_bootstrap import Bootstrap
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_uploads import UploadSet, configure_uploads
-try:
-    from flask_security.utils import hash_password
-except ImportError:
-    # @COMPATIBILITY: Flask-Security < 2.0.2
-    from flask_security.utils import encrypt_password as hash_password
 
 from . import config
 from . import models
 from . import utils
 from .admin import admin, ModelView
 from .nav import nav
+from ._compat import hash_password
 
 
 # Flask app setup
