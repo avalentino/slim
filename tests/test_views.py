@@ -17,8 +17,8 @@ import flask_testing
 os.environ['SLIM_SETTINGS_PATH'] = os.path.join(
     os.path.dirname(__file__), 'slim_testing_config.py')
 
-import slim.app
-import slim.models
+import slim.app     # noqa
+import slim.models  # noqa
 
 
 security = slim.app.components['security']
