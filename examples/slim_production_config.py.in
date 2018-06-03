@@ -20,7 +20,7 @@
 # SLIM_COPYRIGHT_URL = 'http://slimapp.org'
 # SLIM_COPYRIGHT_OWNER = 'Antonio Valentino'
 # SLIM_SUPPORT_EMAIL = 'support@slimapp.org'
-# SLIM_INSTANCE_CONFIG_FILE = 'config.py'
+# SLIM_INSTANCE_CONFIG_FILE = 'config.py'   # relative to the instance folder
 # SLIM_SYSTEM_CONFIG_FILE = '/etc/slim/config.py'
 # SLIM_ITEMS_PER_PAGE = 5
 # SLIM_REQUEST_EXTENSIONS = ('request',)
@@ -31,7 +31,7 @@
 #     '%(INPUT_REQUEST_FILE)s',
 #     '%(OUTPUT_LICENSE_FILE)s',
 # ]
-# SLIM_PLUGIN = None
+# SLIM_PLUGIN = None    # relative to the instance folder
 # SLIM_FILE_LOGGING_LEVEL = None   # no logging on file
 SLIM_FILE_LOGGING_LEVEL = 'INFO'
 # SLIM_FILE_LOGGING_FORMAT = (
