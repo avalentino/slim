@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Admin tools for the SLiM Flask application."""
+
 from __future__ import absolute_import
 
 try:
@@ -24,10 +26,20 @@ from . import models
 from ._compat import hash_password
 
 
+__all__ = [
+    'AdminIndexView', 'RoleModelView', 'UserModelView', 'ProductModelView',
+    'PurchaseModelView', 'LicenseModelView', 'admin',
+]
+
+
 class AdminIndexView(_AdminIndexView):
+    """Generate the view for the main admin page of the SLiM application."""
+
     @expose()
     @roles_accepted('admin')
     def index(self):
+        """Generate the view for the main admin page."""
+
         return self.render(self._template)
 
 
@@ -104,6 +116,8 @@ class PasswordInputField(wtforms.PasswordField):
 
 
 class ModelView(sqla.ModelView):
+    """Base class for model views."""
+
     column_display_pk = True
     # column_display_all_relations = True
 
@@ -127,6 +141,8 @@ class ModelView(sqla.ModelView):
 
 
 class RoleModelView(ModelView):
+    """Generate the view for the role model."""
+
     column_display_all_relations = True
     column_formatters = dict(
         users=lambda v, c, m, p: ', '.join(item.email for item in m.users),
@@ -143,6 +159,8 @@ class RoleModelView(ModelView):
 
 
 class UserModelView(ModelView):
+    """Generate the view for the user model."""
+
     # column_display_all_relations = True
     column_formatters = dict(
         password=lambda v, c, m, p: _format_password(m.password),
@@ -194,6 +212,8 @@ class UserModelView(ModelView):
 
 
 class ProductModelView(ModelView):
+    """Generate the view for the product model."""
+
     column_display_all_relations = True
     column_formatters = dict(
         url=url_formatter,
@@ -207,6 +227,8 @@ class ProductModelView(ModelView):
 
 
 class PurchaseModelView(ModelView):
+    """Generate the view for the purchase model."""
+
     # column_display_all_relations = True
     column_list = (
         'id',
@@ -229,6 +251,8 @@ class PurchaseModelView(ModelView):
 
 
 class LicenseModelView(ModelView):
+    """Generate the view for the license model."""
+
     can_create = False
     column_formatters = dict(
         request=request_data_formatter,

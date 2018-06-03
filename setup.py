@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""Setup script for the SLiM Flask application."""
+
 import os
 import re
 import sys
@@ -11,6 +13,8 @@ PROJECT = 'slim'
 
 
 def get_version(filename=None):
+    """Return the version string read form the specified file."""
+
     if filename is None:
         filename = os.path.join(
             os.path.dirname(__file__), PROJECT, '__init__.py')
@@ -26,6 +30,8 @@ def get_version(filename=None):
 
 
 def compat_requites():
+    """Return the list of additional requirements for old Python versions."""
+
     reqlist = []
 
     if sys.version_info < (3, 3, 0):

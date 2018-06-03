@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Models for the SLiM Flask application."""
+
 from __future__ import absolute_import
 
 import datetime
@@ -19,6 +21,8 @@ roles_users = db.Table(
 
 
 class Role(db.Model, RoleMixin):
+    """User role model."""
+
     __tablename__ = 'roles'
 
     id = db.Column(db.Integer(), primary_key=True)
@@ -26,14 +30,19 @@ class Role(db.Model, RoleMixin):
     description = db.Column(db.String(255))
 
     def __str__(self):
+        """Return str(self)."""
         return self.name
 
     def __repr__(self):
+        """Return repr(self)."""
+
         return '<Role: id=%d, name=%r, description=%r>' % (
             self.id, self.name, self.description)
 
 
 class User(db.Model, UserMixin):
+    """User model."""
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -53,9 +62,13 @@ class User(db.Model, UserMixin):
                             backref=db.backref('users'))  # , lazy='dynamic'))
 
     def __str__(self):
+        """Return str(self)."""
+
         return self.email
 
     def __repr__(self):
+        """Return repr(self)."""
+
         roles = ', '.join([role.name for role in self.roles])
         return '<User: id=%d, email=%r, roles=%r, active=%s>' % (
             self.id, self.email, roles, self.active)
@@ -63,6 +76,8 @@ class User(db.Model, UserMixin):
 
 # SLiM
 class Product(db.Model):
+    """Product model."""
+
     __tablename__ = 'products'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -71,13 +86,19 @@ class Product(db.Model):
     url = db.Column(db.String(255), default='')
 
     def __str__(self):
+        """Return str(self)."""
+
         return self.name
 
     def __repr__(self):
+        """Return repr(self)."""
+
         return '<Product: id=%d, name=%r' % (self.id, self.name)
 
 
 class Purchase(db.Model):
+    """Product purchase model."""
+
     __tablename__ = 'purchases'
 
     id = db.Column(db.Integer, primary_key=True)  # @TODO: check
@@ -94,15 +115,21 @@ class Purchase(db.Model):
         'Product', backref=db.backref('purchases', lazy='dynamic'))
 
     def __str__(self):
+        """Return str(self)."""
+
         return 'Purchase(id=%d, user=%r, product=%r, quantity=%d)' % (
             self.id, self.user.email, self.product.name, self.quantity)
 
     def __repr__(self):
+        """Return repr(self)."""
+
         return '<Purchase: id=%d, user_id=%r, product_id=%r, quantity=%d>' % (
             self.id, self.user_id, self.product_id, self.quantity)
 
     @classmethod
     def count(cls, user_id=None, product_id=None):
+        """Return the count of purchases according to specified parameters."""
+
         query = cls.query
         if user_id:
             query = query.filter_by(user_id=user_id)
@@ -113,6 +140,8 @@ class Purchase(db.Model):
 
 
 class License(db.Model):
+    """Product license model."""
+
     __tablename__ = 'licenses'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -129,15 +158,21 @@ class License(db.Model):
         'Product', backref=db.backref('licenses', lazy='dynamic'))
 
     def __init__(self, **kwargs):
+        """License model initializer."""
+
         kwargs.setdefault('request_date', datetime.datetime.now())
         super(License, self).__init__(**kwargs)
 
     def __str__(self):
+        """Return str(self)."""
+
         return ('License(id=%d, user=%r, product=%r, request_date=%s)' % (
                 self.id, self.user.email, self.product.name,
                 self.request_date.isoformat()))
 
     def __repr__(self):
+        """Return repr(self)."""
+
         return ('<License: id=%d, user_id=%r, product_id=%r, '
                 'request_date=%s>' % (self.id, self.user_id, self.product_id,
                                       self.request_date.isoformat()))

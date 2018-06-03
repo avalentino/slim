@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""CLI interface for the SLiM Flask application."""
+
 from __future__ import print_function
 from __future__ import absolute_import
 
@@ -22,6 +24,8 @@ user_datastore = slim.app.components['user_datastore']
 
 
 def get_logger(level=logging.INFO):
+    """Return the logger for the SLiM CLI application."""
+
     logger = logging.getLogger('slim.cli')
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
@@ -40,7 +44,7 @@ manager = Manager(app)
 # === basic db init ==========================================================
 @manager.command
 def init_db():
-    """Basic initialization of the internal DB"""
+    """Make a basic initialization of the internal DB."""
 
     slim.app.init_db(app, user_datastore, '')
     log.warning('remember to change the password for admin')
@@ -108,7 +112,7 @@ def _init_test_db(products=None):
 
 @manager.command
 def init_test_env():
-    """Basic initialization of the testing environment"""
+    """Make a basic initialization of the testing environment."""
 
     if not utils.is_installed(app.instance_path):
         # uninstalled mode
@@ -142,7 +146,7 @@ UserManager = Manager(usage='Perform user management')
 
 @UserManager.command
 def list():
-    """List users"""
+    """List users."""
 
     db.create_all()
 
@@ -156,7 +160,7 @@ def list():
 @UserManager.option('pwd', help="password for the new user")
 @UserManager.option('email', help="new user's email")
 def add(email, pwd, rolename='user'):
-    """Add a new user"""
+    """Add a new user."""
 
     from sqlalchemy.exc import IntegrityError
 
@@ -180,7 +184,7 @@ def add(email, pwd, rolename='user'):
 
 @UserManager.option('email', help="new user's email")
 def remove(email):
-    """Remove an existing user"""
+    """Remove an existing user."""
 
     db.create_all()
 
@@ -196,7 +200,7 @@ def remove(email):
 
 @UserManager.option('email', help="new user's email")
 def enable(email, enabled=True):
-    """Enable an existing user"""
+    """Enable an existing user."""
 
     db.create_all()
 
@@ -215,7 +219,7 @@ def enable(email, enabled=True):
 
 @UserManager.option('email', help="new user's email")
 def disable(email):
-    """Disable an existing user"""
+    """Disable an existing user."""
 
     return enable(email, False)
 
@@ -223,7 +227,7 @@ def disable(email):
 @UserManager.option('newpwd', metavar='password', help='new password')
 @UserManager.option('email', help="new user's email")
 def change_password(email, newpwd):
-    """Change the password of an existing user"""
+    """Change the password of an existing user."""
 
     db.create_all()
 
@@ -245,6 +249,8 @@ manager.add_command('user', UserManager)
 
 
 def main():
+    """Run the CLI program for SLiM."""
+
     manager.run()
 
 

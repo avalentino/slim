@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Flask application for the Simple LIcense Management system (SLiM)."""
+
 from __future__ import absolute_import
 
 import os
@@ -26,6 +28,8 @@ from ._compat import hash_password
 
 # Flask app setup
 def file_logging_setup(app):
+    """Initialize logging for the SLiM Flask application."""
+
     level = app.config['SLIM_FILE_LOGGING_LEVEL']
     if level is None:
         return
@@ -56,6 +60,8 @@ def file_logging_setup(app):
 
 
 def default_app_config(app):
+    """Set default configuration values for the SLiM Flask application."""
+
     app.config.update(
         SQLALCHEMY_DATABASE_URI=utils.sqlite_uri_for(
             os.path.join(app.instance_path, 'slim.db')),
@@ -71,6 +77,8 @@ def default_app_config(app):
 
 
 def setup_components(app):
+    """Set up components for the SLiM Flask application."""
+
     # bootstrap
     Bootstrap(app)
 
@@ -118,6 +126,8 @@ def setup_components(app):
 
 
 def create_app(app=None, cfg=None):
+    """Create and setup the SLiM Flask application."""
+
     if app is None:
         app = Flask('slim', instance_relative_config=True)
         app.config.from_object(config)
@@ -136,7 +146,7 @@ app, components = create_app()
 
 
 def init_db(app, user_datastore, password):
-    """Basic initialization of the internal DB"""
+    """Make a basic initialization of the internal DB."""
 
     db_path_parts = urlsplit(app.config['SQLALCHEMY_DATABASE_URI'])
 

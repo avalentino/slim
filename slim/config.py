@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Configuration elements for the SLiM Flask application."""
+
 from __future__ import absolute_import
 
 import os

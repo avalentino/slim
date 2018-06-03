@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Navigation tools for the SLiM Flask application."""
+
 from __future__ import absolute_import
 
 import posixpath
@@ -18,6 +20,8 @@ nav = Nav()
 
 @nav.navigation('top')
 def topnavbar():
+    """Build the top navigation bar."""
+
     # support link
     support_email = current_app.config['SLIM_SUPPORT_EMAIL']
     support_link = utils.make_support_link(support_email)

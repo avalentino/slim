@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Views for the SLiM Flask application."""
+
 from __future__ import absolute_import
 
 import os
@@ -27,12 +29,16 @@ _PurchaseMapItem = namedtuple(
 @app.route('/')
 @login_required
 def index():
+    """Generate the view for the main page for the SLiM application."""
+
     return render_template('index.html')
 
 
 @app.route('/licenses')
 @login_required
 def licenses():
+    """Generate the view for the `licenses` page for the SLiM application."""
+
     query = current_user.licenses
     return render_template(
         'licenses.html',
@@ -43,6 +49,8 @@ def licenses():
 @app.route('/products')
 @login_required
 def products():
+    """Generate the view for the `products` page for the SLiM application."""
+
     user = current_user
     purchased_products = set(item.product for item in user.purchases)
 
@@ -68,6 +76,8 @@ def products():
 @app.route('/purchases')
 @login_required
 def purchases():
+    """Generate the view for the `purchases` page for the SLiM application."""
+
     return render_template(
         'purchases.html',
         pagination=current_user.purchases.paginate(
@@ -255,6 +265,8 @@ _new_post = _new_post_raw
 @app.route('/new', methods=['GET', 'POST'])
 @login_required
 def new():
+    """Generate the view for submitting `new` license requests."""
+
     if request.method == 'POST':
         return _new_post()
     else:
@@ -264,6 +276,8 @@ def new():
 @app.route('/licenses/<int:lic_id>')
 @login_required
 def show_license(lic_id):
+    """Generate the view for license information."""
+
     lic = License.query.get_or_404(lic_id)
     if not current_user.has_role('admin') and lic.user_id != current_user.id:
         # return abort(403)
@@ -278,6 +292,8 @@ def show_license(lic_id):
 @app.route('/licenses/<int:lic_id>/download')
 @login_required
 def download(lic_id):
+    """Generate the view for the license download."""
+
     lic = License.query.get_or_404(lic_id)
     if not current_user.has_role('admin') and lic.user_id != current_user.id:
         # return abort(403)
@@ -294,12 +310,16 @@ def download(lic_id):
 @app.route('/profile')
 @login_required
 def user_profile():
+    """Generate the view for the user profile page of the SLiM application."""
+
     return render_template('user.html', user=current_user)
 
 
 @app.route('/about')
 @login_required
 def about():
+    """Generate the view for the `about` page of the SLiM application."""
+
     import slim
     info = utils.component_version_info()
     return render_template(
@@ -309,6 +329,8 @@ def about():
 @app.route('/admin/licenses/<int:lic_id>/download/request')
 @roles_accepted('admin')
 def admin_download_request_file(lic_id):
+    """Generate admin version of the view for downloading request files."""
+
     lic = License.query.get_or_404(lic_id)
 
     response = make_response(lic.request)

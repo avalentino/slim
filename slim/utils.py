@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Utility functions for the SLiM Flask application."""
+
 from __future__ import absolute_import
 
 import os
@@ -11,6 +13,9 @@ except ImportError:
     from urllib import quote
 
 import pkg_resources
+
+
+__all__ = ['component_version_info']
 
 
 def package_dir():
@@ -56,6 +61,13 @@ def expand_cmd_vars(cmdargs, **kwargs):
 
 
 def to_int(s, default=None):
+    """Convert and arbitrary input to `int`.
+
+    Try to convert and arbitrary input to `int` and use a fallback value
+    (`default`) if it is not possible.
+
+    """
+
     try:
         return int(s)
     except (ValueError, TypeError):
@@ -63,6 +75,8 @@ def to_int(s, default=None):
 
 
 def component_version_info():
+    """Return version info of all used Flask components."""
+
     data = dict(
         flask=dict(
             name='Flask',
