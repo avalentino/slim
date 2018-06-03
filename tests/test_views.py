@@ -287,22 +287,22 @@ class TestUserViews02(TestUserViews01):
 
     def test_license_02(self):
         with self.login(self.user):
-            license = self.user.licenses.first()
-            product = license.product
+            license_ = self.user.licenses.first()
+            product = license_.product
 
-            response = self.client.open('/licenses/%d' % license.id)
+            response = self.client.open('/licenses/%d' % license_.id)
             self.assert_200(response)
             self.assert_template_used('license.html')
 
             data = response.get_data(as_text=True).lower()
-            self.assertTrue(('License n. %d' % license.id).lower() in data)
+            self.assertTrue(('License n. %d' % license_.id).lower() in data)
             self.assertTrue('user' in data)
             self.assertTrue(self.user.email in data)
             self.assertTrue('product' in data)
             self.assertTrue(product.name.lower() in data)
             self.assertTrue('description' in data)
-            if license.description is not None:
-                self.assertTrue(license.description.lower() in data)
+            if license_.description is not None:
+                self.assertTrue(license_.description.lower() in data)
             self.assertTrue('request date' in data)
             self.assertTrue('download' in data)
             self.assertTrue(self.license_download_button.lower() in data)
