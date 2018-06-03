@@ -220,7 +220,8 @@ class TestUserViews01(TestCase):
 
     def test_admin_purchases(self):
         with self.login(self.user):
-            response = self.client.get('/admin/purchase', follow_redirects=True)
+            response = self.client.get('/admin/purchase',
+                                       follow_redirects=True)
             self.assert_403(response)
 
     def test_admin_licenses(self):
@@ -362,7 +363,8 @@ class AdminTestMixin:
 
     def test_admin_purchases(self):
         with self.login(self.user):
-            response = self.client.get('/admin/purchase', follow_redirects=True)
+            response = self.client.get('/admin/purchase',
+                                       follow_redirects=True)
             self.assert_200(response)
             data = response.get_data(as_text=True)
             self.assertTrue('<title>Purchase - SLiM</title>' in data)
@@ -387,9 +389,9 @@ class TestAdminViews02(AdminTestMixin, TestUserViews02):
         self.user = self.admin
 
     def test_license_03(self):
-       with self.login(self.user):
-           response = self.client.get('/licenses/1')
-           self.assert_200(response)
+        with self.login(self.user):
+            response = self.client.get('/licenses/1')
+            self.assert_200(response)
 
 
 if __name__ == '__main__':

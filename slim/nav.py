@@ -52,7 +52,7 @@ def topnavbar():
     if current_user.has_role('admin'):
         items.extend([
             View('Admin', 'admin.index'),
-         ])
+        ])
     items.extend([
         Link('Support', support_link),
         View('About', 'about'),
