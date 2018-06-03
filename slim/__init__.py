@@ -12,4 +12,5 @@ from __future__ import absolute_import
 from . import views  # noqa
 
 
-__version__ = '0.9.4.dev0'
+__version__ = '0.9.4'
+
