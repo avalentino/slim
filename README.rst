@@ -55,32 +55,59 @@ Installation
   $ pip install slim
 
 
+Command line interface
+----------------------
+
+The package also provides a command line tool that implements a basic set
+functions that can be used both in the development and deployment phase::
+
+  $ slimcli --help
+
+  usage: slimcli [-?] {init_db,init_test_env,db,user,shell,runserver} ...
+
+  positional arguments:
+    {init_db,init_test_env,db,user,shell,runserver}
+      init_db             Make a basic initialization of the internal DB.
+      init_test_env       Make a basic initialization of the testing
+                          environment.
+      db                  Perform database migrations
+      user                Perform user management
+      shell               Runs a Python shell inside Flask application context.
+      runserver           Runs the Flask development server i.e. app.run()
+
+  optional arguments:
+    -?, --help            show this help message and exit
+
+
 Development
 -----------
 
 The source code of the project can be found at:
 https://github.com/avalentino/slim.
 
+A test environment can be set-up as follows (optional)::
+
+  $ python3 -m venv slimenv
+  $ source slimenv/bin/activete
+  $ pip install wheel
+  $ pip install -r requirements.txt
+
+The command line interface can be run form the development folder as follows::
+
+  $ env PYTHONPATH=. python -m slim <COMMAND>
+
+Before running the development server the slim database shall be initialized,
+and, at least, one admin user shall be enabled::
+
+  $ env PYTHONPATH=. python -m slim init_db
+  $ env PYTHONPATH=. python -m slim user change_password admin <password>
+  $ env PYTHONPATH=. python -m slim user enable admin
+
+The DB is initialized in the `instance` folder.
+In the same folder it is possible to install an instance configuration file.
+A template can ge found in the `examples` directory.
+
 To run the development server use the following command for the project
 root directory::
 
   $ env PYTHONPATH=. python -m slim runserver
-
-The package also provides a basic set tools for developer life easier::
-
-  $ env PYTHONPATH=. python -m slim --help
-
-  usage: __main__.py [-?] {runserver,init_test_env,shell,db,user,init_db} ...
-
-  positional arguments:
-    {runserver,init_test_env,shell,db,user,init_db}
-      runserver           Runs the Flask development server i.e. app.run()
-      init_test_env       Basic initialization of the testing environment
-      shell               Runs a Python shell inside Flask application context.
-      db                  Perform database migrations
-      user                Perform user management
-      init_db             Basic initialization of the internal DB
-
-  optional arguments:
-    -?, --help            show this help message and exit
-
