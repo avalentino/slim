@@ -27,8 +27,8 @@ from ._compat import hash_password
 
 
 __all__ = [
-    'AdminIndexView', 'RoleModelView', 'UserModelView', 'ProductModelView',
-    'PurchaseModelView', 'LicenseModelView', 'admin',
+    'ModelView', 'AdminIndexView', 'RoleModelView', 'UserModelView',
+    'ProductModelView', 'PurchaseModelView', 'LicenseModelView', 'admin',
 ]
 
 
