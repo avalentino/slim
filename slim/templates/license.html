@@ -14,7 +14,7 @@
   <dd>{{ lic.description }}</dd>
 
   {% if current_user.has_role('admin') %}
-  <dt>Download rquest file</dt>
+  <dt>Download request file</dt>
   <dd>{{ form_button(url_for('admin_download_request_file', lic_id=lic.id), icon('download-alt') + ' Download', method='get', class='btn btn-primary') }}<dd>
   {% endif %}
 

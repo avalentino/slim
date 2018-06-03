@@ -150,7 +150,7 @@ def init_db(app, user_datastore, password):
         db_path = db_path_parts.path
         if os.path.exists(db_path):
             raise RuntimeError(
-                'the database already exista at %r. Please remove it and try '
+                'the database already exist at %r. Please remove it and try '
                 'again' % app.config['SQLALCHEMY_DATABASE_URI'])
         db_dir = os.path.dirname(db_path)
         if db_dir and not os.path.exists(db_dir):

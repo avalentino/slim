@@ -56,11 +56,11 @@ def products():
 
     purchase_map = {}
     for product in Product.query.all():
-        purcased = product in purchased_products
+        purchased = product in purchased_products
         purchase_count = sum(
             p.quantity for p in product.purchases.filter_by(user=user))
         license_count = product.licenses.filter_by(user=current_user).count()
-        purchase_map[product.id] = _PurchaseMapItem(purcased,
+        purchase_map[product.id] = _PurchaseMapItem(purchased,
                                                     purchase_count,
                                                     license_count)
 
@@ -130,7 +130,7 @@ def _request_matches_product(product, request):
             else:
                 path = None
         else:
-            app.logger.warning('invaid plugin: %r' % plugin)
+            app.logger.warning('invalid plugin: %r' % plugin)
             app.logger.warning('remove SLIM_PLUGIN form config')
             del app.config['SLIM_PLUGIN']
             path = None
@@ -154,7 +154,7 @@ def _request_matches_product(product, request):
             app.logger.debug('plugin_ext: %r', plugin_ext)
             app.logger.debug('sys.path: %r', sys.path)
         else:
-            app.logger.info('plugin %r corectly loaded', plugin)
+            app.logger.info('plugin %r correctly loaded', plugin)
     else:
         module = sys.modules[plugin_basename]
 
