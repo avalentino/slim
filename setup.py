@@ -3,6 +3,7 @@
 
 import os
 import re
+import sys
 from setuptools import setup
 
 
@@ -22,6 +23,18 @@ def get_version(filename=None):
         return version_match.group(1)
 
     raise RuntimeError("Unable to find version string.")
+
+
+def compat_requites():
+    reqlist = []
+
+    if sys.version_info < (3, 3, 0):
+        reqlist.append('mock')
+
+    if sys.version_info < (2, 7, 0):
+        reqlist.append('future')
+
+    return reqlist
 
 
 setup(
@@ -60,6 +73,6 @@ setup(
         # 'future',     # Python < 2.7
         # 'mock',       # Python < 3.3
         'setuptools'
-    ],
+    ] + compat_requites(),
     test_suite='tests',
 )
